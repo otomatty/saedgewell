@@ -1,0 +1,23 @@
+.sbdocs-wrapper {
+  max-width: 100%;
+  padding: 20px;
+}
+
+.sbdocs-content {
+  position: relative; /* 絶対位置の要素を相対位置に基づかせる */
+}
+
+.sbdocs-preview {
+  overflow: auto; /* はみ出しを防ぐ */
+  height: clamp(200px, 30vh, 90vh); /* 最小300px、最大100vh */
+}
+
+.docs-story {
+  max-width: 100%; /* 必要に応じて幅を調整 */
+  height: 100%;
+  & > div:first-child {
+    overflow: auto; /* はみ出しを防ぐ */
+    max-width: 100%; /* 必要に応じて幅を調整 */
+    height: 100%;
+  }
+}
