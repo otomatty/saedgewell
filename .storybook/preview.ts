@@ -1,4 +1,4 @@
-import '../src/storybook.css';
+import "../src/app/globals.css";
 
 export const parameters = {
   actions: {},
@@ -9,4 +9,4 @@ export const parameters = {
     },
   },
 };
-export const tags = ['autodocs'];
+export const tags = ["autodocs"];

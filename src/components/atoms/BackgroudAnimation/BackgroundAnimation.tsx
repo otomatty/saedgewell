@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion, Variants } from 'framer-motion';
-import styles from './BackgroundAnimation.module.css';
+import React from "react";
+import { motion, Variants } from "framer-motion";
+import styles from "./BackgroundAnimation.module.css";
 
 const generateOrbit = (radius: number): Variants => ({
   animate: {
@@ -8,13 +8,13 @@ const generateOrbit = (radius: number): Variants => ({
     transition: {
       duration: radius / 10, // 半径に応じて速度を調整
       repeat: Infinity,
-      ease: 'linear',
+      ease: "linear",
     },
   },
 });
 
 const BackgroundAnimation: React.FC = () => {
-  const particles = [...Array(10)].map((_, i) => ({
+  const particles = [...Array(8)].map((_, i) => ({
     id: i,
     radius: 50 + i * 20,
     color: `rgba(0, 0, 0, ${Math.random()})`,
@@ -33,7 +33,11 @@ const BackgroundAnimation: React.FC = () => {
         >
           <div
             className={styles.particle}
-            style={{ backgroundColor: particle.color, top: -particle.radius }}
+            style={{
+              backgroundColor: particle.color,
+              top: `calc(50% - ${particle.radius}px - 5px)`,
+              left: `calc(50% - 5px)`, // パーティクルの幅の半分 (10px / 2)
+            }}
           />
         </motion.div>
       ))}

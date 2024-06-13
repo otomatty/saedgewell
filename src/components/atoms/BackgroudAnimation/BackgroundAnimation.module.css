@@ -21,7 +21,7 @@
 
 .orbit {
   position: absolute;
-  border: 1px solid rgba(255, 255, 255, 0.2); /* 軌道の表示 */
+  border: 1px solid rgba(0, 0, 0, 0.3); /* 初期状態で非表示 */
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -33,5 +33,19 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5); /* Added random grayscale color */
+  background-color: rgba(0, 0, 0, 0.5); /* ランダムなグレースケール色 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 残像効果 */
+  animation: particleTrail 2s infinite;
+}
+
+@keyframes particleTrail {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
 }
