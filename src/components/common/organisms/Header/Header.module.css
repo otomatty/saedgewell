@@ -1,0 +1,46 @@
+.header {
+  position: fixed;
+  top: 0;
+  height: 60px;
+  z-index: 500;
+  width: 100%;
+  padding: 1rem 0;
+  transition:
+    transform 0.3s ease-in-out,
+    background-color 0.3s ease-in-out; /* スライドアニメーションと背景色のトランジションを追加 */
+  @media (768px <= width) {
+    height: 100px;
+  }
+}
+
+.headerInner {
+  max-width: 84%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.visible {
+  transform: translateY(0); /* ヘッダーを表示 */
+  background: rgba(255, 255, 240, 0.6); /* 背景色を半透明に設定 */
+  backdrop-filter: blur(10px); /* すりガラス効果を追加 */
+  -webkit-backdrop-filter: blur(10px); /* Safari用のすりガラス効果を追加 */
+}
+
+.hidden {
+  transform: translateY(-260%); /* ヘッダーを非表示 */
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .buttonWrapper > :not(:last-child) {
+    display: none; /* 768px未満で「相談の予約をする」ボタンを非表示 */
+  }
+}

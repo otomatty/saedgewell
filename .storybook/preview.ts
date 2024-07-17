@@ -1,4 +1,5 @@
-import "../src/app/globals.css";
+import '../src/app/globals.css';
+import '../.storybook/story';
 
 export const parameters = {
   actions: {},
@@ -9,4 +10,4 @@ export const parameters = {
     },
   },
 };
-export const tags = ["autodocs"];
+export const tags = ['autodocs'];

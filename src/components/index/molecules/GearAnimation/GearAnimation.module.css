@@ -1,0 +1,114 @@
+.gearContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  width: 50%;
+  height: 100%;
+}
+
+.outerCircle {
+  width: 90vh;
+  height: 90vh;
+  border: 8px solid var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+}
+
+.innerCircle {
+  width: 70vh;
+  height: 70vh;
+  border: 8px solid var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden; /* 内側に画像を表示するために追加 */
+}
+
+.smallCircle {
+  width: calc(10vh - 8px);
+  height: calc(10vh - 8px);
+  border: 8px solid var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  line-height: 1;
+  transition: transform 0.5s ease;
+}
+
+.reasonText,
+.numberText {
+  font-size: 0.8rem;
+  animation: slideInOut 1s ease-in-out;
+}
+
+.gear {
+  height: 20%; /* 画像がinnerCircleの内側に収まるように調整 */
+  width: 20%; /* 画像がinnerCircleの内側に収まるように調整 */
+  transition: transform 1s ease-in-out;
+  position: absolute;
+  transform-origin: center; /* 回転の基点を中心に設定 */
+  clip-path: circle(50%); /* 画像を円形にクリップ */
+  transform: translate(-50%, -50%);
+}
+
+.gear1 {
+  top: 10%;
+  left: 10%;
+}
+
+.gear2 {
+  top: 10%;
+  right: 10%;
+}
+
+.gear3 {
+  bottom: 10%;
+  left: 10%;
+}
+
+.gear4 {
+  bottom: 10%;
+  right: 10%;
+}
+
+.gear5 {
+  top: 50%;
+  left: 50%;
+}
+
+.gear6 {
+  top: 30%;
+  left: 70%;
+}
+
+.gear7 {
+  top: 70%;
+  left: 30%;
+}
+
+.inView .gear {
+  animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

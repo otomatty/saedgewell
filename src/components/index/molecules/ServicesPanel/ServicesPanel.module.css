@@ -1,0 +1,56 @@
+.servicesWrapper {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 10px;
+  grid-template-columns: repeat(12, 1fr); /* 12カラムレイアウト */
+  @media (768px <= width) {
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.serviceCard {
+  border-radius: 8px;
+  height: 30vh;
+  background-color: var(--background-light-color);
+  padding: 20px;
+  text-align: center;
+}
+
+.serviceIcon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.serviceTitle {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.serviceDescription {
+  font-size: 1em;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.serviceAdditionalDescription {
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* 1行目のアイテムに3カラムのレイアウトを適用 */
+.servicesWrapper .serviceCard:nth-child(-n + 3) {
+  grid-column: span 12; /* 12カラムのうち4カラムを占有 */
+  @media (768px <= width) {
+    grid-column: span 4; /* 12カラムのうち4カラムを占有 */
+  }
+}
+
+/* 2行目のアイテムに4カラムのレイアウトを適用 */
+.servicesWrapper .serviceCard:nth-child(n + 4) {
+  grid-column: span 6; /* 12カラムのうち3カラムを占有 */
+  @media (768px <= width) {
+    grid-column: span 3; /* 12カラムのうち4カラムを占有 */
+  }
+}

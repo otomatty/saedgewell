@@ -1,0 +1,17 @@
+.section {
+  padding-top: 40px;
+  overflow: hidden; /* 親要素の幅を超えないようにする */
+  @media (992px <= width) {
+    height: 100vh;
+  }
+}
+
+.sectionInner {
+  width: 84%;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  color: var(--text-main-color);
+}

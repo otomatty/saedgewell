@@ -1,0 +1,64 @@
+.messageSection {
+  background-color: var(--background-light-color);
+  overflow: hidden; /* 親要素の幅を超えないようにする */
+
+  position: relative;
+  @media (1024px <= width) {
+    padding: 2rem;
+
+    padding: 4rem;
+  }
+}
+
+.messageInner {
+  max-width: 84%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center; /* 子要素を左右に配置 */
+  flex-direction: column-reverse;
+  @media (1024px <= width) {
+    flex-direction: row;
+  }
+}
+
+.messageInner > * {
+  flex: 1;
+}
+
+.svgWrapper {
+  max-height: 800px;
+
+  width: 100%;
+  @media (992px <= width) {
+    max-width: 800px;
+  }
+}
+
+.text {
+  max-width: 800px;
+
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  @media (992px <= width) {
+  }
+}
+
+.title {
+  font-size: 1.6rem;
+  color: var(--text-main-color);
+  margin-bottom: 2rem;
+  @media (1200px <= width) {
+    font-size: 2rem;
+  }
+}
+
+.content {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  & span {
+    color: var(--text-main-color);
+  }
+}

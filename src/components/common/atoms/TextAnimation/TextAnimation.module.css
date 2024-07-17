@@ -1,0 +1,32 @@
+.typing {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.4rem;
+  @media (500px <= width) {
+    font-size: 2rem;
+  }
+
+  @media (800px <= width) {
+    font-size: 3rem;
+  }
+}
+
+.cursor {
+  display: inline-block;
+  background-color: #fff;
+  width: 4px;
+  height: 1em;
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}

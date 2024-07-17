@@ -1,0 +1,225 @@
+.worksStats {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 10px 8%;
+  height: 20%;
+  border-top: 1px solid var(--secondary-color);
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  @media (768px <= width) {
+    height: 10%;
+  }
+
+  @media (992px <= width) {
+    padding: 0 8%;
+    align-items: center; /* 親要素に対して子要素を上下中央に配置 */
+    margin-top: 4rem;
+  }
+}
+
+.dateItem {
+  width: 30%;
+  display: flex;
+  @media (768px <= width) {
+    align-items: center;
+  }
+  @media (1200px <= width) {
+    width: 16%;
+  }
+  @media (1600px <= width) {
+    width: 10%;
+  }
+}
+
+.dateContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  @media (992px <= width) {
+    flex-direction: row;
+  }
+}
+
+.year {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: bold; /* 年に対して別のスタイルを適用 */
+  @media (576px <= width) {
+    font-size: 3rem;
+  }
+  @media (1000px <= width) {
+    font-size: 3rem;
+
+    margin-right: 10px; /* 年と月日の間に余白を追加 */
+  }
+}
+
+.monthDay {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-top: 1px solid var(--secondary-color);
+  font-size: 1.6rem;
+  font-weight: bold;
+
+  @media (992px <= width) {
+    border-top: none;
+    font-size: 1.2rem;
+    padding-left: 10px;
+    border-left: 1px solid var(--secondary-color);
+    flex-direction: column; /* 月と日を縦並びにする */
+  }
+}
+
+.statsInfo {
+  width: 70%;
+
+  @media (992px <= width) {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center; /* 垂直方向の中央揃え */
+    gap: 6%;
+  }
+  @media (1200px <= width) {
+    gap: 2%;
+    width: 84%;
+  }
+  @media (1400px <= width) {
+    gap: 8%;
+    width: 72%;
+  }
+  @media (1600px <= width) {
+    gap: 2%;
+    width: 72%;
+  }
+  @media (2200px <= width) {
+    gap: 4%;
+
+    width: 76%;
+  }
+}
+
+.statsTitle {
+  width: 100%;
+  padding-bottom: 8px;
+  font-size: 1.2rem;
+  align-self: center; /* 自身を上下中央に配置 */
+  @media (768px <= width) {
+    font-size: 1.6rem;
+  }
+  @media (1200px <= width) {
+    font-size: 2rem;
+    width: 26%;
+  }
+  @media (1200px <= width) {
+    width: 24%;
+  }
+  @media (1400px <= width) {
+    margin-left: 3%;
+    padding: 10px 0;
+    /* font-size: 2rem; */
+  }
+  @media (1600px <= width) {
+    width: 18%;
+  }
+  @media (2200px <= width) {
+    width: 14%;
+  }
+}
+
+.worksStats ul {
+  width: 100%;
+  list-style: none;
+  display: flex; /* 横並びにする */
+  flex-direction: column;
+  justify-content: center;
+  align-items: start; /* 垂直方向の中央揃え */
+  font-size: 1rem;
+  gap: 4px;
+  @media (768px <= width) {
+    flex-direction: row;
+    align-items: center; /* 垂直方向の中央揃え */
+    justify-content: left;
+    gap: 6%;
+  }
+  @media (992px <= width) {
+    gap: 6%;
+  }
+  @media (1200px <= width) {
+    gap: 2%;
+    width: 62%;
+  }
+  @media (1400px <= width) {
+    gap: 8%;
+    width: 72%;
+  }
+  @media (1600px <= width) {
+    gap: 2%;
+    width: 72%;
+  }
+  @media (2200px <= width) {
+    gap: 4%;
+
+    width: 76%;
+  }
+}
+.worksStats li {
+  height: auto;
+}
+
+.worksStats li:first-of-type {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.orderText {
+  display: block;
+}
+
+.worksStats li:nth-of-type(4) {
+  display: none;
+  @media (1200px <= width) {
+    display: block;
+  }
+}
+
+.worksStats li:nth-of-type(3) {
+  display: none;
+  @media (1600px <= width) {
+    display: block;
+  }
+}
+
+.worksStats li:nth-of-type(5) {
+  display: none;
+  @media (1800px <= width) {
+    display: block;
+  }
+}
+
+.worksStats li:last-child {
+  display: none;
+  border-right: none;
+  padding: 0;
+  @media (2000px <= width) {
+    display: block;
+  }
+}
+
+.orderStatus {
+  display: block;
+  padding: 4px 12px;
+  margin-left: 8px;
+
+  border-radius: 4px;
+  font-weight: bold;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+  @media (768px <= width) {
+    padding: 8px 12px;
+  }
+}

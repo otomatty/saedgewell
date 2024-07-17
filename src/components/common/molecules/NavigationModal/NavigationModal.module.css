@@ -1,0 +1,64 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  position: relative;
+  width: 90%; /* 幅を90%に設定 */
+  height: 90%; /* 高さを90%に設定 */
+  display: flex; /* フレックスボックスを使用 */
+  overflow: auto;
+}
+
+.leftPane {
+  flex: 1; /* 左側のペインをフレックスで設定 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* 子要素のposition: absoluteを正しく機能させる */
+}
+
+.rightPane {
+  flex: 1; /* 右側のペインをフレックスで設定 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin: 10px 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #333;
+}

@@ -1,10 +1,31 @@
 :root {
+  /* 
+  ========================================================
+   */
+  /* カラー */
+  /* ライトモード */
   --primary-color: #465945; /* プライマリカラー */
   --secondary-color: #fffff0; /* セカンダリカラー */
   --accent-color: #7b8d42; /* アクセントカラー */
   --dark-color: #264653; /* ダークカラー */
-  --light-color: #e1e1d2; /* ライトカラー */
-  --text-color: #333; /* テキストカラー */
+  --background-light-color: #e1e1d2; /* ライトカラー */
+  --text-main-color: #1d1d1f;
+  --text-sub-color: #6e6e73; /* テキストカラー */
+
+  /* ダークモード */
+  --background-dark-color: #333; /* ダークモードの背景色 */
+  --text-dark-color: #fff; /* ダークモードのテキストカラー */
+
+  /* 
+  ========================================================
+   */
+  /* ブレイクポイント */
+  --breakpoint-xs: 576px; /* Extra Small Devices (スマートフォン、ポートレートモード) */
+  --breakpoint-sm: 768px; /* Small Devices (スマートフォン、ランドスケープモード) */
+  --breakpoint-md: 992px; /* Medium Devices (タブレット、ポートレートモード) */
+  --breakpoint-lg: 1200px; /* Large Devices (ラップトップ、タブレット、ランドスケープモード) */
+  --breakpoint-xl: 1600px; /* Extra Large Devices (デスクトップ) */
+  --breakpoint-xxl: 1921px; /* Extra Extra Large Devices (大きなデスクトップ、4Kモニター) */
 }
 
 * {
@@ -16,12 +37,12 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
-  color: var(--text-color);
-  background-color: var(--light-color);
+  color: var(--text-sub-color);
+  background-color: var(--secondary-color);
+  font-family: 'Noto Sans JP', sans-serif; /* フォントを適用 */
 }
 
 a {
@@ -29,17 +50,13 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #fff;
-    --light-color: #333;
-  }
+body.dark-mode {
+  color: var(--text-dark-color);
+  background-color: var(--background-dark-color);
+}
 
-  html {
-    color-scheme: dark;
-  }
-
-  body {
-    background-color: var(--secondary-color);
-  }
+.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }

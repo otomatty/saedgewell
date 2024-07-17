@@ -1,0 +1,115 @@
+.sectionContent {
+  border: 1px solid var(--secondary-color);
+  border-radius: 12px;
+  width: 84%;
+  margin: 80px auto auto auto;
+  height: 60vh;
+  @media (768px <= width) {
+    height: 80vh;
+  }
+}
+
+.worksHeader {
+  padding: 20px;
+  display: flex;
+  height: 10%;
+}
+
+.worksTitle {
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  text-align: center;
+  @media (992px <= width) {
+    font-size: 2rem;
+  }
+}
+
+.navigationWrapper {
+  width: 100%;
+  height: 50%;
+  margin: 20% auto 0 auto;
+  @media (1600px <= width) {
+    height: 40%;
+    margin: 10% auto 0 auto;
+  }
+}
+
+.barsContainer {
+  height: 80%;
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (768px <= width) {
+    width: 32%;
+  }
+  @media (992px <= width) {
+    width: 24%;
+  }
+  @media (1600px <= width) {
+    width: 20%;
+  }
+  @media (1600px <= width) {
+    width: 16%;
+  }
+}
+
+.bar {
+  width: 20%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  margin: 0 8px;
+  border-radius: 10px;
+  transition:
+    transform 0.3s ease-in-out,
+    background-color 0.3s ease-in-out; /* アニメーションの追加 */
+  position: relative; /* 丸を配置するために相対位置を設定 */
+}
+
+.circle {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -20px; /* バーの下に配置 */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0; /* 初期状態では非表示 */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.arrows {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: 60%;
+
+  margin: 20px auto;
+  @media (992px <= width) {
+    width: 24%;
+  }
+  @media (1600px <= width) {
+    width: 20%;
+  }
+  @media (1600px <= width) {
+    width: 16%;
+  }
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+  width: 60px; /* ボタンの幅を調整 */
+  height: 32px; /* ボタンの高さを調整 */
+  border-radius: 20px;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 0 8px;
+}

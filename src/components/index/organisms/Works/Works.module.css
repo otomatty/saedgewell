@@ -1,0 +1,16 @@
+.worksSection {
+  height: 800vh; /* セクション全体の高さを500vhに設定 */
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+/* セクションの固定表示の範囲 */
+.sectionInner {
+  height: 100vh; /* コンテナのサイズを100vhに設定 */
+  position: sticky; /* スティッキー */
+  top: 0; /* 画面の中央に配置 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

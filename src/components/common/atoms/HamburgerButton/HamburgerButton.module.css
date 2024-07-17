@@ -1,0 +1,45 @@
+.hamburgerButton {
+  border: none;
+  background-color: transparent;
+
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  @media (768px <= width) {
+    padding: 4px; /* 小さい画面ではボタンのサイズをさらに小さく */
+  }
+}
+
+.bentoIcon {
+  display: grid;
+  grid-template-columns: repeat(3, 7px);
+  grid-template-rows: repeat(3, 7px);
+  gap: 4px;
+  margin-bottom: 8px;
+
+  @media (768px <= width) {
+    grid-template-columns: repeat(3, 7px);
+    grid-template-rows: repeat(3, 7px);
+    gap: 4px;
+  }
+}
+
+.bentoIcon div {
+  width: 5px;
+  height: 5px;
+  background-color: var(--primary-color); /* primary-colorを使用 */
+  border-radius: 50%;
+  @media (768px <= width) {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+.menuText {
+  font-size: 12px; /* テキストのサイズを小さく */
+  font-weight: 700;
+  color: var(--primary-color); /* primary-colorを使用 */
+}
