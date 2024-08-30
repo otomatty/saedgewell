@@ -1,0 +1,113 @@
+{
+  "popular": [
+    {
+      "title": "人気記事1",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail1.jpg",
+      "date": "2023-10-01",
+      "tags": ["タグ1", "タグ2"]
+    },
+    {
+      "title": "人気記事2",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail2.jpg",
+      "date": "2023-10-02",
+      "tags": ["タグ3", "タグ4"]
+    },
+    {
+      "title": "人気記事3",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail3.jpg",
+      "date": "2023-10-03",
+      "tags": ["タグ5", "タグ6"]
+    },
+    {
+      "title": "人気記事4",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail4.jpg",
+      "date": "2023-10-04",
+      "tags": ["タグ7", "タグ8"]
+    },
+    {
+      "title": "人気記事5",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail5.jpg",
+      "date": "2023-10-05",
+      "tags": ["タグ9", "タグ10"]
+    }
+  ],
+  "latest": [
+    {
+      "title": "最新記事1",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail6.jpg",
+      "date": "2023-10-06",
+      "tags": ["タグ11", "タグ12"]
+    },
+    {
+      "title": "最新記事2",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail7.jpg",
+      "date": "2023-10-07",
+      "tags": ["タグ13", "タグ14"]
+    },
+    {
+      "title": "最新記事3",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail8.jpg",
+      "date": "2023-10-08",
+      "tags": ["タグ15", "タグ16"]
+    },
+    {
+      "title": "最新記事4",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail9.jpg",
+      "date": "2023-10-09",
+      "tags": ["タグ17", "タグ18"]
+    },
+    {
+      "title": "最新記事5",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail10.jpg",
+      "date": "2023-10-10",
+      "tags": ["タグ19", "タグ20"]
+    }
+  ],
+  "themed": [
+    {
+      "title": "テーマ記事1",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail11.jpg",
+      "date": "2023-10-11",
+      "tags": ["タグ21", "タグ22"]
+    },
+    {
+      "title": "テーマ記事2",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail12.jpg",
+      "date": "2023-10-12",
+      "tags": ["タグ23", "タグ24"]
+    },
+    {
+      "title": "テーマ記事3",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail13.jpg",
+      "date": "2023-10-13",
+      "tags": ["タグ25", "タグ26"]
+    },
+    {
+      "title": "テーマ記事4",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail14.jpg",
+      "date": "2023-10-14",
+      "tags": ["タグ27", "タグ28"]
+    },
+    {
+      "title": "テーマ記事5",
+      "link": "#",
+      "thumbnail": "/path/to/thumbnail15.jpg",
+      "date": "2023-10-15",
+      "tags": ["タグ29", "タグ30"]
+    }
+  ]
+}

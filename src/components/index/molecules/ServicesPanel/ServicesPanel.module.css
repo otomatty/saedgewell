@@ -1,56 +1,275 @@
-.servicesWrapper {
+.servicesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.servicesWrapperTop,
+.servicesWrapperBottom {
   display: grid;
   gap: 10px;
   padding-bottom: 10px;
-  grid-template-columns: repeat(12, 1fr); /* 12カラムレイアウト */
   @media (768px <= width) {
     gap: 20px;
     padding-bottom: 20px;
   }
 }
 
+.servicesWrapperTop {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.servicesWrapperBottom {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .serviceCard {
   border-radius: 8px;
   height: 30vh;
   background-color: var(--background-light-color);
-  padding: 20px;
+  padding: 8%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.serviceCard.expanded {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.serviceIconWrapper {
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4%;
 }
 
 .serviceIcon {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.serviceTitle {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+.expandedIcon {
+  filter: brightness(0) invert(1);
+}
+
+.serviceContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
 }
 
 .serviceDescription {
-  font-size: 1em;
+  font-size: 1.2em;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.expanded .serviceDescription {
+  color: #fff;
+}
+
+.serviceTitleWrapper {
+  border-top: 4px solid var(--accent-color);
+  padding-top: 10px;
+  text-align: left;
+}
+
+.serviceTitle {
+  font-size: 0.9em;
   color: #666;
+  position: relative;
+  padding-left: 15px;
+  text-align: left;
+}
+
+.expanded .serviceTitle {
+  color: #fff;
+}
+
+.serviceTitle::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+}
+
+.expanded .serviceTitle::before {
+  color: #fff;
+}
+
+.serviceDetails {
+  padding: 3%;
+  margin-top: 20px;
+}
+
+.serviceDetailsTop {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.serviceDetailsInfo {
+  max-width: 60%;
+}
+
+.serviceDetailsSubtitle {
+  font-size: 0.9em;
+  color: var(--accent-color);
+  margin-bottom: 5px;
+}
+
+.serviceDetailsTitle {
+  font-size: 1.5em;
+  color: var(--primary-color);
   margin-bottom: 10px;
 }
 
-.serviceAdditionalDescription {
-  font-size: 0.9em;
-  color: #888;
+.serviceDetailsDescription {
+  font-size: 1em;
+  color: #333;
+  line-height: 1.6;
 }
 
-/* 1行目のアイテムに3カラムのレイアウトを適用 */
-.servicesWrapper .serviceCard:nth-child(-n + 3) {
-  grid-column: span 12; /* 12カラムのうち4カラムを占有 */
-  @media (768px <= width) {
-    grid-column: span 4; /* 12カラムのうち4カラムを占有 */
+.serviceDetailsButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.estimateButton,
+.consultButton {
+  width: 10vw;
+  height: 10vw;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  padding: 10px;
+}
+
+.buttonIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.buttonText {
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.estimateButton {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.consultButton {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.estimateButton:hover,
+.consultButton:hover {
+  opacity: 0.9;
+}
+
+.serviceDetailsBottom {
+  display: flex;
+  justify-content: space-between;
+  border-top: 2px solid var(--primary-color);
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.serviceLink {
+  width: 32%;
+  padding: 4% 4%;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  color: var(--primary-color);
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.serviceLink:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .servicesWrapperTop,
+  .servicesWrapperBottom {
+    grid-template-columns: 1fr;
+  }
+
+  .serviceDetailsTop {
+    flex-direction: column;
+  }
+
+  .serviceDetailsInfo {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .serviceDetailsButtons {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .serviceDetailsInfo,
+  .serviceDetailsButtons {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .serviceDetailsInfo {
+    margin-bottom: 20px;
+  }
+
+  .serviceDetailsButtons {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .serviceDetailsBottom {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .serviceLink {
+    width: 100%;
+    text-align: center;
   }
 }
 
-/* 2行目のアイテムに4カラムのレイアウトを適用 */
-.servicesWrapper .serviceCard:nth-child(n + 4) {
-  grid-column: span 6; /* 12カラムのうち3カラムを占有 */
-  @media (768px <= width) {
-    grid-column: span 3; /* 12カラムのうち4カラムを占有 */
+@media (max-width: 1024px) {
+  .serviceDetailsButtons {
+    width: 40%;
   }
 }

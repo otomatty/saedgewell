@@ -1,0 +1,37 @@
+.consultationStats {
+  width: 70%;
+  padding: 20px 0;
+  text-align: left; /* 必要に応じて調整 */
+  border-right: 1px solid var(--secondary-color);
+  padding-right: 20px;
+}
+
+.consultationStats h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.consultationStats p {
+  font-size: 1em;
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+.consultationListWrapper {
+  padding: 0.5rem;
+  background-color: var(--secondary-color);
+  border-radius: 12px;
+}
+
+.consultationList {
+  color: var(--text-main-color);
+  font-weight: bold;
+  list-style: none;
+  border: 2px solid var(--primary-color);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.consultationList li {
+  margin-bottom: 10px;
+}

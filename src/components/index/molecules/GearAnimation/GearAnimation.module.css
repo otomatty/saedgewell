@@ -5,6 +5,9 @@
   overflow: hidden;
   width: 50%;
   height: 100%;
+  @media (1200px <= width) {
+    width: 30%;
+  }
 }
 
 .outerCircle {
@@ -38,6 +41,12 @@
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+}
+
+.countBox {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,30 +58,34 @@
   transition: transform 0.5s ease;
 }
 
-.reasonText,
-.numberText {
+.reasonText {
   font-size: 0.8rem;
-  animation: slideInOut 1s ease-in-out;
+}
+.numberText {
+  font-size: 2rem;
 }
 
 .gear {
-  height: 20%; /* 画像がinnerCircleの内側に収まるように調整 */
-  width: 20%; /* 画像がinnerCircleの内側に収まるように調整 */
+  height: 30%; /* 画像がinnerCircleの内側に収まるように調整 */
+  width: 30%; /* 画像がinnerCircleの内側に収まるように調整 */
   transition: transform 1s ease-in-out;
   position: absolute;
   transform-origin: center; /* 回転の基点を中心に設定 */
   clip-path: circle(50%); /* 画像を円形にクリップ */
   transform: translate(-50%, -50%);
+  z-index: 999;
 }
 
 .gear1 {
-  top: 10%;
-  left: 10%;
+  height: 20%;
+  width: 20%;
+  top: 65%;
+  left: 40%;
 }
 
 .gear2 {
-  top: 10%;
-  right: 10%;
+  top: 5%;
+  right: 20%;
 }
 
 .gear3 {
@@ -83,11 +96,14 @@
 .gear4 {
   bottom: 10%;
   right: 10%;
+  z-index: 800;
 }
 
 .gear5 {
-  top: 50%;
+  top: 40%;
   left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1009;
 }
 
 .gear6 {
@@ -96,8 +112,11 @@
 }
 
 .gear7 {
-  top: 70%;
+  height: 90%;
+  width: 90%;
+  top: 20%;
   left: 30%;
+  z-index: 100;
 }
 
 .inView .gear {
@@ -111,4 +130,65 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* スライドイン・スライドアウトのアニメーション */
+@keyframes slideInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutDown {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.slideInDown {
+  animation: slideInDown 0.5s forwards;
+}
+
+.slideOutDown {
+  animation: slideOutDown 0.5s forwards;
+}
+
+.slideInUp {
+  animation: slideInUp 0.5s forwards;
+}
+
+.slideOutUp {
+  animation: slideOutUp 0.5s forwards;
 }

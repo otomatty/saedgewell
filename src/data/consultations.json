@@ -1,0 +1,37 @@
+[
+  {
+    "year": 2024,
+    "month": "5月",
+    "location": "埼玉県大宮市",
+    "industry": "建設会社",
+    "content": "サイト運用"
+  },
+  {
+    "year": 2024,
+    "month": "5月",
+    "location": "愛知県名古屋市",
+    "industry": "Webアプリケーション開発会社",
+    "content": "UXデザイン"
+  },
+  {
+    "year": 2024,
+    "month": "5月",
+    "location": "沖縄県浦添市",
+    "industry": "弁護士事務所",
+    "content": "新規サイト制作"
+  },
+  {
+    "year": 2024,
+    "month": "4月",
+    "location": "東京都渋谷区",
+    "industry": "不動産会社",
+    "content": "事業サイト制作"
+  },
+  {
+    "year": 2024,
+    "month": "4月",
+    "location": "北海道函館市",
+    "industry": "個人事業者",
+    "content": "事業サイト"
+  }
+]

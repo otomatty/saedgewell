@@ -1,0 +1,55 @@
+.contactSection {
+  background-color: #f8f9fa;
+  padding: 4rem 0;
+}
+
+.sectionInner {
+  width: 84%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.consultationProcess {
+  flex: 1;
+}
+
+.contactInfo {
+  flex: 1;
+}
+
+.reservationButton {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reservationButton:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    flex-direction: column;
+  }
+}

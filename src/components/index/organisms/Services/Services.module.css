@@ -1,14 +1,14 @@
 .section {
-  padding-top: 40px;
+  min-height: 100vh;
+  height: auto;
   overflow: hidden; /* 親要素の幅を超えないようにする */
-  @media (992px <= width) {
-    height: 100vh;
-  }
 }
 
 .sectionInner {
   width: 84%;
   margin: 0 auto;
+  padding: 40px 0;
+  box-sizing: border-box;
 }
 
 .sectionTitle {

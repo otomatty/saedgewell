@@ -14,6 +14,8 @@
 
 .textContainer {
   width: 50%;
+  height: 100%;
+  margin-top: 10vh;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -21,4 +23,73 @@
   color: var(--text-main-color);
   flex: 1;
   overflow-y: auto; /* 縦方向のスクロールを有効にする */
+  @media (1200px <= width) {
+    width: 70%;
+  }
+}
+
+.textWrapper {
+  margin-top: 4%;
+  overflow: hidden;
+}
+
+/* スライドイン・スライドアウトのアニメーション */
+@keyframes slideInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutDown {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.slideInDown {
+  animation: slideInDown 0.5s forwards;
+}
+
+.slideOutDown {
+  animation: slideOutDown 0.5s forwards;
+}
+
+.slideInUp {
+  animation: slideInUp 0.5s forwards;
+}
+
+.slideOutUp {
+  animation: slideOutUp 0.5s forwards;
 }

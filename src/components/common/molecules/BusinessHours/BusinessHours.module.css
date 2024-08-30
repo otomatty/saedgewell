@@ -1,0 +1,65 @@
+.businessHours {
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.title {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.scheduleTable th {
+  padding: 20px 10px;
+  border-bottom: 2px solid var(--primary-color);
+}
+.scheduleTable td {
+  padding: 20px 10px;
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.scheduleTable th {
+  font-weight: bold;
+}
+
+.scheduleTable td:first-child {
+  font-weight: bold;
+}
+
+.sunday {
+  color: #e74c3c; /* 朱色 */
+}
+
+.saturday {
+  color: #3498db; /* 水色 */
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .businessHours {
+    padding: 15px;
+  }
+
+  .scheduleTable th,
+  .scheduleTable td {
+    padding: 5px 2px;
+    font-size: 0.8rem;
+  }
+
+  .note {
+    font-size: 0.8rem;
+  }
+}

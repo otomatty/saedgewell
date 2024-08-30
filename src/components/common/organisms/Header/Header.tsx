@@ -90,7 +90,7 @@ const Header: React.FC = () => {
             onClick={() => alert('無料相談予約')}
             hidden={isButtonHidden}
           />
-          <HamburgerButton onClick={handleHamburgerClick} />
+          {!isModalOpen && <HamburgerButton onClick={handleHamburgerClick} />}
         </div>
       </div>
       <NavigationModal isOpen={isModalOpen} onClose={handleCloseModal} />

@@ -1,0 +1,60 @@
+.accordionButton {
+  padding: 20px 40px;
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--primary-color);
+  background-color: transparent;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* アイコンとテキストの間にスペースを追加 */
+}
+
+.accordionButton:hover {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+}
+
+.accordionButton:hover .iconContainer {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.accordionButton.active {
+  color: var(--primary-color);
+  background-color: transparent;
+}
+
+.accordionButton.active:hover {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+}
+
+.accordionButton.active:hover .iconContainer {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transition:
+    transform 0.3s,
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.accordionButton.active .iconContainer {
+  transform: rotate(180deg);
+}

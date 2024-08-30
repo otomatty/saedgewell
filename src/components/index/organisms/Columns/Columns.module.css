@@ -1,0 +1,28 @@
+.columnsSection {
+  background-color: var(--background-color);
+  padding: 40px 0;
+}
+
+.sectionInner {
+  width: 84%;
+  margin: 0 auto;
+}
+
+.columns {
+  display: flex;
+  flex-direction: column; /* 子要素を縦に並べる */
+  gap: 20px; /* 子要素間のスペースを追加 */
+}
+
+.accordionButtonContainer {
+  display: flex;
+  justify-content: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 12px;
+  width: fit-content;
+  margin: 20px auto;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
