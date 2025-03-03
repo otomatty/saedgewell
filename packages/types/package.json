@@ -1,0 +1,26 @@
+{
+	"name": "@saedgewell/types",
+	"version": "0.0.1",
+	"private": true,
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": ["dist/**"],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.39.0"
+	},
+	"devDependencies": {
+		"@saedgewell/config": "workspace:*",
+		"@types/node": "^20.0.0",
+		"supabase": "^1.0.0",
+		"tsup": "^8.0.0",
+		"typescript": "^5.0.0",
+		"@types/bun": "latest"
+	},
+	"type": "module"
+}

@@ -1,0 +1,4 @@
+extends = "@saedgewell/config/runtime/bun/bunfig.toml"
+
+[install.dependencies]
+# パッケージ固有の依存関係 

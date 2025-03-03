@@ -1,0 +1,28 @@
+{
+	"name": "@saedgewell/data",
+	"version": "0.1.0",
+	"description": "Sample data and constants for Saedgewell applications",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"type": "module",
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"lint": "biome check .",
+		"format": "biome format --write .",
+		"clean": "rm -rf dist node_modules"
+	},
+	"dependencies": {
+		"@saedgewell/types": "workspace:*",
+		"@saedgewell/utils": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"tsup": "^8.0.1",
+		"typescript": "^5.3.3"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	}
+}

@@ -1,0 +1,36 @@
+import type { Metadata } from "next";
+import { BasicHero } from "../../../../../../../packages/sample/src/components/layout/basic-hero";
+import { PricingSection } from "./components/PricingSection";
+import { PricingFAQ } from "./components/PricingFAQ";
+import {
+	deliverables,
+	faqs,
+} from "../../../../../../../packages/data/src/pricing";
+
+export const metadata: Metadata = {
+	title: "料金",
+	description: "各種成果物の料金体系をご確認いただけます。",
+};
+
+export default function PricingPage() {
+	return (
+		<main>
+			<BasicHero
+				title="料金"
+				description="各種成果物の料金体系をご確認いただけます。"
+				pattern="dots"
+				size="lg"
+			/>
+			<div className="container py-20">
+				{deliverables.map((category) => (
+					<PricingSection
+						key={category.category}
+						category={category.category}
+						items={category.items}
+					/>
+				))}
+				<PricingFAQ faqs={faqs} />
+			</div>
+		</main>
+	);
+}

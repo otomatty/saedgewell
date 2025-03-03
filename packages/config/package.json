@@ -1,0 +1,32 @@
+{
+	"name": "@saedgewell/config",
+	"version": "0.0.1",
+	"private": true,
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js",
+		"./typescript": "./dist/typescript/index.js",
+		"./typescript/base.json": "./dist/typescript/base.json",
+		"./typescript/react.json": "./dist/typescript/react.json",
+		"./typescript/nextjs.json": "./dist/typescript/nextjs.json",
+		"./styling": "./dist/styling/index.js",
+		"./lint": "./dist/lint/index.js",
+		"./lint/base.json": "./dist/lint/base.json",
+		"./runtime": "./dist/runtime/index.js",
+		"./build": "./dist/build/index.js"
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"lint": "biome lint .",
+		"format": "biome format .",
+		"clean": "rm -rf dist node_modules"
+	},
+	"devDependencies": {
+		"@types/node": "^20.0.0",
+		"tsup": "^8.0.0",
+		"typescript": "^5.0.0"
+	}
+}
