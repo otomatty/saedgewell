@@ -25,6 +25,8 @@ export default defineConfig({
 		"src/index.ts",
 		"src/typescript/index.ts",
 		"src/styling/index.ts",
+		"src/styling/tailwind.ts",
+		"src/styling/postcss.js",
 		"src/lint/index.ts",
 		"src/runtime/index.ts",
 		"src/build/index.ts",

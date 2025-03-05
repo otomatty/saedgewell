@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import type { FeaturedWork } from "../../../../../../../packages/types/src/work";
+import type { FeaturedWork } from "@saedgewell/types";
 
 interface BackgroundImagesProps {
 	works: FeaturedWork[]; // 表示する実績データの配列

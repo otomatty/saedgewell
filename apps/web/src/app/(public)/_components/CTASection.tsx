@@ -2,25 +2,19 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Button } from "../../../../../../packages/components/src/components/core/button/button";
-import {../../../../../../packages/components/src/ui/card
-	Card,
-	CardContent,
-} from "../../../../../../packages/components/components/ui/card";
+import { Button } from "@saedgewell/components/core";
+import { Card, CardContent } from "@saedgewell/components/core";
 import {
-	Building2,
-	Users,
-	Code2,
 	FileText,
 	Mail,
 	Phone,
 	Calendar,
-	MessageSquare,../../../../../../packages/components/src/custom/section-title
-	CalendarClock,../../../../../../packages/components/src/custom/contact/contact-dialog
+	MessageSquare,
+	CalendarClock,
 } from "lucide-react";
-import { SectionTitle } from "../../../../../../packages/sample/components/custom/section-title";
-import { ContactDialog } from "../../../../../../packages/sample/components/custom/contact/contact-dialog";
-import { cn } from "../../../../../../packages/sample/src/lib/utils";
+import { SectionTitle } from "@saedgewell/components/layout";
+import { ContactDialog } from "@saedgewell/components/features";
+import { cn } from "@saedgewell/components";
 
 export interface CTASectionProps {
 	/**

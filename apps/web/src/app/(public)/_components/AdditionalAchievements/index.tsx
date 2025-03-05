@@ -1,24 +1,23 @@
 "use client";
-
+// libraries
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "../../../../../../../packages/components/src/components/core/button/button";
-import { Input } from "../../../../../../../packages/components/src/components/core/input";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+// @saedgewell/types
+import type { Work, WorkCategory } from "@saedgewell/types";
+// @saedgewell/components
+import { Button } from "@saedgewell/components/core";
+import { Input } from "@saedgewell/components/core";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "../../../../../../../packages/components/src/components/core/select";
-import { WorkCard } from "../../../../../../../packages/ui/src/components/features/achievements/work-card";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import type {
-	Work,
-	WorkCategory,
-} from "../../../../../../../packages/types/src/work";
-import { SectionTitle } from "../../../../../../../packages/sample/src/components/layout/section-title";
+} from "@saedgewell/components/core";
+import { SectionTitle } from "@saedgewell/components/layout";
+import { WorkCard } from "@saedgewell/components/features";
 
 interface AdditionalAchievementsProps {
 	works: Work[];

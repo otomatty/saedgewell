@@ -1,58 +1,23 @@
+import { baseConfig } from "@saedgewell/config/styling";
 import type { Config } from "tailwindcss";
 
-const config = {
-	darkMode: ["class"],
+// 既存の設定を保持しつつ、ベース設定を拡張
+const config: Config = {
+	...baseConfig,
 	content: [
+		...(Array.isArray(baseConfig.content) ? baseConfig.content : []),
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
 	],
-	prefix: "",
 	theme: {
-		container: {
-			center: true,
-			padding: "2rem",
-			screens: {
-				"2xl": "1400px",
-			},
-		},
+		...baseConfig.theme,
 		extend: {
+			...baseConfig.theme?.extend,
 			colors: {
-				border: "hsl(var(--border))",
+				...baseConfig.theme?.extend?.colors,
 				backgroundLine: "hsl(var(--background-line))",
-				input: "hsl(var(--input))",
-				ring: "hsl(var(--ring))",
-				background: "hsl(var(--background))",
-				foreground: "hsl(var(--foreground))",
-				primary: {
-					DEFAULT: "hsl(var(--primary))",
-					foreground: "hsl(var(--primary-foreground))",
-				},
-				secondary: {
-					DEFAULT: "hsl(var(--secondary))",
-					foreground: "hsl(var(--secondary-foreground))",
-				},
-				destructive: {
-					DEFAULT: "hsl(var(--destructive))",
-					foreground: "hsl(var(--destructive-foreground))",
-				},
-				muted: {
-					DEFAULT: "hsl(var(--muted))",
-					foreground: "hsl(var(--muted-foreground))",
-				},
-				accent: {
-					DEFAULT: "hsl(var(--accent))",
-					foreground: "hsl(var(--accent-foreground))",
-				},
-				popover: {
-					DEFAULT: "hsl(var(--popover))",
-					foreground: "hsl(var(--popover-foreground))",
-				},
-				card: {
-					DEFAULT: "hsl(var(--card))",
-					foreground: "hsl(var(--card-foreground))",
-				},
 				sidebar: {
 					DEFAULT: "hsl(var(--sidebar-background))",
 					foreground: "hsl(var(--sidebar-foreground))",
@@ -75,22 +40,7 @@ const config = {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			keyframes: {
-				"accordion-down": {
-					from: {
-						height: "0",
-					},
-					to: {
-						height: "var(--radix-accordion-content-height)",
-					},
-				},
-				"accordion-up": {
-					from: {
-						height: "var(--radix-accordion-content-height)",
-					},
-					to: {
-						height: "0",
-					},
-				},
+				...baseConfig.theme?.extend?.keyframes,
 				"shimmer-slide": {
 					to: {
 						transform: "translate(calc(100cqw - 100%), 0)",
@@ -249,27 +199,27 @@ const config = {
 					from: {
 						transform: "rotate(360deg)",
 					},
-					to: {
-						transform: "rotate(0deg)",
-					},
 				},
 			},
 			animation: {
-				"accordion-down": "accordion-down 0.2s ease-out",
-				"accordion-up": "accordion-up 0.2s ease-out",
-				"shimmer-slide":
-					"shimmer-slide var(--speed) ease-in-out infinite alternate",
-				"spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
-				orbit: "orbit calc(var(--duration)*1s) linear infinite",
-				marquee: "marquee var(--duration) infinite linear",
+				...baseConfig.theme?.extend?.animation,
+				"shimmer-slide": "shimmer-slide 1.5s linear infinite",
+				"spin-around": "spin-around 6s ease-in-out infinite",
+				orbit: "orbit calc(var(--duration) * 1s) linear infinite",
+				marquee: "marquee var(--duration) linear infinite",
 				"marquee-vertical": "marquee-vertical var(--duration) linear infinite",
-				ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
+				ripple: "ripple 1.5s ease-in-out infinite",
+				"aurora-border": "aurora-border 8s ease-in-out infinite",
+				"aurora-1": "aurora-1 15s ease-in-out infinite",
+				"aurora-2": "aurora-2 15s ease-in-out infinite",
+				"aurora-3": "aurora-3 15s ease-in-out infinite",
+				"aurora-4": "aurora-4 15s ease-in-out infinite",
 				"background-position-spin":
-					"background-position-spin 3000ms infinite alternate",
-				meteor: "meteor 5s linear infinite",
-				aurora: "aurora-gradient 6s ease-in-out infinite",
-				"spin-clockwise": "spin 20s linear infinite",
-				"spin-counterclockwise": "spin-reverse 20s linear infinite",
+					"background-position-spin 3s ease-in-out infinite alternate",
+				meteor: "meteor var(--duration) linear infinite",
+				"aurora-gradient": "aurora-gradient 15s ease infinite",
+				"spin-slow": "spin 4s linear infinite",
+				"spin-reverse": "spin-reverse 1s linear infinite",
 			},
 		},
 	},

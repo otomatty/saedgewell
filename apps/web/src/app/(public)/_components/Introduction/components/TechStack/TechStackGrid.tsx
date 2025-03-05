@@ -1,6 +1,5 @@
-import { OrbitingCircles } from "../../../../../../../../../packages/sample/src/components/animation/orbiting-circles";
-import { Particles } from "../../../../../../../../../packages/sample/src/components/background/particles";
-import { techStacks } from "../../../../../../../../../packages/data/src/tech-stacks";
+import { OrbitingCircles } from "@saedgewell/components/animation";
+import { techStacks } from "@saedgewell/data";
 import { TechStackIcon } from "./TechStackIcon";
 
 /**

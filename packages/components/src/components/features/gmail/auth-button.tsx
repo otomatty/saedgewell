@@ -1,86 +1,54 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "../../core/button";
 import { Mail } from "lucide-react";
 import { startGmailAuth, checkGmailAuthStatus } from "@saedgewell/actions";
+import { Button } from "../../core/button";
+import { useToast } from "@saedgewell/hooks";
 
+/**
+ * Gmail認証を開始するためのボタンコンポーネント
+ *
+ * @description
+ * - 認証状態を確認し、未認証の場合のみ認証フローを開始します
+ * - 認証済みの場合はトーストメッセージで通知します
+ * - エラーが発生した場合はトーストメッセージでエラー内容を表示します
+ */
 export function GmailAuthButton() {
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<Error | null>(null);
+	const { toast } = useToast();
 
-	// 認証状態を確認する
-	useEffect(() => {
-		const checkAuth = async () => {
-			try {
-				setIsLoading(true);
-				const status = await checkGmailAuthStatus();
-				setIsAuthenticated(status.authenticated);
-				if (!status.authenticated && status.error) {
-					setError(new Error(status.error));
-				} else {
-					setError(null);
-				}
-			} catch (err) {
-				setError(
-					err instanceof Error
-						? err
-						: new Error("認証状態の確認中にエラーが発生しました"),
-				);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		checkAuth();
-	}, []);
-
-	// 認証を開始する
-	const handleStartAuth = async () => {
+	/**
+	 * ボタンクリック時の処理
+	 * - 認証状態を確認
+	 * - 未認証の場合は認証フローを開始
+	 * - エラー発生時はトーストメッセージで通知
+	 */
+	const handleClick = async () => {
 		try {
-			setIsLoading(true);
-			setError(null);
-			const result = await startGmailAuth();
-			if (result.url) {
-				// 認証URLにリダイレクト
-				window.location.href = result.url;
-			} else if (result.error) {
-				setError(new Error(result.error));
+			const isAuthenticated = await checkGmailAuthStatus();
+			if (isAuthenticated) {
+				toast({
+					title: "既に認証済みです",
+					description: "Gmailは既に認証されています。",
+					variant: "default",
+				});
+				return;
 			}
-		} catch (err) {
-			setError(
-				err instanceof Error
-					? err
-					: new Error("認証の開始中にエラーが発生しました"),
-			);
-		} finally {
-			setIsLoading(false);
+
+			await startGmailAuth();
+		} catch (error) {
+			toast({
+				title: "エラーが発生しました",
+				description:
+					error instanceof Error ? error.message : "認証に失敗しました。",
+				variant: "destructive",
+			});
 		}
 	};
 
-	if (isLoading) {
-		return (
-			<Button disabled variant="outline">
-				<Mail className="mr-2 h-4 w-4" />
-				読み込み中...
-			</Button>
-		);
-	}
-
-	if (isAuthenticated) {
-		return (
-			<Button variant="outline" className="text-green-600">
-				<Mail className="mr-2 h-4 w-4" />
-				Gmail連携済み
-			</Button>
-		);
-	}
-
 	return (
-		<Button onClick={handleStartAuth} variant="outline">
+		<Button onClick={handleClick} variant="outline" className="w-full">
 			<Mail className="mr-2 h-4 w-4" />
-			{error ? "再認証" : "Gmailと連携"}
+			Gmailで認証
 		</Button>
 	);
 }

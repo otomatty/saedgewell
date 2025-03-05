@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { OrbitAnimation } from "../../../../../../../packages/sample/src/components/animation/orbit-animation";
+import { OrbitAnimation } from "@saedgewell/components/animation";
 
 /**
  * 実績セクションの背景に表示する軌道アニメーションコンポーネント

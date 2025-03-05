@@ -13,25 +13,24 @@ import {
 } from "@radix-ui/react-icons";
 import { Notebook, Telescope } from "lucide-react";
 // Utils
-import { cn } from "../../../../../../../packages/sample/src/lib/utils";
+import { cn } from "@saedgewell/components";
 // Types
-import type { Metric } from "../../../../../../../packages/types/src/metrics";
+import type { Metric } from "@saedgewell/types";
 // Components
-import {../../../../../../../packages/components/src/bento-grid
-	BentoGrid,../../../../../../../packages/components/src/custom/section-title
-	MagicBentoCard,
-} from "../../../../../../../packages/components/components/bento-grid";
-import { SectionTitle } from "../../../../../../../packages/sample/components/custom/section-title";
-import { TechStackGrid } from ".../../../../../../../packages/components/src/magicui/flickering-grid
-import { NumberDisplay } from../../../../../../../packages/components/src/magicui/grid-pattern
-import { GitHubImages } from ".../../../../../../../packages/components/src/magicui/shippo-pattern
-import { FlickeringGrid } from ".../../../../../../../packages/components/src/magicui/seigaiha-pattern
-import { GridPattern } from ../../../../../../../packages/components/src/magicui/dot-patternrn";
-import { ShippoPattern }../../../../../../../packages/components/src/magicui/ripple/shippo-pattern";
-import { SeigaihaPattern } ../../../../../../../packages/components/src/magicui/particlesgaiha-pattern";
-import { DotPattern } from "../../../../../../../packages/sample/components/magicui/dot-pattern";
-import { Ripple } from "../../../../../../../packages/sample/components/magicui/ripple";
-import { Particles } from "../../../../../../../packages/sample/components/magicui/particles";
+import { BentoGrid } from "@saedgewell/components/layout";
+import { SectionTitle } from "@saedgewell/components/layout";
+import { MagicBentoCard } from "@saedgewell/components/layout";
+import { FlickeringGrid } from "@saedgewell/components/background";
+import { GridPattern } from "@saedgewell/components/background";
+import { ShippoPattern } from "@saedgewell/components/background";
+import { SeigaihaPattern } from "@saedgewell/components/background";
+import { DotPattern } from "@saedgewell/components/background";
+import { Ripple } from "@saedgewell/components/background";
+import { Particles } from "@saedgewell/components/background";
+// 固有コンポーネント
+import { TechStackGrid } from "./components/TechStack";
+import { NumberDisplay } from "./components/NumberCard";
+import { GitHubImages } from "./components/GitHubCard";
 
 interface IntroductionProps {
 	metrics: Metric[];

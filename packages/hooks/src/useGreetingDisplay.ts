@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 const GREETING_SHOWN_KEY = "greeting-shown";

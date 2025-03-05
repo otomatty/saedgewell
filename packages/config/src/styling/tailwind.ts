@@ -73,3 +73,5 @@ export const baseConfig: Config = {
 	},
 	plugins: [require("tailwindcss-animate")],
 };
+
+export default { baseConfig };

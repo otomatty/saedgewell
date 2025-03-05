@@ -4,21 +4,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Navigation } from "./Navigation";
 import { MobileSidebar } from "./MobileSidebar";
-import { Skeleton } from "../../../../../../packages/components/src/components/core/skeleton";
+import { Skeleton } from "@saedgewell/components/core";
 import { UserMenu } from "./_components/UserMenu";
-import { useAuth } from "../../../hooks/useAuth";
-import type { ProfileWithRole } from "../../../../../../packages/types/src/profile";
-import { ContactDialog } from "../../../../../../packages/ui/src/components/features/contacts/contact-dialog";
-import { ThemeToggle } from "../../../../../../packages/ui/src/components/features/theme/theme-toggle";
-import { LoginDialog } from "../../../../../../packages/ui/src/components/features/auth/login-dialog";
+import type { ProfileWithRole } from "@saedgewell/types";
+import { ContactDialog } from "@saedgewell/components/features";
+import { ThemeToggle } from "@saedgewell/components/features";
+import { LoginDialog } from "@saedgewell/components/features";
 
 interface HeaderProps {
 	profile: ProfileWithRole | null;
+	isAuthenticated: boolean;
 }
 
-export const Header = ({ profile }: HeaderProps) => {
-	const { isLoading, isAuthenticated } = useAuth(profile);
-
+export const Header = ({ profile, isAuthenticated }: HeaderProps) => {
 	return (
 		<motion.header
 			initial={{ y: -100 }}
@@ -38,21 +36,17 @@ export const Header = ({ profile }: HeaderProps) => {
 						<Navigation />
 						<ThemeToggle />
 						<ContactDialog />
-						{isLoading ? (
-							<Skeleton className="h-10 w-10 rounded-full" />
+						{profile ? (
+							<UserMenu profile={profile} />
 						) : isAuthenticated ? (
-							profile ? (
-								<UserMenu profile={profile} />
-							) : (
-								<Skeleton className="h-10 w-10 rounded-full" />
-							)
+							<Skeleton className="h-10 w-10 rounded-full" />
 						) : (
 							<LoginDialog />
 						)}
 					</div>
 
 					{/* モバイル用のサイドバー */}
-					<MobileSidebar profile={profile} />
+					<MobileSidebar profile={profile} isAuthenticated={isAuthenticated} />
 				</div>
 			</div>
 		</motion.header>

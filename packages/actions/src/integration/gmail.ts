@@ -2,7 +2,8 @@
 
 import { createClient } from "@saedgewell/lib/server";
 import { revalidatePath } from "next/cache";
-import { GmailClient } from "@saedgewell/lib/server";
+import { GmailClient, generateAuthUrl } from "@saedgewell/lib/server";
+import type { GmailToken } from "@saedgewell/types";
 
 /**
  * メール一覧を取得する
@@ -300,55 +301,33 @@ export async function downloadEmailAttachment(
 }
 
 /**
- * Gmail認証を開始し、認証URLを返します
- * @returns 認証URLまたはエラー情報を含むオブジェクト
+ * Gmail認証を開始する
  */
 export async function startGmailAuth() {
-	"use server";
-
 	try {
-		// 認証URLを生成するロジック
-		// 実際の実装ではOAuth2クライアントを使用して認証URLを生成します
-		const authUrl = process.env.NEXT_PUBLIC_GMAIL_AUTH_URL;
-
-		if (!authUrl) {
-			console.error("Gmail認証URLが設定されていません");
-			return { error: "認証の設定が不完全です" };
-		}
-
-		// 認証状態を追跡するためのセッション情報を保存するなどの処理をここに追加
-
+		const authUrl = generateAuthUrl();
 		return { url: authUrl };
 	} catch (error) {
-		console.error("Gmail認証の開始中にエラーが発生しました:", error);
-		return { error: "認証の開始に失敗しました" };
+		return {
+			error: `Gmail認証の開始に失敗しました: ${(error as Error).message}`,
+		};
 	}
 }
 
 /**
- * Gmail認証状態を確認します
- * @returns 認証状態を含むオブジェクト
+ * Gmail認証状態を確認する
  */
 export async function checkGmailAuthStatus() {
-	"use server";
-
 	try {
-		// 既存のgetGmailCredentials関数を使用して認証状態を確認
 		const credentials = await getGmailCredentials();
-
-		// credentialsが存在し、アクセストークンが有効であれば認証済みと判断
-		const isAuthenticated = Boolean(
-			credentials?.access_token &&
-				new Date(credentials.expiry_date) > new Date(),
-		);
-
 		return {
-			authenticated: isAuthenticated,
-			// 認証情報が存在しない場合はエラーメッセージを返す
-			...(!credentials?.access_token && { error: "認証情報が見つかりません" }),
+			authenticated: !!credentials,
+			error: null,
 		};
 	} catch (error) {
-		console.error("Gmail認証状態の確認中にエラーが発生しました:", error);
-		return { authenticated: false, error: "認証状態の確認に失敗しました" };
+		return {
+			authenticated: false,
+			error: `認証状態の確認に失敗しました: ${(error as Error).message}`,
+		};
 	}
 }

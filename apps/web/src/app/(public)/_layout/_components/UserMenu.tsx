@@ -4,7 +4,7 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from "../../../../../../../packages/components/src/components/core/avatar";
+} from "@saedgewell/components/core";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,22 +12,23 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "../../../../../../../packages/components/src/components/core/dropdown-menu";
-import { createClient } from "../../../../../../../packages/lib/lib/supabase/client";
+} from "@saedgewell/components/core";
 import { User, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
-import type { ProfileWithRole } from "../../../../../../../packages/types/src/profile";
+import { signOut } from "@saedgewell/actions";
+import type { ProfileWithRole } from "@saedgewell/types";
 
 interface UserMenuProps {
 	profile: ProfileWithRole;
 }
 
 export const UserMenu = ({ profile }: UserMenuProps) => {
-	const supabase = createClient();
-
 	const handleSignOut = async () => {
-		await supabase.auth.signOut();
-		window.location.reload();
+		try {
+			await signOut();
+		} catch (error) {
+			console.error("ログアウトに失敗しました:", error);
+		}
 	};
 
 	return (
@@ -52,7 +53,7 @@ export const UserMenu = ({ profile }: UserMenuProps) => {
 						ダッシュボード
 					</Link>
 				</DropdownMenuItem>
-				{profile.role === "admin" && (
+				{profile.isAdmin && (
 					<DropdownMenuItem asChild>
 						<Link href="/admin" className="cursor-pointer">
 							<Settings className="mr-2 h-4 w-4" />

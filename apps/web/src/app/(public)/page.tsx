@@ -1,3 +1,8 @@
+// パッケージ
+import type { Metric } from "@saedgewell/types";
+import { getMetrics } from "@saedgewell/actions";
+import dynamic from "next/dynamic";
+// 固有コンポーネント
 import { Hero } from "./_components/Hero";
 import { Introduction } from "./_components/Introduction";
 import { Achievements } from "./_components/achievements";
@@ -5,9 +10,14 @@ import { CTASection } from "./_components/CTASection";
 import { AdditionalAchievements } from "./_components/AdditionalAchievements";
 import { sampleWorks } from "./_components/AdditionalAchievements/sample-data";
 import { mockWorks } from "./_components/achievements/mock-data";
-import type { Metric } from "../../../../../packages/types/src/metrics";
-import { getMetrics } from "../../_actions/metrics";
-import { GearBackground } from "../../../../../packages/sample/src/components/background/gear-background";
+
+const GearBackground = dynamic(
+	() =>
+		import("@saedgewell/components/background").then(
+			(mod) => mod.GearBackground,
+		),
+	{ ssr: false },
+);
 
 export default async function HomePage() {
 	const metrics: Metric[] = await getMetrics();

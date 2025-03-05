@@ -10,8 +10,8 @@ import {
 	NavigationMenuTrigger,
 	NavigationMenuContent,
 	navigationMenuTriggerStyle,
-} from "../../../../../../packages/components/src/components/core/navigation-menu";
-import { cn } from "../../../../../../packages/sample/src/lib/utils";
+} from "@saedgewell/components/core";
+import { cn } from "@saedgewell/components";
 
 type NavigationSubItem = {
 	title: string;

@@ -1,7 +1,8 @@
+"use client";
+
 import { Badge } from "../../core/badge";
 import { Card } from "../../core/card";
 import type { Work } from "@saedgewell/types";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface WorkCardProps {
@@ -20,11 +21,10 @@ export const WorkCard = ({ work }: WorkCardProps) => {
 				<Card className="overflow-hidden group cursor-pointer">
 					<div className="relative aspect-[3/4]">
 						<div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
-						<Image
+						<img
 							src={work.thumbnail_url}
 							alt={work.title}
-							fill
-							className="object-cover transition-transform duration-300 group-hover:scale-110"
+							className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
 						/>
 					</div>
 				</Card>

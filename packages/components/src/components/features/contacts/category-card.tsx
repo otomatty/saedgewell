@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "../../core/card";
 import { cn } from "../../../lib/utils";
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType } from "react";
 
 export interface CategoryCardProps {
 	/**
@@ -20,7 +20,7 @@ export interface CategoryCardProps {
 	/**
 	 * カテゴリーのアイコン
 	 */
-	icon: LucideIcon;
+	icon: ComponentType<{ className?: string }>;
 	/**
 	 * カテゴリーが選択された時のコールバック
 	 */

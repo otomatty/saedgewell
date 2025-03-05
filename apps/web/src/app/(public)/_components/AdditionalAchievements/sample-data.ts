@@ -1,4 +1,4 @@
-import type { Work } from "../../../../../../../packages/types/src/work";
+import type { Work } from "@saedgewell/types";
 
 export const sampleWorks: Work[] = [
 	{

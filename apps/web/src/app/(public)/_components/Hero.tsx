@@ -25,11 +25,11 @@
 import Link from "next/link";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Button } from "../../../../../../packages/components/src/components/core/button/button";
+import { Button } from "@saedgewell/components/core";
 import { ArrowRight } from "lucide-react";
-import { ContactDialog } from "../../../../../../packages/ui/src/components/features/contacts/contact-dialog";
-import { ThemeSwitch } from "../../../../../../packages/ui/src/components/features/theme-switch";
-import LinearRotate from "../../../../../../packages/sample/src/components/background/linear-rotate";
+import { ContactDialog } from "@saedgewell/components/features";
+import { ThemeSwitch } from "@saedgewell/components/features";
+import { LinearRotate } from "@saedgewell/components/background";
 import { useRef } from "react";
 
 export const Hero = () => {

@@ -12,7 +12,7 @@ export interface AuthContextType extends AuthState {
 	signOut: () => Promise<void>;
 }
 
-export type UserRole = "admin" | "client" | "user";
+export type UserRole = "user" | "client";
 
 export interface UserProfile {
 	id: string;

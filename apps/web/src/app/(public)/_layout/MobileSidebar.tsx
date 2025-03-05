@@ -8,25 +8,24 @@ import {
 	SheetContent,
 	SheetTrigger,
 	SheetTitle,
-} from "../../../../../../packages/components/src/components/core/sheet";
-import { Separator } from "../../../../../../packages/components/src/components/core/separator";
-import { Button } from "../../../../../../packages/components/src/components/core/button/button";
+} from "@saedgewell/components/core";
+import { Separator } from "@saedgewell/components/core";
+import { Button } from "@saedgewell/components/core";
 import { Menu, ChevronDown, LogOut } from "lucide-react";
-import { cn } from "../../../../../../packages/sample/src/lib/utils";
+import { cn } from "@saedgewell/components";
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from "../../../../../../packages/components/src/components/core/avatar";
-import { createClient } from "../../../../../../packages/lib/lib/supabase/client";
+} from "@saedgewell/components/core";
+import { createClient } from "@saedgewell/lib";
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from "../../../../../../packages/components/src/components/core/collapsible";
-import type { Profile } from "../../../../../../packages/types/src/profile";
-import { useAuth } from "../../../hooks/useAuth";
-import { LoginDialog } from "../../../../../../packages/ui/src/components/features/auth/login-dialog";
+} from "@saedgewell/components/core";
+import type { Profile, ProfileWithRole } from "@saedgewell/types";
+import { LoginDialog } from "@saedgewell/components/features";
 
 const navigationItems = [
 	{
@@ -69,15 +68,18 @@ const navigationItems = [
 ] as const;
 
 interface MobileSidebarProps {
-	profile: Profile | null;
+	profile: ProfileWithRole | null;
+	isAuthenticated: boolean;
 }
 
-export const MobileSidebar = ({ profile }: MobileSidebarProps) => {
+export const MobileSidebar = ({
+	profile,
+	isAuthenticated,
+}: MobileSidebarProps) => {
 	const [open, setOpen] = useState(false);
 	const [servicesOpen, setServicesOpen] = useState(false);
 	const pathname = usePathname();
 	const supabase = createClient();
-	const { isLoading, isAuthenticated } = useAuth(profile);
 
 	const handleSignOut = async () => {
 		await supabase.auth.signOut();
@@ -196,7 +198,7 @@ export const MobileSidebar = ({ profile }: MobileSidebarProps) => {
 							</Button>
 						</>
 					) : (
-						!isLoading && <LoginDialog />
+						<LoginDialog />
 					)}
 				</div>
 			</SheetContent>

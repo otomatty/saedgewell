@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { cn } from "../../../../../../../../../packages/sample/src/lib/utils";
-import type { TechStack } from "../../../../../../../../../packages/data/src/tech-stacks";
+import { cn } from "@saedgewell/components";
+import type { TechStack } from "@saedgewell/data";
 
 /**
  * 技術スタックアイコンを表示するコンポーネント

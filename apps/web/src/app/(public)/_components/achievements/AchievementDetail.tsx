@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import type { FeaturedWork } from "../../../../../../../packages/types/src/work";
-import { ExternalLinkIcon, GithubIcon } from "lucide-react";
-import { Badge } from "../../../../../../../packages/components/src/components/core/badge";
-import { Separator } from "../../../../../../../packages/components/src/components/core/separator";
+import type { FeaturedWork } from "@saedgewell/types";
+import { ExternalLinkIcon } from "lucide-react";
+import { GitHubIcon } from "@saedgewell/components/core";
+import { Badge } from "@saedgewell/components/core";
+import { Separator } from "@saedgewell/components/core";
 
 interface AchievementDetailProps {
 	work: FeaturedWork;
@@ -161,7 +162,7 @@ export const AchievementDetail = ({
 										rel="noopener noreferrer"
 										className="inline-flex items-center text-primary hover:underline"
 									>
-										<GithubIcon className="mr-2 h-4 w-4" />
+										<GitHubIcon className="mr-2 h-4 w-4" />
 										GitHubを見る
 									</a>
 								)}

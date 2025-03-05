@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
-import { Button } from "../../../../../../packages/components/src/components/core/button/button";
+import { Button } from "@saedgewell/components/core";
 
 const footerLinks = [
 	{

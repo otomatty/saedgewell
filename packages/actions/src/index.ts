@@ -1,10 +1,12 @@
+"use server";
+
 /**
  * actionsパッケージのエントリーポイント
  * 各機能カテゴリごとのアクションをエクスポートします
  */
 
 // 認証関連のアクション
-export * from "./auth";
+export * from "./auth/auth";
 
 // ユーザー関連のアクション
 export * from "./user";

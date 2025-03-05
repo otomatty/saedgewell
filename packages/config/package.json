@@ -11,6 +11,8 @@
 		"./typescript/react.json": "./dist/typescript/react.json",
 		"./typescript/nextjs.json": "./dist/typescript/nextjs.json",
 		"./styling": "./dist/styling/index.js",
+		"./styling/tailwind": "./dist/styling/tailwind.js",
+		"./styling/postcss": "./dist/styling/postcss.js",
 		"./lint": "./dist/lint/index.js",
 		"./lint/base.json": "./dist/lint/base.json",
 		"./runtime": "./dist/runtime/index.js",

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import type { FeaturedWork } from "../../../../../../../packages/types/src/work";
+import type { FeaturedWork } from "@saedgewell/types";
 import { AnimatedIndicator } from "./AnimatedIndicator";
-import { useAchievementBarAnimation } from "../../../../hooks/useAchievementBarAnimation";
+import { useAchievementBarAnimation } from "@saedgewell/hooks";
 
 interface AchievementBarProps {
 	work: FeaturedWork; // 表示する実績データ

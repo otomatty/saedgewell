@@ -1,7 +1,6 @@
-import { createClient } from "../../../packages/lib/lib/supabase/server";
+import { createClient } from "@saedgewell/lib/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import type { Database } from "../../../packages/types/src/supabase";
 
 const THEME_COOKIE_NAME = "theme";
 

@@ -1,4 +1,4 @@
-import { NumberTicker } from "../../../../../../../../../packages/components/src/components/core/number-ticker";
+import { NumberTicker } from "@saedgewell/components/core";
 
 interface NumberDisplayProps {
 	value: number;

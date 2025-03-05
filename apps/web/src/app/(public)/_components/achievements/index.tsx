@@ -1,15 +1,19 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+// libraries
+import { useRef, useState } from "react";
 import {
 	motion,
 	useScroll,
 	useTransform,
 	useMotionValueEvent,
 } from "framer-motion";
-import type { FeaturedWork } from "../../../../../../../packages/types/src/work";
-import { NeonGradientCard } from "../../../../../../../packages/sample/src/components/animation/neon-gradient-card";
-import { ScrollTextAnimation } from "../../../../../../../packages/sample/src/components/animation/scroll-text-animation";
+// @saedgewell/types
+import type { FeaturedWork } from "@saedgewell/types";
+// @saedgewell/components
+import { NeonGradientCard } from "@saedgewell/components/animation";
+import { ScrollTextAnimation } from "@saedgewell/components/animation";
+// 固有コンポーネント
 import { OrbitBackground } from "./OrbitBackground";
 import { AchievementBar } from "./AchievementBar";
 import { AchievementDetail } from "./AchievementDetail";

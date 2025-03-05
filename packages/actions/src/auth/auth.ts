@@ -3,7 +3,7 @@
 import { createClient } from "@saedgewell/lib/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { UserRole } from "@saedgewell/types";
+import type { UserRole, ProfileWithRole } from "@saedgewell/types";
 
 /**
  * OAuth認証（Google）を実行します
@@ -58,17 +58,24 @@ export async function signInWithGithub() {
 
 /**
  * サインアウトを実行します
+ * @throws {Error} サインアウトに失敗した場合
  */
 export async function signOut() {
-	const supabase = await createClient();
-	const { error } = await supabase.auth.signOut();
+	try {
+		const supabase = await createClient();
+		const { error } = await supabase.auth.signOut();
 
-	if (error) {
+		if (error) {
+			throw error;
+		}
+
+		// キャッシュを無効化し、ルートページにリダイレクト
+		revalidatePath("/", "layout");
+		redirect("/");
+	} catch (error) {
+		console.error("サインアウトに失敗しました:", error);
 		throw error;
 	}
-
-	revalidatePath("/", "layout");
-	redirect("/");
 }
 
 /**
@@ -129,5 +136,93 @@ export async function checkIsAdmin(): Promise<boolean> {
 	} catch (error) {
 		console.error("Unexpected error in checkIsAdmin:", error);
 		return false;
+	}
+}
+
+/**
+ * 認証状態とプロフィール情報を取得します
+ * @returns {Promise<{ isAuthenticated: boolean; profile: ProfileWithRole | null }>}
+ */
+export async function getAuthState() {
+	try {
+		const supabase = await createClient();
+
+		// レスポンスのキャッシュを無効化
+		const response = new Response();
+		response.headers.set("Cache-Control", "no-store");
+
+		// セッション情報を取得
+		const {
+			data: { session },
+		} = await supabase.auth.getSession();
+
+		if (!session) {
+			return {
+				isAuthenticated: false,
+				profile: null,
+			};
+		}
+
+		// プロフィール情報とロール情報を取得
+		const { data: profile } = await supabase
+			.from("profiles")
+			.select(`
+				*,
+				user_roles!inner (
+					roles!inner (
+						name
+					)
+				)
+			`)
+			.eq("id", session.user.id)
+			.single();
+
+		if (!profile) {
+			return {
+				isAuthenticated: true,
+				profile: null,
+			};
+		}
+
+		// 管理者権限を確認（admin_usersテーブルから）
+		const { data: isAdmin } = await supabase.rpc("check_is_admin");
+
+		// ロール情報を配列に変換（user, clientのみ）
+		const roles = (profile.user_roles?.map(
+			(ur: { roles: { name: string } }) => {
+				const roleName = ur.roles.name;
+				if (roleName === "user" || roleName === "client") {
+					return roleName;
+				}
+				return "user";
+			},
+		) ?? ["user"]) as UserRole[];
+
+		// デフォルトロールを設定（最初のロールをメインロールとして使用）
+		const defaultRole = roles[0] ?? "user";
+
+		// ProfileWithRole型に変換
+		const profileWithRole: ProfileWithRole = {
+			id: profile.id,
+			email: profile.email,
+			fullName: profile.full_name ?? null,
+			avatarUrl: profile.avatar_url ?? null,
+			createdAt: profile.created_at,
+			updatedAt: profile.updated_at,
+			role: defaultRole,
+			isAdmin: !!isAdmin, // admin_usersテーブルの結果を使用
+			roles,
+		};
+
+		return {
+			isAuthenticated: true,
+			profile: profileWithRole,
+		};
+	} catch (error) {
+		console.error("認証状態の取得に失敗しました:", error);
+		return {
+			isAuthenticated: false,
+			profile: null,
+		};
 	}
 }

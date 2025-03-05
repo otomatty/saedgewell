@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Button } from "../../core/button";
 import { signInWithGoogle, signInWithGithub } from "@saedgewell/actions";
 import { useToast } from "@saedgewell/hooks";
-import { Loader2 } from "lucide-react";
-import { GoogleIcon, GitHubIcon } from "../../core/icons";
+import { GoogleIcon, GitHubIcon, LoadingIcon } from "../../core/icons";
 
 export const LoginForm = () => {
 	const [isLoading, setIsLoading] = useState<{
@@ -60,7 +59,7 @@ export const LoginForm = () => {
 				className="w-full"
 			>
 				{isLoading.google ? (
-					<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+					<LoadingIcon className="mr-2 h-4 w-4" />
 				) : (
 					<GoogleIcon className="mr-2 h-4 w-4" />
 				)}
@@ -73,7 +72,7 @@ export const LoginForm = () => {
 				className="w-full"
 			>
 				{isLoading.github ? (
-					<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+					<LoadingIcon className="mr-2 h-4 w-4" />
 				) : (
 					<GitHubIcon className="mr-2 h-4 w-4" />
 				)}

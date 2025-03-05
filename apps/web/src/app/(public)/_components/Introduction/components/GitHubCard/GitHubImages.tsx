@@ -1,7 +1,9 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { cn } from "../../../../../../../../../packages/sample/src/lib/utils";
+import { cn } from "@saedgewell/components";
 
 /**
  * GitHubのプロフィール画像を重ねて表示するコンポーネント
