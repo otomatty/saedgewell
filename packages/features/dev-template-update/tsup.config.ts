@@ -8,4 +8,7 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   external: ['react', '@kit/ui'],
+  banner: {
+    js: "'use client';",
+  },
 });
