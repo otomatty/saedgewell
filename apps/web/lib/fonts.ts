@@ -1,23 +1,31 @@
-import { Inter as SansFont } from 'next/font/google';
+import { Noto_Sans_JP, Inter } from 'next/font/google';
 
 /**
- * @sans
+ * @name inter
  * @description Define here the sans font.
  * By default, it uses the Inter font from Google Fonts.
  */
-const sans = SansFont({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
-  fallback: ['system-ui', 'Helvetica Neue', 'Helvetica', 'Arial'],
+  weight: ['400', '500', '700'],
   preload: true,
-  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  preload: true,
+  display: 'swap',
+  variable: '--font-noto-sans-jp',
 });
 
 /**
  * @heading
  * @description Define here the heading font.
  */
-const heading = sans;
+const heading = notoSansJP;
 
 // we export these fonts into the root layout
-export { sans, heading };
+export { inter, heading };

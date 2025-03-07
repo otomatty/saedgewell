@@ -2,6 +2,16 @@ import Link from 'next/link';
 
 import { cn } from '@kit/ui/utils';
 
+/**
+ * @description SVGロゴを表示するための内部コンポーネント
+ * @internal
+ *
+ * @param {object} props
+ * @param {string} [props.className] - カスタムCSSクラス名
+ * @param {number} [props.width=105] - ロゴの幅（デフォルト: 105px）
+ *
+ * @returns {JSX.Element} SVGロゴ要素
+ */
 function LogoImage({
   className,
   width = 105,
@@ -27,6 +37,27 @@ function LogoImage({
   );
 }
 
+/**
+ * @description アプリケーションのロゴを表示し、必要に応じてリンクとして機能するコンポーネント
+ *
+ * @component
+ * @example
+ * // リンク付きロゴ
+ * <AppLogo href="/" />
+ *
+ * // リンクなしロゴ
+ * <AppLogo href={null} />
+ *
+ * // カスタムクラスとラベル付きロゴ
+ * <AppLogo href="/" className="custom-class" label="ホームへ戻る" />
+ *
+ * @param {object} props
+ * @param {string | null} [props.href] - リンク先URL。nullの場合はリンクなしで表示
+ * @param {string} [props.className] - カスタムCSSクラス名
+ * @param {string} [props.label] - アクセシビリティのためのaria-label（デフォルト: 'Home Page'）
+ *
+ * @returns {JSX.Element} ロゴコンポーネント（リンク付きまたはリンクなし）
+ */
 export function AppLogo({
   href,
   label,

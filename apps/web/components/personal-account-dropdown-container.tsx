@@ -17,6 +17,28 @@ const features = {
   enableThemeToggle: featuresFlagConfig.enableThemeToggle,
 };
 
+/**
+ * @description ユーザーアカウント関連のドロップダウンメニューを提供するコンポーネント
+ *
+ * @component
+ * @example
+ * // 基本的な使用方法
+ * <PersonalAccountDropdownContainer />
+ *
+ * // カスタムクラス付きで使用
+ * <PersonalAccountDropdownContainer className="custom-dropdown" />
+ *
+ * @param {object} props
+ * @param {string} [props.className] - カスタムCSSクラス名
+ *
+ * @details
+ * - ユーザープロフィール情報の表示
+ * - アカウント関連の各種操作（設定、ログアウトなど）
+ * - ドロップダウン形式のUIを提供
+ * - 認証状態に応じて適切なメニュー項目を表示
+ *
+ * @returns {JSX.Element} アカウントドロップダウンメニューコンポーネント
+ */
 export function ProfileAccountDropdownContainer(props: {
   user?: User;
   showProfileName?: boolean;

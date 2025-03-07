@@ -1,17 +1,44 @@
-import { redirect } from 'next/navigation';
-import type { NextRequest } from 'next/server';
+import { createClient } from "../../../../../../packages/lib/lib/supabase/server";
+import { NextResponse } from "next/server";
 
-import { createAuthCallbackService } from '@kit/supabase/auth';
-import { getSupabaseServerClient } from '@kit/supabase/server-client';
+export async function GET(request: Request) {
+	const requestUrl = new URL(request.url);
+	const code = requestUrl.searchParams.get("code");
 
-import pathsConfig from '~/config/paths.config';
+	if (code) {
+		const supabase = await createClient();
 
-export async function GET(request: NextRequest) {
-  const service = createAuthCallbackService(getSupabaseServerClient());
+		// codeを使用してセッションを交換
+		const {
+			data: { session },
+			error,
+		} = await supabase.auth.exchangeCodeForSession(code);
 
-  const { nextPath } = await service.exchangeCodeForSession(request, {
-    redirectPath: pathsConfig.app.home,
-  });
+		if (!error && session?.user) {
+			// ユーザー情報を取得
+			const { user } = session;
+			const email = user.email ?? "";
+			const fullName =
+				user.user_metadata.full_name ?? user.user_metadata.name ?? null;
+			const avatarUrl = user.user_metadata.avatar_url ?? null;
 
-  return redirect(nextPath);
+			// プロファイルとユーザーロールを作成/更新
+			const { error: profileError } = await supabase.rpc("handle_new_user", {
+				p_user_id: user.id,
+				p_email: email,
+				p_full_name: fullName,
+				p_avatar_url: avatarUrl,
+			});
+
+			if (profileError) {
+				console.error("Profile creation error:", profileError);
+			}
+
+			// 認証成功後、ホームページにリダイレクト
+			return NextResponse.redirect(new URL("/", requestUrl.origin));
+		}
+	}
+
+	// エラーが発生した場合はログインページにリダイレクト
+	return NextResponse.redirect(new URL("/auth/login", requestUrl.origin));
 }

@@ -12,14 +12,32 @@ import {
 } from '~/lib/i18n/i18n.settings';
 
 /**
- * 言語切り替えコンポーネント
+ * @description 言語切り替えを提供するコンポーネント
  *
- * 使用例：
- * ```tsx
+ * @component
+ * @example
+ * // デフォルトの言語切り替え
  * <LanguageSwitcher />
- * ```
+ *
+ * // カスタムクラス付きの言語切り替え
+ * <LanguageSwitcher className="custom-switcher" />
+ *
+ * @param {object} props
+ * @param {string} [props.className] - カスタムCSSクラス名
+ *
+ * @details
+ * - 複数言語間の切り替え機能を提供
+ * - i18n設定と連携して言語を切り替え
+ * - ユーザーの言語選択をUIで操作可能
+ * - 選択された言語は永続化され、次回訪問時も維持
+ *
+ * @returns {JSX.Element} 言語切り替えコンポーネント
  */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({
+  className,
+}: {
+  className?: string;
+}) {
   const router = useRouter();
   const { i18n } = useTranslation();
   const [isPending, startTransition] = useTransition();
@@ -52,7 +70,7 @@ export function LanguageSwitcher() {
         handleLanguageChange(e.target.value as SupportedLanguage)
       }
       disabled={isPending}
-      className="px-2 py-1 border rounded-md bg-background"
+      className={`px-2 py-1 border rounded-md bg-background ${className || ''}`}
       aria-label="Select language"
     >
       {languages.map((lang) => (

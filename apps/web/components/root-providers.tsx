@@ -22,6 +22,10 @@ import { ReactQueryProvider } from './react-query-provider';
 
 const captchaSiteKey = authConfig.captchaTokenSiteKey;
 
+/**
+ * @description CAPTCHAトークンを設定するための動的にインポートされるコンポーネント
+ * @internal
+ */
 const CaptchaTokenSetter = dynamic(async () => {
   if (!captchaSiteKey) {
     return Promise.resolve(() => null);
@@ -34,6 +38,30 @@ const CaptchaTokenSetter = dynamic(async () => {
   };
 });
 
+/**
+ * @description アプリケーションのルートレベルで必要な各種プロバイダーを提供するコンポーネント
+ *
+ * @component
+ * @example
+ * <RootProviders lang="ja" theme="light">
+ *   <YourApp />
+ * </RootProviders>
+ *
+ * @param {object} props
+ * @param {string} props.lang - 使用する言語コード
+ * @param {string} [props.theme] - 使用するテーマ（デフォルト: appConfig.themeの値）
+ * @param {React.ReactNode} props.children - ラップする子コンポーネント
+ *
+ * @details 以下のプロバイダーを統合:
+ * - ReactQueryProvider: データフェッチング管理
+ * - I18nProvider: 国際化対応
+ * - CaptchaProvider: CAPTCHA機能
+ * - AuthProvider: 認証状態管理
+ * - ThemeProvider: テーマ管理
+ * - VersionUpdater: バージョン更新通知（feature flagで制御）
+ *
+ * @returns {JSX.Element} 複数のプロバイダーでラップされたコンポーネント
+ */
 export function RootProviders({
   lang,
   theme = appConfig.theme,
