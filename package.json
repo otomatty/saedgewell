@@ -1,0 +1,50 @@
+{
+  "name": "super-next-app",
+  "version": "0.2.0",
+  "private": true,
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.10.0",
+    "bun": ">=1.0.0"
+  },
+  "author": {
+    "url": "https://makerkit.dev",
+    "name": "MakerKit"
+  },
+  "scripts": {
+    "preinstall": "bun run --cwd tooling/scripts requirements",
+    "postinstall": "manypkg fix",
+    "build": "turbo build --cache-dir=.turbo",
+    "clean": "git clean -xdf node_modules dist .next",
+    "clean:workspaces": "turbo clean",
+    "dev": "cross-env FORCE_COLOR=1 turbo dev --parallel",
+    "format": "turbo format --cache-dir=.turbo --continue -- biome format .",
+    "format:fix": "turbo format --cache-dir=.turbo --continue -- biome format . --write",
+    "lint": "turbo lint --cache-dir=.turbo --continue -- biome lint .",
+    "lint:fix": "turbo lint --cache-dir=.turbo --continue -- biome lint . --apply",
+    "typecheck": "turbo typecheck --cache-dir=.turbo",
+    "test": "turbo test --cache-dir=.turbo",
+    "update": "bun update",
+    "syncpack:list": "bun x syncpack list-mismatches",
+    "syncpack:fix": "bun x syncpack fix-mismatches",
+    "supabase:web:start": "bun --cwd apps/web supabase:start",
+    "supabase:web:stop": "bun --cwd apps/web supabase:stop",
+    "supabase:web:typegen": "bun --cwd apps/web supabase:typegen",
+    "supabase:web:reset": "bun --cwd apps/web supabase:reset"
+  },
+  "packageManager": "bun@1.2.4",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@manypkg/cli": "^0.23.0",
+    "@turbo/gen": "^2.4.4",
+    "cross-env": "^7.0.3",
+    "turbo": "^2.4.4",
+    "typescript": "^5.7.3"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/features/*",
+    "tooling/*"
+  ]
+}

@@ -1,0 +1,36 @@
+import { defineConfig } from 'tsup';
+import { allEntries } from './src/entries';
+
+export default defineConfig({
+  entry: allEntries,
+  format: ['esm', 'cjs'],
+  dts: true,
+  clean: true,
+  external: [
+    'react',
+    'react-dom',
+    'next',
+    '@radix-ui/*',
+    'tailwindcss',
+    'clsx',
+    'lucide-react',
+    '@hookform/resolvers',
+    'cmdk',
+    'input-otp',
+    'react-day-picker',
+    'react-top-loading-bar',
+    'recharts',
+    'tailwind-merge',
+    'class-variance-authority',
+    'next-themes',
+    'react-hook-form',
+    'react-i18next',
+    'sonner',
+    'zod',
+  ],
+  treeshake: true,
+  sourcemap: true,
+  outDir: 'dist',
+  splitting: true,
+  bundle: true,
+});
