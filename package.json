@@ -13,7 +13,6 @@
   },
   "scripts": {
     "preinstall": "bun run --cwd tooling/scripts requirements",
-    "postinstall": "manypkg fix",
     "build": "turbo build --cache-dir=.turbo",
     "clean": "git clean -xdf node_modules dist .next",
     "clean:workspaces": "turbo clean",
@@ -35,7 +34,6 @@
   "packageManager": "bun@1.2.4",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@manypkg/cli": "^0.23.0",
     "@turbo/gen": "^2.4.4",
     "cross-env": "^7.0.3",
     "turbo": "^2.4.4",
