@@ -3,6 +3,7 @@ import { StrictMode } from 'react';
 
 import { Toaster } from '@kit/ui/sonner';
 import { cn } from '@kit/ui/utils';
+import { UpdateNotification } from '@kit/dev-template-update';
 
 import { RootProviders } from '~/components/root-providers';
 import { heading, sans } from '~/lib/fonts';
@@ -25,6 +26,7 @@ export default async function RootLayout({
       <body>
         <StrictMode>
           <RootProviders theme={theme} lang={language}>
+            <UpdateNotification />
             {children}
           </RootProviders>
 
