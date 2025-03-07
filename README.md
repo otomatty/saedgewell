@@ -1,4 +1,3 @@
-
 # Super Next App
 
 Next.js 15 + Supabaseスターターキットで、より速くSaaSの構築を始めましょう。
@@ -305,3 +304,15 @@ CloudflareダッシュボードでNode.js互換性を有効にすることを忘
 ## サポート
 
 このキットにはサポートは提供されません。質問やヘルプが必要な場合はissueを開いていただけますが、応答時間や修正の保証はありません。
+
+## 謝辞
+
+このプロジェクトは多くの素晴らしいオープンソースプロジェクトの影響を受けています。詳細な謝辞は[ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md)をご覧ください。
+
+主な参考プロジェクト：
+- [Next.js](https://nextjs.org/)
+- [Supabase](https://supabase.com/)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [Turborepo](https://turborepo.org/)
+
+より詳細な情報は[credits](docs/credits)ディレクトリをご確認ください。
