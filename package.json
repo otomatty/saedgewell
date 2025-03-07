@@ -1,6 +1,6 @@
 {
   "name": "super-next-app",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "private": true,
   "sideEffects": false,
   "engines": {
@@ -8,8 +8,8 @@
     "bun": ">=1.0.0"
   },
   "author": {
-    "url": "https://makerkit.dev",
-    "name": "MakerKit"
+    "url": "https://saedgewell.net",
+    "name": "Saedgewell"
   },
   "scripts": {
     "preinstall": "bun run --cwd tooling/scripts requirements",
@@ -41,10 +41,5 @@
     "turbo": "^2.4.4",
     "typescript": "^5.7.3"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "packages/features/*",
-    "tooling/*"
-  ]
+  "workspaces": ["apps/*", "packages/*", "packages/features/*", "tooling/*"]
 }

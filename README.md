@@ -165,7 +165,7 @@ packages/
     └── ...
 ```
 
-このプロジェクト構造の詳細については、[Next.js App Router: プロジェクト構造](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure)の記事を参照してください。
+このプロジェクト構造の詳細については、[Super Next App: プロジェクト構造](https://docs.saedgewell.net/sna-project-structure)の記事を参照してください。
 
 ### 環境変数
 

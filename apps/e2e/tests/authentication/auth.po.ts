@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 import { Mailbox } from '../utils/mailbox';
 
@@ -52,7 +52,7 @@ export class AuthPageObject {
       deleteAfter: boolean;
     } = {
       deleteAfter: true,
-    },
+    }
   ) {
     return expect(async () => {
       const res = await this.mailbox.visitMailbox(email, params);
@@ -64,7 +64,7 @@ export class AuthPageObject {
   createRandomEmail() {
     const value = Math.random() * 10000000000;
 
-    return `${value.toFixed(0)}@makerkit.dev`;
+    return `${value.toFixed(0)}@saedgewell.net`;
   }
 
   async signUpFlow(path: string) {
