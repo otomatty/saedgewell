@@ -1,0 +1,159 @@
+/*
+* globals.css for UI package
+*
+* Global styles for Storybook and UI components
+*/
+
+/* Tailwind CSS */
+@import 'tailwindcss';
+
+/* Base styles */
+@layer base {
+  :root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-heading: var(--font-sans);
+
+    --background: var(--color-white, #ffffff);
+    --foreground: var(--color-neutral-950, #0a0a0a);
+
+    --card: var(--color-white, #ffffff);
+    --card-foreground: var(--color-neutral-950, #0a0a0a);
+
+    --popover: var(--color-white, #ffffff);
+    --popover-foreground: var(--color-neutral-950, #0a0a0a);
+
+    --primary: var(--color-neutral-950, #0a0a0a);
+    --primary-foreground: var(--color-white, #ffffff);
+
+    --secondary: oklch(96.76% 0.0013 286.38);
+    --secondary-foreground: oklch(21.03% 0.0318 264.65);
+
+    --muted: oklch(96.71% 0.0029 264.54);
+    --muted-foreground: oklch(55.13% 0.0233 264.36);
+
+    --accent: oklch(96.76% 0.0013 286.38);
+    --accent-foreground: oklch(21.03% 0.0318 264.65);
+
+    --destructive: var(--color-red-500, #ef4444);
+    --destructive-foreground: var(--color-white, #ffffff);
+
+    --border: var(--color-gray-100, #f3f4f6);
+    --input: var(--color-gray-200, #e5e7eb);
+    --ring: var(--color-neutral-800, #262626);
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: var(--color-neutral-900, #171717);
+    --foreground: var(--color-white, #ffffff);
+
+    --card: var(--color-neutral-900, #171717);
+    --card-foreground: var(--color-white, #ffffff);
+
+    --popover: var(--color-neutral-900, #171717);
+    --popover-foreground: var(--color-white, #ffffff);
+
+    --primary: var(--color-white, #ffffff);
+    --primary-foreground: var(--color-neutral-900, #171717);
+
+    --secondary: var(--color-neutral-800, #262626);
+    --secondary-foreground: oklch(98.43% 0.0017 247.84);
+
+    --muted: var(--color-neutral-800, #262626);
+    --muted-foreground: oklch(71.19% 0.0129 286.07);
+
+    --accent: var(--color-neutral-800, #262626);
+    --accent-foreground: oklch(98.48% 0 0);
+
+    --destructive: var(--color-red-700, #b91c1c);
+    --destructive-foreground: var(--color-white, #ffffff);
+
+    --border: var(--color-neutral-800, #262626);
+    --input: var(--color-neutral-700, #404040);
+    --ring: oklch(87.09% 0.0055 286.29);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border, currentColor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--muted-foreground);
+  }
+}
+
+/* Animation keyframes */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fade-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+/* Animations */
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s;
+}
+
+.animate-fade-down {
+  animation: fade-down 0.5s;
+} 
