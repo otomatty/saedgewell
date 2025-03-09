@@ -1,5 +1,5 @@
 {
-  "name": "@kit/ui",
+  "name": "super-next-app",
   "private": true,
   "version": "0.1.0",
   "sideEffects": false,
@@ -29,27 +29,16 @@
     "supabase:web:start": "bun --cwd apps/web supabase:start",
     "supabase:web:stop": "bun --cwd apps/web supabase:stop",
     "supabase:web:typegen": "bun --cwd apps/web supabase:typegen",
-    "supabase:web:reset": "bun --cwd apps/web supabase:reset",
-    "storybook": "bun --cwd packages/ui storybook",
-    "build-storybook": "bun --cwd packages/ui build-storybook"
+    "supabase:web:reset": "bun --cwd apps/web supabase:reset"
   },
   "packageManager": "bun@1.2.4",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@chromatic-com/storybook": "^3.2.5",
-    "@storybook/addon-essentials": "^8.6.4",
-    "@storybook/addon-onboarding": "^8.6.4",
-    "@storybook/addon-themes": "^8.6.4",
-    "@storybook/blocks": "^8.6.4",
-    "@storybook/react": "^8.6.4",
-    "@storybook/react-vite": "^8.6.4",
-    "@storybook/test": "^8.6.4",
     "@turbo/gen": "^2.4.4",
     "@vitest/browser": "^3.0.8",
     "@vitest/coverage-v8": "^3.0.8",
     "cross-env": "^7.0.3",
     "playwright": "^1.51.0",
-    "storybook": "^8.6.4",
     "turbo": "^2.4.4",
     "typescript": "^5.7.3",
     "vitest": "^3.0.8"
