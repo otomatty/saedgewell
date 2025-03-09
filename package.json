@@ -39,5 +39,14 @@
     "turbo": "^2.4.4",
     "typescript": "^5.7.3"
   },
-  "workspaces": ["apps/*", "packages/*", "packages/features/*", "tooling/*"]
+  "workspaces": ["apps/*", "packages/*", "packages/features/*", "tooling/*"],
+  "dependencies": {
+    "next-themes": "^0.4.4",
+    "rehype-parse": "^9.0.1",
+    "rehype-pretty-code": "0.10.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-frontmatter": "^5.0.0",
+    "shiki": "0.14.3",
+    "unified": "^11.0.5"
+  }
 }

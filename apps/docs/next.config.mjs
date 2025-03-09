@@ -1,3 +1,6 @@
+import createMDX from '@next/mdx';
+import rehypePrettyCode from 'rehype-pretty-code';
+
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const ENABLE_REACT_COMPILER = process.env.ENABLE_REACT_COMPILER === 'true';
@@ -11,6 +14,22 @@ const INTERNAL_PACKAGES = [
   '@kit/i18n',
   '@kit/next',
 ];
+
+// シンタックスハイライトの設定
+const prettyCodeOptions = {
+  theme: 'github-dark',
+  // 関数を使用しない、シリアライズ可能なオプションのみを使用
+  keepBackground: true,
+  defaultLang: 'plaintext',
+};
+
+// @next/mdxの使用を停止
+// const withMDX = createMDX({
+//   options: {
+//     remarkPlugins: [],
+//     rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+//   },
+// });
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -31,10 +50,12 @@ const config = {
     '/*': ['./content/**/*'],
   },
   experimental: {
-    mdxRs: true,
+    mdxRs: false,
     reactCompiler: ENABLE_REACT_COMPILER,
+    // ハイドレーションエラーを検出して修正するオプションを追加
+    optimisticClientCache: false,
     turbo: {
-      resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
+      resolveExtensions: ['.ts', '.tsx', '.js', '.jsx', '.mdx'],
     },
     optimizePackageImports: [
       'recharts',
@@ -54,8 +75,11 @@ const config = {
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 };
 
+// @next/mdxの使用を停止
+// export default withMDX(config);
 export default config;
 
 function getRemotePatterns() {

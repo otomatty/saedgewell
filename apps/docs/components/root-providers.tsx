@@ -4,14 +4,14 @@ import { useMemo } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '~/components/theme-provider';
 
 import { CaptchaProvider } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
 import { If } from '@kit/ui/if';
 import { VersionUpdater } from '@kit/ui/version-updater';
 
-import { AuthProvider } from '~/components/auth-provider';
+// import { AuthProvider } from '~/components/auth-provider';
 import appConfig from '~/config/app.config';
 import authConfig from '~/config/auth.config';
 import featuresFlagConfig from '~/config/feature-flags.config';
@@ -50,17 +50,18 @@ export function RootProviders({
         <CaptchaProvider>
           <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-          <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              enableSystem
-              disableTransitionOnChange
-              defaultTheme={theme}
-              enableColorScheme={false}
-            >
-              {children}
-            </ThemeProvider>
-          </AuthProvider>
+          {/* 一時的にAuthProviderをコメントアウト */}
+          {/* <AuthProvider> */}
+          <ThemeProvider
+            attribute="class"
+            enableSystem
+            disableTransitionOnChange
+            defaultTheme={theme}
+            enableColorScheme={false}
+          >
+            {children}
+          </ThemeProvider>
+          {/* </AuthProvider> */}
         </CaptchaProvider>
 
         <If condition={featuresFlagConfig.enableVersionUpdater}>

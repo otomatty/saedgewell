@@ -25,9 +25,7 @@ const AppConfigSchema = z
       .string({
         required_error: 'Please provide the variable NEXT_PUBLIC_SITE_URL',
       })
-      .url({
-        message: `You are deploying a production build but have entered a NEXT_PUBLIC_SITE_URL variable using http instead of https. It is very likely that you have set the incorrect URL. The build will now fail to prevent you from from deploying a faulty configuration. Please provide the variable NEXT_PUBLIC_SITE_URL with a valid URL, such as: 'https://example.com'`,
-      }),
+      .url(),
     locale: z
       .string({
         description: 'This is the default locale of your SaaS.',
@@ -53,16 +51,6 @@ const AppConfigSchema = z
     {
       message: `Please provide a valid HTTPS URL. Set the variable NEXT_PUBLIC_SITE_URL with a valid URL, such as: 'https://example.com'`,
       path: ['url'],
-    }
-  )
-  .refine(
-    (schema) => {
-      return schema.themeColor !== schema.themeColorDark;
-    },
-    {
-      message:
-        'Please provide different theme colors for light and dark themes.',
-      path: ['themeColor'],
     }
   );
 

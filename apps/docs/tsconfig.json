@@ -6,13 +6,15 @@
       "~/*": ["./app/*"],
       "~/config/*": ["./config/*"],
       "~/components/*": ["./components/*"],
-      "~/lib/*": ["./lib/*"]
+      "~/lib/*": ["./lib/*"],
+      "~/types/*": ["./types/*"]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
@@ -23,7 +25,9 @@
     "./config/**/*.ts",
     "components/**/*",
     "lib/**/*.ts",
-    "app"
+    "app",
+    "docs",
+    "types/**/*.d.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

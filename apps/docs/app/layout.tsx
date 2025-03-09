@@ -3,16 +3,16 @@ import { StrictMode } from 'react';
 
 import { Toaster } from '@kit/ui/sonner';
 import { cn } from '@kit/ui/utils';
-import { UpdateNotification } from '@kit/dev-template-update';
 
 import { RootProviders } from '~/components/root-providers';
 import { heading, sans } from '~/lib/fonts';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { generateRootMetadata } from '~/lib/root-metdata';
+import RootLayout from '~/components/layout/RootLayout';
 
 import '../styles/globals.css';
 
-export default async function RootLayout({
+export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -23,11 +23,10 @@ export default async function RootLayout({
 
   return (
     <html lang={language} className={className}>
-      <body>
+      <body suppressHydrationWarning>
         <StrictMode>
           <RootProviders theme={theme} lang={language}>
-            <UpdateNotification />
-            {children}
+            <RootLayout>{children}</RootLayout>
           </RootProviders>
 
           <Toaster richColors={true} theme={theme} position="top-center" />

@@ -47,3 +47,48 @@
     color: var(--color-muted-foreground);
   }
 }
+
+/* Mermaid図解のスタイリング */
+.mermaid-container {
+  @apply flex justify-center my-8 overflow-x-auto;
+}
+
+.mermaid-diagram {
+  @apply bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm max-w-full;
+}
+
+.mermaid-diagram svg {
+  @apply max-w-full h-auto;
+}
+
+/* Mermaidダイアグラム内のテキスト色を調整 */
+.dark .mermaid-diagram text {
+  @apply fill-gray-200;
+}
+
+.dark .mermaid-diagram .actor {
+  @apply fill-slate-700 stroke-slate-600;
+}
+
+.dark .mermaid-diagram .messageText {
+  @apply fill-gray-300 stroke-none;
+}
+
+/* フローチャートの矢印色を調整 */
+.dark .mermaid-diagram .marker {
+  @apply fill-gray-300 stroke-gray-300;
+}
+
+/* クラス図の枠線色を調整 */
+.dark .mermaid-diagram .classGroup rect {
+  @apply fill-slate-700 stroke-slate-600;
+}
+
+/* コピーボタンのスタイル */
+.copy-button {
+  @apply absolute top-2 right-2 px-2 py-1 text-xs bg-gray-700 text-white rounded opacity-70 hover:opacity-100 transition-opacity;
+}
+
+pre {
+  @apply relative;
+}

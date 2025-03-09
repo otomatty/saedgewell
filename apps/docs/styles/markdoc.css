@@ -6,7 +6,7 @@
  */
 
 .markdoc {
-    @apply text-foreground;
+    @apply text-foreground max-w-none;
 }
 
 .markdoc h1 {
@@ -85,7 +85,7 @@
 }
 
 .markdoc pre {
-    @apply overflow-x-auto bg-muted/50 rounded-md border border-border p-4 text-sm font-mono text-foreground;
+    @apply overflow-x-auto bg-muted/50 rounded-md border border-border p-4 text-sm font-mono text-foreground my-6 relative;
 }
 
 .markdoc blockquote {
@@ -111,6 +111,67 @@
 
 .markdoc [role='alert'] h5 {
     color: inherit;
+}
+
+.markdoc table {
+    @apply w-full my-6 text-sm border-collapse;
+}
+
+.markdoc table thead {
+    @apply bg-muted/50;
+}
+
+.markdoc table th {
+    @apply p-4 text-left font-semibold border;
+}
+
+.markdoc table td {
+    @apply p-4 border;
+}
+
+.markdoc img {
+    @apply my-4 rounded-lg border border-border;
+    max-width: 100%;
+    height: auto;
+}
+
+.markdoc code {
+    @apply font-mono text-sm;
+}
+
+.markdoc pre code {
+    @apply block overflow-x-auto;
+    padding: 0 !important;
+}
+
+/* シンタックスハイライト用のスタイル */
+.markdoc pre {
+    @apply relative;
+}
+
+.markdoc pre > code {
+    @apply grid;
+}
+
+.markdoc pre > code > .line {
+    @apply py-1;
+}
+
+/* コードブロックの言語表示 */
+.markdoc pre::before {
+    content: attr(data-language);
+    @apply absolute top-0 right-0 text-xs text-muted-foreground bg-muted px-2 py-1 rounded-bl;
+}
+
+/* コピーボタン */
+.markdoc pre .copy-button {
+    @apply absolute top-2 right-2 p-1 rounded-md text-xs bg-muted/80 hover:bg-muted text-muted-foreground;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.markdoc pre:hover .copy-button {
+    opacity: 1;
 }
 
 /* markdoc styles */
