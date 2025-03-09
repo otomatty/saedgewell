@@ -1,7 +1,7 @@
 import React from 'react';
 
-import type { Button } from '@kit/ui/button';
-import { cn } from '@kit/ui/utils';
+import type { Button } from '../../shadcn/button';
+import { cn } from '../../lib/utils/cn';
 
 import { CtaButton } from './cta-button';
 import { GradientSecondaryText } from './gradient-secondary-text';
@@ -40,19 +40,19 @@ const ComingSoon: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   const childrenArray = React.Children.toArray(children);
 
   const logo = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === ComingSoonLogo,
+    (child) => React.isValidElement(child) && child.type === ComingSoonLogo
   );
 
   const heading = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === ComingSoonHeading,
+    (child) => React.isValidElement(child) && child.type === ComingSoonHeading
   );
 
   const text = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === ComingSoonText,
+    (child) => React.isValidElement(child) && child.type === ComingSoonText
   );
 
   const button = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === ComingSoonButton,
+    (child) => React.isValidElement(child) && child.type === ComingSoonButton
   );
 
   const cmps = [
@@ -65,14 +65,14 @@ const ComingSoon: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   const otherChildren = childrenArray.filter(
     (child) =>
       React.isValidElement(child) &&
-      !cmps.includes(child.type as (typeof cmps)[number]),
+      !cmps.includes(child.type as (typeof cmps)[number])
   );
 
   return (
     <div
       className={cn(
         'container flex min-h-screen flex-col items-center justify-center space-y-12 p-4',
-        className,
+        className
       )}
       {...props}
     >

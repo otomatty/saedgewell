@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import {
   flexRender,
-  getCoreRowModel,
+  getShadcnRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -82,7 +82,7 @@ export function DataTable<T extends object>({
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    getShadcnRowModel: getShadcnRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination,
     manualSorting,
@@ -159,7 +159,7 @@ export function DataTable<T extends object>({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
                 </TableHead>
               ))}
@@ -266,7 +266,7 @@ function Pagination<T>({
 function useNavigateToNewPage(
   props: { pageParam?: string } = {
     pageParam: 'page',
-  },
+  }
 ) {
   const router = useRouter();
   const param = props.pageParam ?? 'page';
@@ -278,6 +278,6 @@ function useNavigateToNewPage(
 
       router.push(url.pathname + url.search);
     },
-    [param, router],
+    [param, router]
   );
 }
