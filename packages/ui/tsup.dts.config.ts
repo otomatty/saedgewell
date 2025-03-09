@@ -30,40 +30,38 @@ const externalDependencies = [
   'zod',
 ];
 
-// 共通の設定をベースとして定義
-const baseConfig = {
-  format: ['esm' as const, 'cjs' as const],
-  dts: true,
-  external: externalDependencies,
-  treeshake: true,
-  sourcemap: true,
-  outDir: 'dist',
-  splitting: true,
-  bundle: true,
-  minify: true,
-  workers: 2,
-};
-
-// エントリーポイントを分割してビルドする
+// 型定義のみを生成する設定
 export default defineConfig([
   {
-    ...baseConfig,
     entry: shadcnEntries,
-    clean: true, // 最初のビルドでのみtrueに設定
+    dts: true, // 型定義のみを生成
+    format: [], // 出力形式なし
+    external: externalDependencies,
+    outDir: 'dist',
+    clean: false, // 既存のビルド結果を保持
   },
   {
-    ...baseConfig,
     entry: makerkitEntries,
-    clean: false, // 後続のビルドではfalseに設定
-  },
-  {
-    ...baseConfig,
-    entry: magicuiEntries,
+    dts: true,
+    format: [],
+    external: externalDependencies,
+    outDir: 'dist',
     clean: false,
   },
   {
-    ...baseConfig,
+    entry: magicuiEntries,
+    dts: true,
+    format: [],
+    external: externalDependencies,
+    outDir: 'dist',
+    clean: false,
+  },
+  {
     entry: utilEntries,
+    dts: true,
+    format: [],
+    external: externalDependencies,
+    outDir: 'dist',
     clean: false,
   },
 ]);

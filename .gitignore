@@ -49,3 +49,6 @@ yarn-error.log*
 # contentlayer
 .contentlayer/
 *storybook.log
+
+# cache
+.cache/

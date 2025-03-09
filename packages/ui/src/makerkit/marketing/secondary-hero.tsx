@@ -20,7 +20,7 @@ export const SecondaryHero: React.FC<SecondaryHeroProps> =
       <div
         className={cn(
           'flex flex-col items-center space-y-6 text-center',
-          className,
+          className
         )}
         {...props}
       >
