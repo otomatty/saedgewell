@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '~/components/theme-provider';
 
 import { CaptchaProvider } from '@kit/auth/captcha/client';
 import { I18nProvider } from '@kit/i18n/provider';
