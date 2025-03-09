@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getDocFromParams } from '~/lib/docs';
-import { MDXContent } from '~/components/mdx-content';
+import { MDXContent } from '~/components/mdx/mdx-content';
 import { Suspense } from 'react';
 
 interface PageProps {
