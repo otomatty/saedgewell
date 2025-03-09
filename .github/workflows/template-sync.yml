@@ -33,33 +33,35 @@ jobs:
           chmod +x ./scripts/update-from-template.sh
           # packages ディレクトリの更新
           git checkout upstream/main -- packages/
-          # docs ディレクトリの更新
-          git checkout upstream/main -- docs/
           # tooling ディレクトリの更新
           git checkout upstream/main -- tooling/
-          # ルートディレクトリの設定ファイルの更新
-          git checkout upstream/main -- *.json
+          # ルートディレクトリの設定ファイルの更新（package.jsonを除く）
           git checkout upstream/main -- *.toml
           git checkout upstream/main -- *.yml
           git checkout upstream/main -- .gitattributes
           git checkout upstream/main -- .npmrc
           git checkout upstream/main -- .nvmrc
+          # 特定のJSONファイルのみ更新（package.json以外）
+          git checkout upstream/main -- tsconfig.json
+          git checkout upstream/main -- biome.json
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          title: '🔄 テンプレートの更新を同期（apps以外）'
+          title: '🔄 テンプレートの更新を同期（除外ディレクトリあり）'
           body: |
             親テンプレートからの更新を同期します。
             
             更新対象：
             - packages/
-            - docs/
             - tooling/
-            - ルートディレクトリの設定ファイル
+            - ルートディレクトリの設定ファイル（package.json除く）
             
             除外対象：
             - apps/
+            - docs/
+            - .cursor/
+            - package.json
             
             - この PR は自動生成されています
             - コンフリクトがある場合は手動での解決が必要です
@@ -69,4 +71,4 @@ jobs:
           labels: |
             template-sync
             automated pr
-          commit-message: '🔄 テンプレートの更新を同期（apps以外）' 
+          commit-message: '🔄 テンプレートの更新を同期（除外ディレクトリあり）' 

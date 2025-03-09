@@ -5,7 +5,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { Button } from '../../shadcn/button';
 import { Card } from '../../shadcn/card';
-import { MagicCard } from '../../animation/magic-card';
+import { MagicCard } from '../magic-card';
 import { cn } from '../../lib/utils';
 import { useTheme } from 'next-themes';
 

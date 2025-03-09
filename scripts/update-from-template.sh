@@ -3,6 +3,19 @@
 # エラーが発生したら停止
 set -e
 
+# 除外するファイルやディレクトリのリスト
+# スペース区切りで複数指定可能
+EXCLUDED_FILES=(
+  "README.md"
+  "LICENSE"
+  "apps/specific-app"
+  "custom-config.json"
+  ".cursor"
+  "docs"
+  "apps"
+  "package.json"
+)
+
 echo "🔄 テンプレートリポジトリからの更新を確認します..."
 
 # upstreamの最新変更を取得
@@ -36,9 +49,32 @@ echo "🔄 更新を開始します..."
 # マージ前の状態を保存
 git stash
 
+# 除外ファイルの一時保存
+echo "📋 除外ファイルを一時保存しています..."
+TEMP_DIR=$(mktemp -d)
+for file in "${EXCLUDED_FILES[@]}"; do
+  if [ -e "$file" ]; then
+    mkdir -p "$TEMP_DIR/$(dirname "$file")"
+    cp -r "$file" "$TEMP_DIR/$(dirname "$file")/"
+    echo "  - $file を保存しました"
+  fi
+done
+
 # upstreamの変更をマージ
 echo "📥 テンプレートの変更を取り込んでいます..."
 git merge upstream/main --allow-unrelated-histories
+
+# 除外ファイルを復元
+echo "📋 除外ファイルを復元しています..."
+for file in "${EXCLUDED_FILES[@]}"; do
+  if [ -e "$TEMP_DIR/$file" ]; then
+    cp -r "$TEMP_DIR/$file" "$(dirname "$file")/"
+    echo "  - $file を復元しました"
+  fi
+done
+
+# 一時ディレクトリの削除
+rm -rf "$TEMP_DIR"
 
 # パッケージの更新
 echo "📦 依存関係を更新しています..."
