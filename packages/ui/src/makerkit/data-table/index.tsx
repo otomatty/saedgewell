@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import {
   flexRender,
-  getShadcnRowModel,
+  getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -82,7 +82,7 @@ export function DataTable<T extends object>({
   const table = useReactTable({
     data,
     columns,
-    getShadcnRowModel: getShadcnRowModel(),
+    getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination,
     manualSorting,
