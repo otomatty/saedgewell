@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
 
 export const GradientText: React.FC<React.HTMLAttributes<HTMLSpanElement>> =
   function GradientTextComponent({ className, children, ...props }) {
@@ -8,7 +8,7 @@ export const GradientText: React.FC<React.HTMLAttributes<HTMLSpanElement>> =
       <span
         className={cn(
           'bg-linear-to-r bg-clip-text text-transparent',
-          className,
+          className
         )}
         {...props}
       >

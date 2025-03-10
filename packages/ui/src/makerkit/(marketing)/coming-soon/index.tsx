@@ -1,11 +1,11 @@
 import React from 'react';
 
-import type { Button } from '../../shadcn/button';
-import { cn } from '../../lib/utils/cn';
+import type { Button } from '../../../shadcn/button';
+import { cn } from '../../../lib/utils/cn';
 
-import { CtaButton } from './cta-button';
-import { GradientSecondaryText } from './gradient-secondary-text';
-import { HeroTitle } from './hero-title';
+import { CtaButton } from '../cta-button';
+import { GradientSecondaryText } from '../gradient-secondary-text';
+import { HeroTitle } from '../hero-title';
 
 const ComingSoonHeading: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({
   className,

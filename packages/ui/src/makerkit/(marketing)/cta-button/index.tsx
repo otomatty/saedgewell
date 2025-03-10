@@ -1,5 +1,5 @@
-import { cn } from '../../lib/utils';
-import { Button } from '../../shadcn/button';
+import { cn } from '../../../lib/utils';
+import { Button } from '../../../shadcn/button';
 
 export const CtaButton: React.FC<React.ComponentProps<typeof Button>> =
   function CtaButtonComponent({ className, children, ...props }) {

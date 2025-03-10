@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { cn } from '../lib/utils';
-import { Separator } from '../shadcn/separator';
-import { SidebarTrigger } from '../shadcn/sidebar';
-import { If } from './if';
+import { cn } from '../../lib/utils';
+import { Separator } from '../../shadcn/separator';
+import { SidebarTrigger } from '../../shadcn/sidebar';
+import { If } from '../if';
 
 export type PageLayoutStyle = 'sidebar' | 'header' | 'custom';
 

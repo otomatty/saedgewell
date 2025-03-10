@@ -13,7 +13,7 @@ EXCLUDED_FILES=(
   ".cursor"
   "docs"
   "apps"
-  "package.json"
+  "./package.json"  # ルートディレクトリのpackage.jsonのみを除外
 )
 
 echo "🔄 テンプレートリポジトリからの更新を確認します..."

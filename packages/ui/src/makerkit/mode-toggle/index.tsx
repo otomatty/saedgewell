@@ -5,8 +5,8 @@ import { useMemo } from 'react';
 import { Computer, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-import { cn } from '../lib/utils';
-import { Button } from '../shadcn/button';
+import { cn } from '../../lib/utils';
+import { Button } from '../../shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,8 +16,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '../shadcn/dropdown-menu';
-import { Trans } from './trans';
+} from '../../shadcn/dropdown-menu';
+import { Trans } from '../trans';
 
 const MODES = ['light', 'dark', 'system'];
 
@@ -91,7 +91,7 @@ export function SubMenuModeToggle() {
           </DropdownMenuItem>
         );
       }),
-    [setTheme, theme],
+    [setTheme, theme]
   );
 
   return (

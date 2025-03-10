@@ -4,9 +4,9 @@ import { Fragment, useCallback } from 'react';
 
 import { cva } from 'class-variance-authority';
 
-import { cn } from '../lib/utils';
-import { If } from './if';
-import { Trans } from './trans';
+import { cn } from '../../lib/utils';
+import { If } from '../if';
+import { Trans } from '../trans';
 
 type Variant = 'numbers' | 'default' | 'dots';
 

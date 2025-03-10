@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
-import { cn } from '../lib/utils';
-import { Spinner } from './spinner';
+import { cn } from '../../lib/utils';
+import { Spinner } from '../spinner';
 
 export function LoadingOverlay({
   children,

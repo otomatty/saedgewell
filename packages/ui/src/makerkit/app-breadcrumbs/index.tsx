@@ -11,9 +11,9 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '../shadcn/breadcrumb';
-import { If } from './if';
-import { Trans } from './trans';
+} from '../../shadcn/breadcrumb';
+import { If } from '../if';
+import { Trans } from '../trans';
 
 const unslugify = (slug: string) => slug.replace(/-/g, ' ');
 

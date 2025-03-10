@@ -4,16 +4,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { cn } from '../../lib/utils';
-import { Button } from '../../shadcn/button';
+import { cn } from '../../../lib/utils';
+import { Button } from '../../../shadcn/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '../../shadcn/form';
-import { Input } from '../../shadcn/input';
+} from '../../../shadcn/form';
+import { Input } from '../../../shadcn/input';
 
 const NewsletterFormSchema = z.object({
   email: z.string().email('Please enter a valid email address'),

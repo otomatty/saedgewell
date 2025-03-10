@@ -31,8 +31,10 @@ jobs:
       - name: Run update script for specific directories
         run: |
           chmod +x ./scripts/update-from-template.sh
-          # packages ディレクトリの更新
+          # packages ディレクトリの更新（ルートのpackage.jsonは除外）
           git checkout upstream/main -- packages/
+          # もしルートのpackage.jsonが更新された場合は元に戻す
+          git checkout HEAD -- package.json
           # tooling ディレクトリの更新
           git checkout upstream/main -- tooling/
           # ルートディレクトリの設定ファイルの更新（package.jsonを除く）

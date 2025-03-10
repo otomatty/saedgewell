@@ -1,6 +1,6 @@
 import { Slot, Slottable } from '@radix-ui/react-slot';
 
-import { cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
 
 export const HeroTitle: React.FC<
   React.HTMLAttributes<HTMLHeadingElement> & {
@@ -13,7 +13,7 @@ export const HeroTitle: React.FC<
     <Comp
       className={cn(
         'hero-title flex flex-col text-center font-sans text-4xl font-semibold tracking-tighter sm:text-6xl lg:max-w-5xl lg:text-7xl xl:text-[4.5rem] dark:text-white',
-        className,
+        className
       )}
       {...props}
     >

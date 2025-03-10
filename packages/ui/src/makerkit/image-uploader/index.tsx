@@ -5,9 +5,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { Button } from '../shadcn/button';
-import { ImageUploadInput } from './image-upload-input';
-import { Trans } from './trans';
+import { Button } from '../../shadcn/button';
+import { ImageUploadInput } from '../image-upload-input';
+import { Trans } from '../trans';
 
 export function ImageUploader(
   props: React.PropsWithChildren<{

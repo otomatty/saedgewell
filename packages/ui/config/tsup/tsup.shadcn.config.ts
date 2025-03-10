@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { shadcnEntries } from './entries';
+import { shadcnEntries } from './entries/shadcn';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [
@@ -39,4 +39,9 @@ export default defineConfig({
   minify: true,
   // workers: 1, // 並列処理を最小限に制限
   clean: true, // 最初のビルドでクリーン
+  esbuildOptions(options) {
+    // パス解決の設定を追加
+    options.resolveExtensions = ['.tsx', '.ts', '.jsx', '.js'];
+    options.mainFields = ['module', 'main'];
+  },
 });

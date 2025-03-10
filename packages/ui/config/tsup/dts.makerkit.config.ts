@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { makerkitEntries } from './entries';
+import { makerkitEntries } from './entries/makerkit';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [

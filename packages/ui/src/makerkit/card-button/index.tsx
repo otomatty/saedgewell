@@ -3,7 +3,7 @@ import type * as React from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { ChevronRight } from 'lucide-react';
 
-import { cn } from '../lib/utils';
+import { cn } from '../../lib/utils';
 
 export const CardButton: React.FC<
   {
@@ -18,7 +18,7 @@ export const CardButton: React.FC<
     <Comp
       className={cn(
         'group hover:bg-secondary/20 active:bg-secondary active:bg-secondary/50 dark:shadow-primary/20 relative flex h-36 flex-col rounded-lg border transition-all hover:shadow-xs active:shadow-lg',
-        className,
+        className
       )}
       {...props}
     >
@@ -39,7 +39,7 @@ export const CardButtonTitle: React.FC<
     <Comp
       className={cn(
         className,
-        'text-muted-foreground group-hover:text-secondary-foreground align-super text-sm font-medium transition-colors',
+        'text-muted-foreground group-hover:text-secondary-foreground align-super text-sm font-medium transition-colors'
       )}
       {...props}
     >
@@ -72,7 +72,7 @@ export const CardButtonHeader: React.FC<
             'text-muted-foreground group-hover:text-secondary-foreground absolute top-4 right-2 h-4 transition-colors',
             {
               hidden: !displayArrow,
-            },
+            }
           )}
         />
       </Slottable>
@@ -107,7 +107,7 @@ export const CardButtonFooter: React.FC<
     <Comp
       className={cn(
         className,
-        'mt-auto flex h-0 w-full flex-col justify-center border-t px-4',
+        'mt-auto flex h-0 w-full flex-col justify-center border-t px-4'
       )}
       {...props}
     >
