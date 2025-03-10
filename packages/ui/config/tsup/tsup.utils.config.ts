@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { utilEntries } from './entries';
+import { utilEntries } from './entries/util';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [
@@ -38,4 +38,9 @@ export default defineConfig({
   bundle: true,
   minify: true,
   clean: false, // 既存のビルド結果を保持
+  esbuildOptions(options) {
+    // パス解決の設定を追加
+    options.resolveExtensions = ['.tsx', '.ts', '.jsx', '.js'];
+    options.mainFields = ['module', 'main'];
+  },
 });

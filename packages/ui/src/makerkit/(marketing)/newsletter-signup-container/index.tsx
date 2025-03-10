@@ -2,11 +2,11 @@
 
 import { useCallback, useState } from 'react';
 
-import { cn } from '../../lib/utils';
-import { Alert, AlertDescription, AlertTitle } from '../../shadcn/alert';
-import { Heading } from '../../shadcn/heading';
-import { Spinner } from '../spinner';
-import { NewsletterSignup } from './newsletter-signup';
+import { cn } from '../../../lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '../../../shadcn/alert';
+import { Heading } from '../../../shadcn/heading';
+import { Spinner } from '../../spinner';
+import { NewsletterSignup } from '../newsletter-signup';
 
 interface NewsletterSignupContainerProps
   extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { utilEntries } from './entries';
+import { utilEntries } from './entries/util';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [

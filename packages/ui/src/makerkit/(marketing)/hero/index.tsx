@@ -1,7 +1,7 @@
 import type React from 'react';
 
-import { cn } from '../../lib/utils';
-import { HeroTitle } from './hero-title';
+import { cn } from '../../../lib/utils';
+import { HeroTitle } from '../hero-title';
 
 interface HeroProps {
   pill?: React.ReactNode;

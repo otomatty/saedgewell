@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { cn } from '../lib/utils';
-import { Button } from '../shadcn/button';
+import { cn } from '../../lib/utils';
+import { Button } from '../../shadcn/button';
 
 const EmptyStateHeading: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({
   className,
@@ -38,15 +38,15 @@ const EmptyState: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   const childrenArray = React.Children.toArray(children);
 
   const heading = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === EmptyStateHeading,
+    (child) => React.isValidElement(child) && child.type === EmptyStateHeading
   );
 
   const text = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === EmptyStateText,
+    (child) => React.isValidElement(child) && child.type === EmptyStateText
   );
 
   const button = childrenArray.find(
-    (child) => React.isValidElement(child) && child.type === EmptyStateButton,
+    (child) => React.isValidElement(child) && child.type === EmptyStateButton
   );
 
   const cmps = [EmptyStateHeading, EmptyStateText, EmptyStateButton];
@@ -54,14 +54,14 @@ const EmptyState: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   const otherChildren = childrenArray.filter(
     (child) =>
       React.isValidElement(child) &&
-      !cmps.includes(child.type as (typeof cmps)[number]),
+      !cmps.includes(child.type as (typeof cmps)[number])
   );
 
   return (
     <div
       className={cn(
         'flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-xs',
-        className,
+        className
       )}
       {...props}
     >

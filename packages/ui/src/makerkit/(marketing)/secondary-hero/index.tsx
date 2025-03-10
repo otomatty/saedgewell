@@ -1,5 +1,5 @@
-import { cn } from '../../lib/utils';
-import { Heading } from '../../shadcn/heading';
+import { cn } from '../../../lib/utils';
+import { Heading } from '../../../shadcn/heading';
 
 interface SecondaryHeroProps extends React.HTMLAttributes<HTMLDivElement> {
   pill?: React.ReactNode;

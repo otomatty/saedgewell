@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../shadcn/select';
+} from '../../shadcn/select';
 
 export function LanguageSelector({
   onChange,
@@ -21,7 +21,7 @@ export function LanguageSelector({
   const { language: currentLanguage, options } = i18n;
 
   const locales = (options.supportedLngs as string[]).filter(
-    (locale) => locale.toLowerCase() !== 'cimode',
+    (locale) => locale.toLowerCase() !== 'cimode'
   );
 
   const languageNames = useMemo(() => {
@@ -45,7 +45,7 @@ export function LanguageSelector({
       // refresh cached translations
       window.location.reload();
     },
-    [i18n, onChange],
+    [i18n, onChange]
   );
 
   return (

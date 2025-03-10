@@ -12,9 +12,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../shadcn/alert-dialog';
-import { Button } from '../shadcn/button';
-import { Trans } from './trans';
+} from '../../shadcn/alert-dialog';
+import { Button } from '../../shadcn/button';
+import { Trans } from '../trans';
 
 /**
  * Current version of the app that is running

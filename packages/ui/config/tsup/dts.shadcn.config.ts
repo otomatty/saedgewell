@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { shadcnEntries } from './entries';
+import { shadcnEntries } from './entries/shadcn';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [

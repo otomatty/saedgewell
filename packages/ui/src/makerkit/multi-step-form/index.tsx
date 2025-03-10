@@ -16,7 +16,7 @@ import { useMutation } from '@tanstack/react-query';
 import type { Path, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 
-import { cn } from '../lib/utils';
+import { cn } from '../../lib/utils';
 
 interface MultiStepFormProps<T extends z.ZodType> {
   schema: T;
@@ -58,22 +58,22 @@ export function MultiStepForm<T extends z.ZodType>({
     () =>
       React.Children.toArray(children).filter(
         (child): child is React.ReactElement<StepProps> =>
-          React.isValidElement(child) && child.type === MultiStepFormStep,
+          React.isValidElement(child) && child.type === MultiStepFormStep
       ),
-    [children],
+    [children]
   );
 
   const header = useMemo(() => {
     return React.Children.toArray(children).find(
       (child) =>
-        React.isValidElement(child) && child.type === MultiStepFormHeader,
+        React.isValidElement(child) && child.type === MultiStepFormHeader
     );
   }, [children]);
 
   const footer = useMemo(() => {
     return React.Children.toArray(children).find(
       (child) =>
-        React.isValidElement(child) && child.type === MultiStepFormFooter,
+        React.isValidElement(child) && child.type === MultiStepFormFooter
     );
   }, [children]);
 
@@ -152,7 +152,7 @@ export function useMultiStepFormContext<Schema extends z.ZodType>() {
 
   if (!context) {
     throw new Error(
-      'useMultiStepFormContext must be used within a MultiStepForm',
+      'useMultiStepFormContext must be used within a MultiStepForm'
     );
   }
 
@@ -171,7 +171,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
   schema: Schema,
   form: UseFormReturn<z.infer<Schema>>,
   stepNames: string[],
-  onSubmit: (data: z.infer<Schema>) => void,
+  onSubmit: (data: z.infer<Schema>) => void
 ) {
   const [state, setState] = useState({
     currentStepIndex: 0,
@@ -219,7 +219,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
 
           if (currentStepSchema) {
             const fields = Object.keys(
-              (currentStepSchema as z.ZodObject<never>).shape,
+              (currentStepSchema as z.ZodObject<never>).shape
             );
 
             const keys = fields.map((field) => `${currentStepName}.${field}`);
@@ -244,7 +244,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
         });
       }
     },
-    [isStepValid, state.currentStepIndex, stepNames, schema, form],
+    [isStepValid, state.currentStepIndex, stepNames, schema, form]
   );
 
   const prevStep = useCallback(
@@ -263,7 +263,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
         });
       }
     },
-    [state.currentStepIndex],
+    [state.currentStepIndex]
   );
 
   const goToStep = useCallback(
@@ -279,7 +279,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
         });
       }
     },
-    [isStepValid, stepNames.length],
+    [isStepValid, stepNames.length]
   );
 
   const isValid = form.formState.isValid;
@@ -320,7 +320,7 @@ export function useMultiStepForm<Schema extends z.ZodType>(
       isStepValid,
       isValid,
       errors,
-    ],
+    ]
   );
 }
 
@@ -362,7 +362,7 @@ export const MultiStepFormFooter: React.FC<
  * @param steps
  */
 export function createStepSchema<T extends Record<string, z.ZodType>>(
-  steps: T,
+  steps: T
 ) {
   return z.object(steps);
 }
@@ -397,7 +397,7 @@ function AnimatedStep({
   useEffect(() => {
     if (isActive && stepRef.current) {
       const focusableElement = stepRef.current.querySelector(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
 
       if (focusableElement) {
@@ -422,7 +422,7 @@ function AnimatedStep({
       : {
           '-translate-x-full': direction === 'forward' || index < currentIndex,
           'translate-x-full': direction === 'backward' || index > currentIndex,
-        },
+        }
   );
 
   const className = cn(baseClasses, visibilityClasses, transformClasses);

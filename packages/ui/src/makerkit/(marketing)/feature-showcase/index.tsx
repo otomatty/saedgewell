@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
 
 interface FeatureShowcaseProps extends React.HTMLAttributes<HTMLDivElement> {
   heading: React.ReactNode;
@@ -34,14 +34,14 @@ export const FeatureShowcase: React.FC<FeatureShowcaseProps> =
 export function FeatureShowcaseIconContainer(
   props: React.PropsWithChildren<{
     className?: string;
-  }>,
+  }>
 ) {
   return (
     <div className={'flex'}>
       <div
         className={cn(
           'flex items-center justify-center space-x-4 rounded-lg p-3 font-medium',
-          props.className,
+          props.className
         )}
       >
         {props.children}

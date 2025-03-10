@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { cn, isRouteActive } from '../lib/utils';
-import { Button } from '../shadcn/button';
+import { cn, isRouteActive } from '../../lib/utils';
+import { Button } from '../../shadcn/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from '../shadcn/navigation-menu';
-import { Trans } from './trans';
+} from '../../shadcn/navigation-menu';
+import { Trans } from '../trans';
 
 export function BorderedNavigationMenu(props: React.PropsWithChildren) {
   return (
@@ -58,7 +58,7 @@ export function BorderedNavigationMenuItem(props: {
           {active ? (
             <span
               className={cn(
-                'bg-primary animate-in fade-in zoom-in-90 absolute -bottom-2.5 left-0 h-0.5 w-full',
+                'bg-primary animate-in fade-in zoom-in-90 absolute -bottom-2.5 left-0 h-0.5 w-full'
               )}
             />
           ) : null}

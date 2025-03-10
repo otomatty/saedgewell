@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup';
-import { magicuiEntries } from './entries';
+import { magicuiEntries } from './entries/magicui';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [

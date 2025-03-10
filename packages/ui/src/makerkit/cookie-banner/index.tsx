@@ -4,9 +4,9 @@ import { useCallback, useMemo, useState } from 'react';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-import { Button } from '../shadcn/button';
-import { Heading } from '../shadcn/heading';
-import { Trans } from './trans';
+import { Button } from '../../shadcn/button';
+import { Heading } from '../../shadcn/heading';
+import { Trans } from '../trans';
 
 // configure this as you wish
 const COOKIE_CONSENT_STATUS = 'cookie_consent_status';

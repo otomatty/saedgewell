@@ -1,7 +1,7 @@
 import { Slot, Slottable } from '@radix-ui/react-slot';
 
-import { cn } from '../../lib/utils';
-import { GradientSecondaryText } from './gradient-secondary-text';
+import { cn } from '../../../lib/utils';
+import { GradientSecondaryText } from '../gradient-secondary-text';
 
 export const Pill: React.FC<
   React.HTMLAttributes<HTMLHeadingElement> & {
@@ -15,7 +15,7 @@ export const Pill: React.FC<
     <Comp
       className={cn(
         'bg-muted/50 flex items-center gap-x-1.5 rounded-full border px-2 py-1.5 pr-2 text-center text-sm font-medium text-transparent',
-        className,
+        className
       )}
       {...props}
     >
