@@ -3,6 +3,7 @@ import {
   shadcnEntries,
   makerkitEntries,
   magicuiEntries,
+  customEntries,
   utilEntries,
 } from './src/entries';
 

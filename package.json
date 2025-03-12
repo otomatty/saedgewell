@@ -11,6 +11,14 @@
     "url": "https://saedgewell.net",
     "name": "Saedgewell"
   },
+  "template": {
+    "name": "super-next-app",
+    "author": {
+      "url": "https://saedgewell.net",
+      "name": "Saedgewell"
+    },
+    "repository": "https://github.com/otomatty/super-next-app"
+  },
   "scripts": {
     "preinstall": "bun run --cwd tooling/scripts requirements",
     "build": "tsup",
