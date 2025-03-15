@@ -188,7 +188,7 @@ export interface DocType {
   title: string;
   description?: string;
   icon?: string;
-  thumbnail?: string; // Gyazoなどの画像URLを格納
+  thumbnail?: string; // Gyazoなどの画像URLまたは/thumbnails/から始まる相対パス
   status?: 'published' | 'draft' | 'deprecated'; // ドキュメントの状態
   disabled?: boolean; // ドロップダウンでの選択を無効化
   badge?: string; // "開発中" "非推奨"などのバッジテキスト

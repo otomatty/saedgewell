@@ -1,6 +1,7 @@
 {
   "title": "Supabase",
   "description": "Supabaseの公式ドキュメント",
+  "thumbnail": "https://supabase.com",
   "tags": {
     "type": ["official"],
     "tech": ["supabase"]

@@ -1,9 +1,17 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Check, ChevronsUpDown, BookOpen, ChevronRight } from 'lucide-react';
+import {
+  Check,
+  ChevronsUpDown,
+  BookOpen,
+  ChevronRight,
+  FileText,
+  BookMarked,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +27,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@kit/ui/sidebar';
+import { Skeleton } from '@kit/ui/skeleton';
+import { getCategoryDisplayName, getCategoryColor } from '~/lib/utils/category';
+import {
+  optimizeImageUrlSync,
+  DEFAULT_THUMBNAIL_PATH,
+} from '~/lib/utils/image';
 import type { DocType, DocCategory } from '~/lib/mdx/types';
+
+// カテゴリごとのアイコンを取得する関数
+function getCategoryIcon(category?: string) {
+  switch (category) {
+    case 'documents':
+      return <BookMarked className="size-5" />;
+    case 'wiki':
+      return <FileText className="size-5" />;
+    default:
+      return <BookOpen className="size-5" />;
+  }
+}
 
 export function DocTypeSelector() {
   const router = useRouter();
@@ -28,6 +54,10 @@ export function DocTypeSelector() {
   const [categories, setCategories] = useState<DocCategory[]>([]);
   const [currentType, setCurrentType] = useState<DocType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // 画像の読み込み状態を保持するstate
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<string, boolean>
+  >({});
 
   useEffect(() => {
     const fetchDocTypes = async () => {
@@ -43,9 +73,28 @@ export function DocTypeSelector() {
         if (data.categories && data.docTypes) {
           setCategories(data.categories);
           setDocTypes(data.docTypes);
+
+          // 画像の読み込み状態を初期化
+          const initialLoadingStates: Record<string, boolean> = {};
+          for (const docType of data.docTypes) {
+            initialLoadingStates[docType.id] = true;
+          }
+          for (const category of data.categories) {
+            initialLoadingStates[`category-${category.id}`] = true;
+          }
+          setImageLoadingStates(initialLoadingStates);
         } else {
           // 後方互換性のため、配列の場合はドキュメントタイプとして扱う
           setDocTypes(Array.isArray(data) ? data : []);
+
+          // 画像の読み込み状態を初期化
+          const initialLoadingStates: Record<string, boolean> = {};
+          if (Array.isArray(data)) {
+            for (const docType of data) {
+              initialLoadingStates[docType.id] = true;
+            }
+          }
+          setImageLoadingStates(initialLoadingStates);
         }
 
         // パスから現在のドキュメントタイプを特定
@@ -77,8 +126,37 @@ export function DocTypeSelector() {
     router.push(`/${type.id}`);
   };
 
+  // 画像の読み込み完了時の処理
+  const handleImageLoad = (id: string) => {
+    setImageLoadingStates((prev) => ({
+      ...prev,
+      [id]: false,
+    }));
+  };
+
+  // 画像の読み込みエラー時の処理
+  const handleImageError = (id: string) => {
+    setImageLoadingStates((prev) => ({
+      ...prev,
+      [id]: false,
+    }));
+  };
+
   if (isLoading) {
-    return null;
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg" className="animate-pulse">
+            <Skeleton className="h-9 w-9 rounded-md" />
+            <div className="flex flex-col gap-0.5 w-full">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-16" />
+            </div>
+            <Skeleton className="h-4 w-4 ml-auto" />
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
   }
 
   // カテゴリごとにドキュメントタイプをグループ化
@@ -106,17 +184,30 @@ export function DocTypeSelector() {
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <div
+                  className={`flex aspect-square size-9 items-center justify-center rounded-md border-2 bg-transparent ${getCategoryColor(currentType.category)} border-current`}
+                >
                   {currentType.icon ? (
-                    <Image
-                      src={currentType.icon}
-                      alt={currentType.title}
-                      width={16}
-                      height={16}
-                      className="size-4"
-                    />
+                    <div className="relative size-5">
+                      {imageLoadingStates[currentType.id] && (
+                        <Skeleton className="absolute inset-0 z-10" />
+                      )}
+                      <Image
+                        src={optimizeImageUrlSync(currentType.icon)}
+                        alt={currentType.title}
+                        width={20}
+                        height={20}
+                        className="size-5"
+                        onLoad={() => handleImageLoad(currentType.id)}
+                        onError={() => handleImageError(currentType.id)}
+                        style={{
+                          opacity: imageLoadingStates[currentType.id] ? 0 : 1,
+                          transition: 'opacity 0.2s ease-in-out',
+                        }}
+                      />
+                    </div>
                   ) : (
-                    <BookOpen className="size-4" />
+                    getCategoryIcon(currentType.category)
                   )}
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
@@ -124,7 +215,7 @@ export function DocTypeSelector() {
                   {currentType.category && (
                     <span className="text-xs text-muted-foreground">
                       {categories.find((c) => c.id === currentType.category)
-                        ?.title || currentType.category}
+                        ?.title || getCategoryDisplayName(currentType.category)}
                     </span>
                   )}
                 </div>
@@ -148,15 +239,46 @@ export function DocTypeSelector() {
                         <DropdownMenuSub key={category.id}>
                           <DropdownMenuSubTrigger className="flex items-center gap-2">
                             {category.icon ? (
-                              <Image
-                                src={category.icon}
-                                alt={category.title}
-                                width={16}
-                                height={16}
-                                className="size-4"
-                              />
+                              <div
+                                className={`flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent ${getCategoryColor(category.id)} border-current`}
+                              >
+                                <div className="relative size-5">
+                                  {imageLoadingStates[
+                                    `category-${category.id}`
+                                  ] && (
+                                    <Skeleton className="absolute inset-0 z-10" />
+                                  )}
+                                  <Image
+                                    src={optimizeImageUrlSync(category.icon)}
+                                    alt={category.title}
+                                    width={20}
+                                    height={20}
+                                    className="size-5"
+                                    onLoad={() =>
+                                      handleImageLoad(`category-${category.id}`)
+                                    }
+                                    onError={() =>
+                                      handleImageError(
+                                        `category-${category.id}`
+                                      )
+                                    }
+                                    style={{
+                                      opacity: imageLoadingStates[
+                                        `category-${category.id}`
+                                      ]
+                                        ? 0
+                                        : 1,
+                                      transition: 'opacity 0.2s ease-in-out',
+                                    }}
+                                  />
+                                </div>
+                              </div>
                             ) : (
-                              <BookOpen className="size-4" />
+                              <div
+                                className={`flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent ${getCategoryColor(category.id)} border-current`}
+                              >
+                                {getCategoryIcon(category.id)}
+                              </div>
                             )}
                             <span>{category.title}</span>
                             <ChevronRight className="ml-auto size-4" />
@@ -170,15 +292,37 @@ export function DocTypeSelector() {
                               >
                                 <div className="flex w-full items-center gap-2">
                                   {type.icon ? (
-                                    <Image
-                                      src={type.icon}
-                                      alt={type.title}
-                                      width={16}
-                                      height={16}
-                                      className="size-4"
-                                    />
+                                    <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent border-current">
+                                      <div className="relative size-5">
+                                        {imageLoadingStates[type.id] && (
+                                          <Skeleton className="absolute inset-0 z-10" />
+                                        )}
+                                        <Image
+                                          src={optimizeImageUrlSync(type.icon)}
+                                          alt={type.title}
+                                          width={20}
+                                          height={20}
+                                          className="size-5"
+                                          onLoad={() =>
+                                            handleImageLoad(type.id)
+                                          }
+                                          onError={() =>
+                                            handleImageError(type.id)
+                                          }
+                                          style={{
+                                            opacity: imageLoadingStates[type.id]
+                                              ? 0
+                                              : 1,
+                                            transition:
+                                              'opacity 0.2s ease-in-out',
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
                                   ) : (
-                                    <BookOpen className="size-4" />
+                                    <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent border-current">
+                                      {getCategoryIcon(type.category)}
+                                    </div>
                                   )}
                                   <span className="font-medium">
                                     {type.title}
@@ -215,15 +359,30 @@ export function DocTypeSelector() {
                 >
                   <div className="flex w-full items-center gap-2">
                     {type.icon ? (
-                      <Image
-                        src={type.icon}
-                        alt={type.title}
-                        width={16}
-                        height={16}
-                        className="size-4"
-                      />
+                      <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent border-current">
+                        <div className="relative size-5">
+                          {imageLoadingStates[type.id] && (
+                            <Skeleton className="absolute inset-0 z-10" />
+                          )}
+                          <Image
+                            src={optimizeImageUrlSync(type.icon)}
+                            alt={type.title}
+                            width={20}
+                            height={20}
+                            className="size-5"
+                            onLoad={() => handleImageLoad(type.id)}
+                            onError={() => handleImageError(type.id)}
+                            style={{
+                              opacity: imageLoadingStates[type.id] ? 0 : 1,
+                              transition: 'opacity 0.2s ease-in-out',
+                            }}
+                          />
+                        </div>
+                      </div>
                     ) : (
-                      <BookOpen className="size-4" />
+                      <div className="flex h-6 w-6 items-center justify-center rounded-md border-2 bg-transparent border-current">
+                        <BookOpen className="size-5" />
+                      </div>
                     )}
                     <span className="font-medium">{type.title}</span>
                     {type.id === currentType.id && (
