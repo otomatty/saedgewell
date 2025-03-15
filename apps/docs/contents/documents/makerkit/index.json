@@ -1,0 +1,10 @@
+{
+  "title": "MakerKit",
+  "description": "MakerKitテンプレートのカスタマイズガイド",
+  "order": 4,
+  "icon": "/icons/makerkit.png",
+  "status": "published",
+  "version": "1.0.0",
+  "lastUpdated": "2024-03-10",
+  "maintainers": ["Akimasa Sugai"]
+}

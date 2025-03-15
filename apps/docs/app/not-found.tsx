@@ -19,8 +19,6 @@ export const generateMetadata = async () => {
 const NotFoundPage = async () => {
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <Header />
-
       <div
         className={
           'container m-auto flex w-full flex-1 flex-col items-center justify-center'

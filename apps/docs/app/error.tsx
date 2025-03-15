@@ -19,7 +19,6 @@ const ErrorPage = ({ error, reset }: ErrorPageProps) => {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Header />
       <main className="flex-1">
         <section className="container flex flex-col items-center justify-center gap-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:pb-24 lg:pt-16">
           <Heading level={1} className="text-center">

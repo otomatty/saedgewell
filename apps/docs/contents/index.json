@@ -1,0 +1,133 @@
+{
+  "categories": [
+    {
+      "id": "documents",
+      "title": "ドキュメント",
+      "description": "書籍、プロジェクト文書、技術文書などのまとまった情報"
+    },
+    {
+      "id": "wiki",
+      "title": "Wiki",
+      "description": "技術用語や業務用語などの単語レベルの情報"
+    }
+  ],
+  "tags": {
+    "type": [
+      {
+        "id": "book",
+        "title": "書籍",
+        "description": "プログラミング関連の書籍やチュートリアル"
+      },
+      {
+        "id": "project",
+        "title": "プロジェクト",
+        "description": "個人開発プロジェクトのドキュメント"
+      },
+      {
+        "id": "official",
+        "title": "公式ドキュメント",
+        "description": "使用技術の公式ドキュメント"
+      }
+    ],
+    "tech": [
+      {
+        "id": "nextjs",
+        "title": "Next.js"
+      },
+      {
+        "id": "react",
+        "title": "React"
+      },
+      {
+        "id": "supabase",
+        "title": "Supabase"
+      }
+    ]
+  },
+  "docTypes": [
+    {
+      "id": "programming-book",
+      "title": "プログラミング書籍",
+      "description": "プログラミング関連の書籍やチュートリアル",
+      "category": "documents",
+      "tags": {
+        "type": ["book"]
+      }
+    },
+    {
+      "id": "technical-terms",
+      "title": "技術用語",
+      "description": "プログラミングや開発に関する技術用語の解説",
+      "category": "wiki",
+      "tags": {
+        "tech": ["nextjs", "react", "supabase"]
+      }
+    },
+    {
+      "id": "business-terms",
+      "title": "業務用語",
+      "description": "プロジェクトマネジメントやビジネスに関する用語の解説",
+      "category": "wiki"
+    },
+    {
+      "id": "nextjs-docs",
+      "title": "Next.js",
+      "description": "Next.jsの公式ドキュメント",
+      "category": "documents",
+      "tags": {
+        "type": ["official"],
+        "tech": ["nextjs"]
+      }
+    },
+    {
+      "id": "supabase-docs",
+      "title": "Supabase",
+      "description": "Supabaseの公式ドキュメント",
+      "category": "documents",
+      "tags": {
+        "type": ["official"],
+        "tech": ["supabase"]
+      }
+    },
+    {
+      "id": "react-docs",
+      "title": "React",
+      "description": "Reactの公式ドキュメント",
+      "category": "documents",
+      "tags": {
+        "type": ["official"],
+        "tech": ["react"]
+      }
+    },
+    {
+      "id": "saedgewell-app",
+      "title": "Saedgewell App",
+      "description": "メインアプリケーション",
+      "category": "documents",
+      "tags": {
+        "type": ["project"],
+        "tech": ["nextjs", "react", "supabase"]
+      }
+    },
+    {
+      "id": "saedgewell-docs",
+      "title": "Saedgewell Docs",
+      "description": "ドキュメントサイト",
+      "category": "documents",
+      "tags": {
+        "type": ["project"],
+        "tech": ["nextjs", "react"]
+      }
+    },
+    {
+      "id": "saedgewell-api",
+      "title": "Saedgewell API",
+      "description": "APIサーバー",
+      "category": "documents",
+      "tags": {
+        "type": ["project"],
+        "tech": ["supabase"]
+      }
+    }
+  ]
+}

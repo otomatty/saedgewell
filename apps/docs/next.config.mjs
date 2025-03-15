@@ -1,6 +1,3 @@
-import createMDX from '@next/mdx';
-import rehypePrettyCode from 'rehype-pretty-code';
-
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const ENABLE_REACT_COMPILER = process.env.ENABLE_REACT_COMPILER === 'true';
@@ -14,22 +11,6 @@ const INTERNAL_PACKAGES = [
   '@kit/i18n',
   '@kit/next',
 ];
-
-// シンタックスハイライトの設定
-const prettyCodeOptions = {
-  theme: 'github-dark',
-  // 関数を使用しない、シリアライズ可能なオプションのみを使用
-  keepBackground: true,
-  defaultLang: 'plaintext',
-};
-
-// @next/mdxの使用を停止
-// const withMDX = createMDX({
-//   options: {
-//     remarkPlugins: [],
-//     rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
-//   },
-// });
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -78,13 +59,16 @@ const config = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 };
 
-// @next/mdxの使用を停止
-// export default withMDX(config);
 export default config;
 
 function getRemotePatterns() {
   /** @type {import('next').NextConfig['remotePatterns']} */
-  const remotePatterns = [];
+  const remotePatterns = [
+    {
+      protocol: 'https',
+      hostname: 'i.gyazo.com',
+    },
+  ];
 
   if (SUPABASE_URL) {
     const hostname = new URL(SUPABASE_URL).hostname;
@@ -98,6 +82,7 @@ function getRemotePatterns() {
   return IS_PRODUCTION
     ? remotePatterns
     : [
+        ...remotePatterns,
         {
           protocol: 'http',
           hostname: '127.0.0.1',

@@ -1,13 +1,19 @@
 'use client';
 
-import { useMemo, Suspense, useState, useEffect } from 'react';
-import { getMDXComponent } from 'mdx-bundler/client';
+import { useMemo, Suspense, useState, useEffect, useRef } from 'react';
+import { MDXRemote } from 'next-mdx-remote';
+import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { createRoot } from 'react-dom/client';
 
-// Mermaidコンポーネントを動的にインポート（クライアントサイドのみで実行）
-const MermaidDiagram = dynamic(
-  () => import('./mermaid-diagram').then((mod) => mod.MermaidDiagram),
+import { MermaidWrapper } from './mermaid-wrapper';
+import KeywordLink from './KeywordLink';
+import { KeywordLinkDebug } from './KeywordLinkDebug';
+
+// MermaidRendererコンポーネントを動的にインポート
+const MermaidRenderer = dynamic(
+  () => import('./mermaid-renderer').then((mod) => mod.MermaidRenderer),
   {
     ssr: false,
     loading: () => (
@@ -23,7 +29,7 @@ const MermaidDiagram = dynamic(
  * @param code - MDXバンドラーによって生成されたコード
  */
 interface MDXContentProps {
-  code: string;
+  code: MDXRemoteSerializeResult;
 }
 
 /**
@@ -68,43 +74,153 @@ interface CodeProps {
 }
 
 /**
- * Mermaidダイアグラムをラップするコンポーネント
- * クライアントサイドでのみレンダリングされるようにします
- */
-function MermaidWrapper({ chart }: { chart: string }) {
-  const [isClient, setIsClient] = useState(false);
-
-  // 一意のキーを生成して、再レンダリング時に新しいコンポーネントとして扱われるようにする
-  const [componentKey] = useState(
-    () =>
-      `mermaid-wrapper-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
-  );
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // サーバーサイドレンダリング時
-  if (!isClient) {
-    return (
-      <div
-        className="flex justify-center items-center p-4 border border-gray-200 rounded-md bg-gray-50"
-        suppressHydrationWarning
-      >
-        <p className="text-gray-500">図を読み込み中...</p>
-      </div>
-    );
-  }
-
-  // クライアントサイドレンダリング時
-  return <MermaidDiagram key={componentKey} chart={chart} />;
-}
-
-/**
  * MDXコンポーネントのカスタマイズ
  * コードブロックやMermaidダイアグラムの表示をカスタマイズします
  */
 const MDXComponents = {
+  // 見出しコンポーネントをカスタマイズ
+  h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h1 id={id} className="text-3xl font-bold mt-12 mb-4" {...props}>
+        {children}
+      </h1>
+    );
+  },
+  h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h2 id={id} className="text-2xl font-bold mt-10 mb-3" {...props}>
+        {children}
+      </h2>
+    );
+  },
+  h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h3 id={id} className="text-xl font-semibold mt-8 mb-3" {...props}>
+        {children}
+      </h3>
+    );
+  },
+  h4: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h4 id={id} className="text-lg font-semibold mt-6 mb-2" {...props}>
+        {children}
+      </h4>
+    );
+  },
+  h5: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h5 id={id} className="text-base font-semibold mt-5 mb-2" {...props}>
+        {children}
+      </h5>
+    );
+  },
+  h6: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
+    const id = children
+      ?.toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return (
+      <h6 id={id} className="text-sm font-semibold mt-4 mb-2" {...props}>
+        {children}
+      </h6>
+    );
+  },
+  // 段落コンポーネントをカスタマイズ
+  p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="my-4 text-base leading-7 text-muted-foreground" {...props}>
+      {children}
+    </p>
+  ),
+  // リストコンポーネントをカスタマイズ
+  ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul
+      className="my-4 ml-6 list-disc space-y-2 text-base leading-7 text-muted-foreground"
+      {...props}
+    >
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol
+      className="my-4 ml-6 list-decimal space-y-2 text-base leading-7 text-muted-foreground"
+      {...props}
+    >
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
+    <li className="my-1 text-base leading-7 text-muted-foreground" {...props}>
+      {children}
+    </li>
+  ),
+  // 引用コンポーネントをカスタマイズ
+  blockquote: ({
+    children,
+    ...props
+  }: React.HTMLAttributes<HTMLQuoteElement>) => (
+    <blockquote
+      className="my-4 border-l-4 border-primary pl-4 py-1 text-base italic text-muted-foreground"
+      {...props}
+    >
+      {children}
+    </blockquote>
+  ),
+  // 強調コンポーネントをカスタマイズ
+  strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <strong className="font-semibold text-foreground" {...props}>
+      {children}
+    </strong>
+  ),
+  // 斜体コンポーネントをカスタマイズ
+  em: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <em className="italic text-muted-foreground" {...props}>
+      {children}
+    </em>
+  ),
+  // 区切り線コンポーネントをカスタマイズ
+  hr: (props: React.HTMLAttributes<HTMLHRElement>) => (
+    <hr className="my-8 border-t border-border" {...props} />
+  ),
+  // リンクコンポーネントをカスタマイズ
+  a: ({
+    href,
+    children,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a
+      href={href}
+      className="text-primary font-medium hover:underline"
+      {...props}
+    >
+      {children}
+    </a>
+  ),
   // preタグをカスタマイズ
   pre: ({ className, children, ...props }: CodeElementProps) => {
     // codeElementの取得
@@ -128,6 +244,38 @@ const MDXComponents = {
       // data-language から言語を抽出する試み
       if (!language && codeElement.props['data-language']) {
         language = codeElement.props['data-language'] as string;
+      }
+
+      // クラス名に 'language-mermaid' が含まれているかチェック
+      if (
+        !language &&
+        codeElement.props.className &&
+        typeof codeElement.props.className === 'string' &&
+        codeElement.props.className.includes('mermaid')
+      ) {
+        language = 'mermaid';
+      }
+
+      // コンテンツに 'graph' や 'sequenceDiagram' などのMermaid特有のキーワードが含まれているかチェック
+      if (!language && codeElement.props.children) {
+        const codeContent =
+          typeof codeElement.props.children === 'string'
+            ? codeElement.props.children
+            : Array.isArray(codeElement.props.children)
+              ? codeElement.props.children.join('')
+              : '';
+
+        if (
+          codeContent.includes('graph ') ||
+          codeContent.includes('sequenceDiagram') ||
+          codeContent.includes('classDiagram') ||
+          codeContent.includes('stateDiagram') ||
+          codeContent.includes('gantt') ||
+          codeContent.includes('pie title') ||
+          codeContent.includes('erDiagram')
+        ) {
+          language = 'mermaid';
+        }
       }
     }
 
@@ -174,42 +322,57 @@ const MDXComponents = {
                 // 子要素がオブジェクトの場合（例：React要素）
                 if (props.children && React.isValidElement(props.children)) {
                   const childProps = props.children.props as {
-                    children?: React.ReactNode;
+                    children?: string;
                   };
-                  if (typeof childProps.children === 'string') {
-                    return childProps.children;
-                  }
+                  return typeof childProps.children === 'string'
+                    ? childProps.children
+                    : '';
                 }
               }
-              return '';
             }
-            return String(child);
+            return '';
           })
           .join('');
-      } else {
-        code = String(codeElement.props.children);
+      } else if (typeof codeElement.props.children === 'string') {
+        code = codeElement.props.children;
       }
     }
 
-    // Mermaidコードブロックの場合
+    // Mermaidダイアグラムの場合
     if (language === 'mermaid') {
-      // コードが空白のみの場合はサンプルダイアグラムを使用
-      if (code.trim() === '') {
-        code = `graph TD
-    A[開始] --> B[処理]
-    B --> C[終了]`;
+      // Mermaidのテーマ設定を抽出
+      let theme: 'default' | 'forest' | 'dark' | 'neutral' | 'custom' =
+        'default';
+
+      // コードブロックにテーマの指定があるか確認
+      if (className && typeof className === 'string') {
+        if (className.includes('theme-forest')) {
+          theme = 'forest';
+        } else if (className.includes('theme-dark')) {
+          theme = 'dark';
+        } else if (className.includes('theme-neutral')) {
+          theme = 'neutral';
+        } else if (className.includes('theme-custom')) {
+          theme = 'custom';
+        }
       }
 
-      // 各Mermaidダイアグラムに一意のキーを割り当てて、再レンダリング時に新しいコンポーネントとして扱われるようにする
-      const diagramKey = `mermaid-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
       return (
-        <div
-          className="mermaid-container max-w-[800px] w-full"
-          key={diagramKey}
-          suppressHydrationWarning
-        >
-          <MermaidWrapper chart={code} />
+        <div className="mermaid-container">
+          <MermaidWrapper chart={code} theme={theme} />
+        </div>
+      );
+    }
+
+    // highlight.jsによってハイライトされたコードブロックの場合
+    // className に 'hljs' が含まれている場合は、そのまま返す
+    if (className?.includes('hljs')) {
+      return (
+        <div className="relative">
+          <CopyButton code={code} />
+          <pre className={className} {...props}>
+            {children}
+          </pre>
         </div>
       );
     }
@@ -217,46 +380,108 @@ const MDXComponents = {
     // 通常のコードブロックの場合
     return (
       <pre
+        className={`${className || ''} language-${language || 'text'} relative p-6`}
         {...props}
-        data-language={language}
-        className={`max-w-[800px] w-full whitespace-pre-wrap break-words ${className || ''}`}
       >
-        {children}
+        {language && (
+          <div className="absolute top-0 right-0 bg-gray-700 text-white px-2 py-1 text-xs rounded-bl">
+            {language}
+          </div>
+        )}
         <CopyButton code={code} />
+        {children}
       </pre>
     );
   },
+  // codeタグをカスタマイズ
+  code: ({ className, children, ...props }: CodeElementProps) => {
+    // インラインコードの場合
+    if (!className || !className.startsWith('language-')) {
+      return (
+        <code
+          className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+
+    // highlight.jsによってハイライトされたコードの場合
+    if (className?.includes('hljs')) {
+      return (
+        <code className={`${className} bg-transparent`} {...props}>
+          {children}
+        </code>
+      );
+    }
+
+    // 言語の抽出
+    const language = className.replace('language-', '');
+
+    // 言語に応じたクラス名を追加
+    return (
+      <code
+        className={`${className} language-${language} bg-transparent`}
+        data-language={language}
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
+  // キーワードリンクコンポーネント
+  KeywordLink,
+  // キーワードリンクデバッグコンポーネント
+  KeywordLinkDebug,
 };
 
 /**
- * MDXレンダラーコンポーネント
- * MDXコードをReactコンポーネントに変換して表示します
- */
-function MDXRenderer({ code }: { code: string }) {
-  const Component = useMemo(() => getMDXComponent(code), [code]);
-  const components = useMemo(() => MDXComponents, []);
-
-  return (
-    <div className="markdoc">
-      <Component components={components} />
-    </div>
-  );
-}
-
-/**
- * MDXコンテンツコンポーネント
- * Suspenseを使用して非同期読み込みをサポートします
+ * MDXコンテンツをレンダリングするコンポーネント
+ * @param code - シリアライズされたMDXコンテンツ
  */
 export function MDXContent({ code }: MDXContentProps) {
-  return (
-    <div className="mdx-content">
-      <Suspense
-        fallback={
-          <div className="p-4 text-center">コンテンツを読み込み中...</div>
-        }
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // レンダリング後にDOMを確認
+  useEffect(() => {
+    if (contentRef.current) {
+      const childNodes = contentRef.current.querySelectorAll('*');
+      const keywordLinks = contentRef.current.querySelectorAll('.keyword-link');
+
+      // [[キーワード]]パターンを含むテキストノードを探す
+      const textNodes = Array.from(contentRef.current.querySelectorAll('*'))
+        .flatMap((el) => Array.from(el.childNodes))
+        .filter(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE && node.textContent?.includes('[[')
+        );
+
+      if (textNodes.length > 0) {
+      }
+    }
+  }, []);
+
+  if (!code) {
+    return (
+      <div className="text-red-500">MDXコンテンツが提供されていません</div>
+    );
+  }
+
+  try {
+    return (
+      <div
+        ref={contentRef}
+        className="mdx-content prose prose-stone dark:prose-invert prose-headings:scroll-mt-28 w-full px-4 md:px-6"
       >
-        <MDXRenderer code={code} />
-      </Suspense>
-    </div>
-  );
+        <MDXRemote {...code} components={MDXComponents} />
+      </div>
+    );
+  } catch (error) {
+    return (
+      <div className="text-red-500">
+        MDXコンテンツのレンダリング中にエラーが発生しました: {String(error)}
+      </div>
+    );
+  }
 }

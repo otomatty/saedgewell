@@ -1,0 +1,12 @@
+{
+  "title": "React",
+  "description": "Reactの公式ドキュメント",
+  "type": "docType",
+  "icon": "/icons/react.svg",
+  "status": "published",
+  "category": "official",
+  "order": 3,
+  "version": "18.0.0",
+  "lastUpdated": "2024-03-15",
+  "maintainers": ["Akimasa Sugai"]
+}

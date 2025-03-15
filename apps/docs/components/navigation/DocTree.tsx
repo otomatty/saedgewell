@@ -3,44 +3,113 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@kit/ui/utils';
-import type { DocNode } from '~/lib/docs';
+import { ChevronRight, Folder } from 'lucide-react';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@kit/ui/collapsible';
+import type { DocNode } from '~/lib/mdx/docs';
 
 interface DocTreeProps {
   items: DocNode[];
   className?: string;
+  docType: string;
 }
 
-export function DocTree({ items, className }: DocTreeProps) {
+export function DocTree({ items, className, docType }: DocTreeProps) {
   const pathname = usePathname();
 
+  // トップページ（/）または404ページの場合は何も表示しない
+  if (
+    pathname === '/' ||
+    pathname === '/404' ||
+    !pathname.startsWith(`/${docType}`)
+  ) {
+    return null;
+  }
+
+  // アンダースコアで始まるディレクトリを除外したアイテムをフィルタリング
+  const filteredItems = items.filter((item) => {
+    const slugParts = item.slug?.split('/') || [];
+    return !slugParts.some((part) => part.startsWith('_'));
+  });
+
   return (
-    <div className={cn('space-y-2', className)}>
-      {items.map((item) => (
-        <div key={item.slug} className="space-y-1">
-          {item.slug ? (
-            <Link
-              href={`/docs/${item.slug}`}
-              className={cn(
-                'block w-full rounded-md px-2 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
-                pathname === `/docs/${item.slug}`
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-foreground/60'
-              )}
-            >
-              {item.title}
-            </Link>
-          ) : (
-            <div className="px-2 py-1.5 text-sm font-semibold">
-              {item.title}
-            </div>
-          )}
-          {item.children?.length > 0 && (
-            <div className="ml-4">
-              <DocTree items={item.children} />
-            </div>
-          )}
-        </div>
+    <div className={cn('space-y-1', className)}>
+      {filteredItems.map((item) => (
+        <TreeItem
+          key={item.slug || item.title}
+          item={item}
+          docType={docType}
+          pathname={pathname}
+        />
       ))}
     </div>
+  );
+}
+
+interface TreeItemProps {
+  item: DocNode;
+  docType: string;
+  pathname: string;
+}
+
+function TreeItem({ item, docType, pathname }: TreeItemProps) {
+  const isCurrentPage = pathname === `/${docType}/${item.slug}`;
+  const isDirectory = !item.slug || item.children?.length > 0;
+
+  // ファイルの場合
+  if (!isDirectory) {
+    return (
+      <Link
+        href={`/${docType}/${item.slug}`}
+        className={cn(
+          'block w-full rounded-md px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+          isCurrentPage
+            ? 'bg-accent text-accent-foreground'
+            : 'text-foreground/60'
+        )}
+      >
+        {item.title}
+      </Link>
+    );
+  }
+
+  // ディレクトリの場合
+  return (
+    <Collapsible
+      className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
+      defaultOpen={
+        isCurrentPage ||
+        item.children?.some((child) => pathname === `/${docType}/${child.slug}`)
+      }
+    >
+      <CollapsibleTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            'flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+            'text-foreground/60'
+          )}
+        >
+          <ChevronRight className="h-4 w-4 shrink-0 transition-transform" />
+          <Folder className="h-4 w-4 shrink-0" />
+          {item.title}
+        </button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="ml-4 space-y-1">
+          {item.children?.map((child) => (
+            <TreeItem
+              key={child.slug || child.title}
+              item={child}
+              docType={docType}
+              pathname={pathname}
+            />
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

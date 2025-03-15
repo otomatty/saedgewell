@@ -9,6 +9,9 @@ import { useMermaidDiagram } from './useMermaidDiagram';
  * MDXコンテンツ内のmermaidコードブロックを図解として表示します
  */
 export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
+  // デバッグ: チャートの内容を確認
+  console.log('🔍 MermaidDiagram received chart:', chart);
+
   // カスタムフックからロジックを取得
   const {
     mermaidRef,
@@ -23,6 +26,14 @@ export function MermaidDiagram({ chart, className = '' }: MermaidDiagramProps) {
     handleTouchStart,
     setIsCollapsed,
   } = useMermaidDiagram(chart);
+
+  // デバッグ: フックから返された状態を確認
+  console.log('🔍 MermaidDiagram hook state:', {
+    error,
+    isRendered,
+    zoomLevel,
+    isCollapsed,
+  });
 
   return (
     <div

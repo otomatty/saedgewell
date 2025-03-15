@@ -1,0 +1,9 @@
+{
+  "title": "Next.js",
+  "description": "Next.jsの公式ドキュメント",
+  "thumbnail": "https://i.gyazo.com/4225440212904b9b90345966d29a418d.png",
+  "tags": {
+    "type": ["official"],
+    "tech": ["nextjs"]
+  }
+}

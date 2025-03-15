@@ -58,7 +58,7 @@ export async function middleware(request: NextRequest) {
 
 async function withCsrfMiddleware(
   request: NextRequest,
-  response = new NextResponse(),
+  response = new NextResponse()
 ) {
   // set up CSRF protection
   const csrfProtect = createCsrfProtect({
@@ -99,6 +99,19 @@ function isServerAction(request: NextRequest) {
  */
 function getPatterns() {
   return [
+    // 静的アセットのリクエストを処理するパターンを追加
+    {
+      pattern: new URLPattern({
+        pathname: '/*.(ico|svg|png|jpg|jpeg|gif|webp)',
+      }),
+      handler: async (req: NextRequest, res: NextResponse) => {
+        // 静的アセットのリクエストはそのまま処理させる
+        console.log('🖼️ Static asset request:', req.nextUrl.pathname);
+        // 静的アセットのリクエストが[...slug]ルートに到達しないように、
+        // ここでNextResponseを返す
+        return NextResponse.next();
+      },
+    },
     {
       pattern: new URLPattern({ pathname: '/auth/*?' }),
       handler: async (req: NextRequest, res: NextResponse) => {
@@ -118,7 +131,7 @@ function getPatterns() {
         // redirect to home page.
         if (!isVerifyMfa) {
           return NextResponse.redirect(
-            new URL(pathsConfig.app.home, req.nextUrl.origin).href,
+            new URL(pathsConfig.app.home, req.nextUrl.origin).href
           );
         }
       },
@@ -149,7 +162,7 @@ function getPatterns() {
         // If user requires multi-factor authentication, redirect to MFA page.
         if (requiresMultiFactorAuthentication) {
           return NextResponse.redirect(
-            new URL(pathsConfig.auth.verifyMfa, origin).href,
+            new URL(pathsConfig.auth.verifyMfa, origin).href
           );
         }
       },

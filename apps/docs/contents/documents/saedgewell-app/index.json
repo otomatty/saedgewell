@@ -1,0 +1,21 @@
+{
+  "title": "Saedgewell App",
+  "description": "メインアプリケーション",
+  "thumbnail": "https://i.gyazo.com/a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4.jpg",
+  "type": "docType",
+  "icon": "/icons/app.svg",
+  "status": "published",
+  "category": "projects",
+  "order": 1,
+  "version": "1.0.0",
+  "lastUpdated": "2024-03-15",
+  "maintainers": ["Akimasa Sugai"],
+  "badge": "Active",
+  "badgeColor": "success",
+  "repository": "https://github.com/username/saedgewell-app",
+  "techStack": ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
+  "tags": {
+    "type": ["project"],
+    "tech": ["nextjs", "react", "supabase"]
+  }
+}

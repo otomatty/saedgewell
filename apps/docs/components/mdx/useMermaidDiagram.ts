@@ -31,6 +31,10 @@ export function useMermaidDiagram(chart: string): UseMermaidDiagramReturn {
   // 空のチャートの場合はデフォルトのダイアグラムを使用
   const actualChart = chart.trim() === '' ? DEFAULT_DIAGRAM : chart;
 
+  // デバッグ: 受け取ったチャートとデフォルト処理後のチャートを確認
+  console.log('🔍 useMermaidDiagram received chart:', chart);
+  console.log('🔍 useMermaidDiagram using chart:', actualChart);
+
   const [error, setError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const mermaidRef = useRef<HTMLDivElement>(null);
@@ -61,8 +65,11 @@ export function useMermaidDiagram(chart: string): UseMermaidDiagramReturn {
     const newChartId = generateUniqueId();
     setChartId(newChartId);
 
+    console.log('🔍 useMermaidDiagram initialized with chartId:', newChartId);
+
     // Mermaidの初期化（一度だけ）
     if (!isMermaidInitialized) {
+      console.log('🔍 Initializing mermaid library');
       mermaid.initialize({
         startOnLoad: false,
         theme: 'neutral',
@@ -81,36 +88,57 @@ export function useMermaidDiagram(chart: string): UseMermaidDiagramReturn {
         },
       });
       isMermaidInitialized = true;
+      console.log('🔍 Mermaid library initialized');
     }
   }, []);
 
   // Mermaidダイアグラムをレンダリングする関数
   const renderDiagram = useCallback(async () => {
+    console.log('🔍 renderDiagram called with state:', {
+      isClient,
+      isRendered,
+      chartId,
+      mermaidRefExists: !!mermaidRef.current,
+    });
+
     if (!isClient || !mermaidRef.current || isRendered) {
+      console.log('🔍 renderDiagram early return:', {
+        isClient,
+        mermaidRefExists: !!mermaidRef.current,
+        isRendered,
+      });
       return;
     }
 
     try {
       // チャートが空白のみかチェック
       if (actualChart.trim() === '') {
+        console.log('🔍 Empty chart detected');
         setError('チャートが空です。正しいMermaid構文を入力してください。');
         return;
       }
 
       // コンテナをクリア
       mermaidRef.current.innerHTML = '';
+      console.log('🔍 Cleared mermaid container');
 
       // チャートのレンダリング
       try {
+        console.log('🔍 Attempting to render chart with ID:', chartId);
+        console.log('🔍 Chart content:', actualChart);
+
         const { svg } = await mermaid.render(chartId, actualChart);
+        console.log('🔍 Mermaid render successful, svg length:', svg.length);
 
         // SVGをDOMに挿入
         if (mermaidRef.current) {
           mermaidRef.current.innerHTML = svg;
+          console.log('🔍 SVG inserted into DOM');
 
           // SVG要素を取得してレスポンシブ属性を設定
           const svgElement = mermaidRef.current.querySelector('svg');
           if (svgElement) {
+            console.log('🔍 SVG element found, applying styles');
             // SVGの属性を設定してレスポンシブに表示
             svgElement.setAttribute('width', '100%');
             svgElement.setAttribute('height', 'auto');
@@ -125,41 +153,57 @@ export function useMermaidDiagram(chart: string): UseMermaidDiagramReturn {
             // SVGの高さを調整（縦長のダイアグラムの場合）
             const viewBox = svgElement.getAttribute('viewBox');
             if (viewBox) {
+              console.log('🔍 ViewBox found:', viewBox);
               const viewBoxValues = viewBox.split(' ').map(Number);
               // viewBoxは通常 "x y width height" の形式
               if (viewBoxValues.length >= 4) {
                 const width = viewBoxValues[2];
                 const height = viewBoxValues[3];
+                console.log('🔍 ViewBox dimensions:', { width, height });
 
                 // 値が有効な場合のみ処理
                 if (width && height) {
                   const aspectRatio = width / height;
+                  console.log('🔍 Aspect ratio:', aspectRatio);
 
                   // 縦長のダイアグラムの場合（アスペクト比が1未満）
                   if (aspectRatio < 1) {
                     // 高さを制限（最大500px）
                     const maxHeight = Math.min(height, 500);
                     svgElement.style.height = `${maxHeight}px`;
+                    console.log('🔍 Applied height constraint:', maxHeight);
                   } else {
                     // 横長または正方形のダイアグラムの場合は自動調整
                     svgElement.style.height = 'auto';
+                    console.log('🔍 Using auto height');
                   }
                 }
               }
             }
+          } else {
+            console.log('🔍 No SVG element found in the rendered output');
           }
 
           setIsRendered(true);
+          console.log('🔍 Set isRendered to true');
         }
 
         // エラー状態をクリア
-        if (error) setError(null);
+        if (error) {
+          console.log('🔍 Clearing previous error:', error);
+          setError(null);
+        }
       } catch (renderError) {
+        console.error('🔍 Render error:', renderError);
+
         // 構文エラーの場合、より詳細な情報を表示
         try {
           // 構文チェック
+          console.log('🔍 Attempting to parse chart to check syntax');
           await mermaid.parse(actualChart);
+          console.log('🔍 Parse successful but render failed');
         } catch (parseError) {
+          console.error('🔍 Parse error:', parseError);
           setError(`Mermaid構文エラー: ${parseError}`);
           return;
         }
@@ -171,6 +215,7 @@ export function useMermaidDiagram(chart: string): UseMermaidDiagramReturn {
         );
       }
     } catch (err) {
+      console.error('🔍 Unexpected error:', err);
       setError(
         err instanceof Error
           ? `予期しないエラーが発生しました: ${err.message}`
