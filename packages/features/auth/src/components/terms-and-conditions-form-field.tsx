@@ -3,6 +3,31 @@ import Link from 'next/link';
 import { Checkbox } from '@kit/ui/checkbox';
 import { FormControl, FormField, FormItem, FormMessage } from '@kit/ui/form';
 
+/**
+ * @name TermsAndConditionsFormField
+ * @description
+ * 利用規約とプライバシーポリシーへの同意を得るためのフォームフィールドコンポーネント。
+ * サインアップフォームなどで使用され、ユーザーに利用規約への同意を求める。
+ *
+ * @features
+ * - チェックボックス入力
+ * - 利用規約へのリンク
+ * - プライバシーポリシーへのリンク
+ * - カスタムフィールド名の設定
+ *
+ * @dependencies
+ * - next/link: リンクコンポーネント
+ * - @kit/ui/checkbox: チェックボックスコンポーネント
+ * - @kit/ui/form: フォームコンポーネント
+ *
+ * @param {Object} [props]
+ * @param {string} [props.name] - フォームフィールド名（デフォルト: 'termsAccepted'）
+ *
+ * @example
+ * ```tsx
+ * <TermsAndConditionsFormField name="agreeToTerms" />
+ * ```
+ */
 export function TermsAndConditionsFormField(
   props: {
     name?: string;

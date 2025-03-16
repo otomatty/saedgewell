@@ -21,6 +21,37 @@ import { Input } from '@kit/ui/input';
 import { useCaptchaToken } from '../captcha/client';
 import { AuthErrorAlert } from './auth-error-alert';
 
+/**
+ * @name PasswordResetRequestContainer
+ * @description
+ * パスワードリセットリクエストを処理するコンテナコンポーネント。
+ * ユーザーのメールアドレスを入力し、パスワードリセットリンクを送信する機能を提供する。
+ *
+ * @features
+ * - メールアドレス入力フォーム
+ * - CAPTCHAトークンの管理
+ * - Supabaseを使用したパスワードリセット機能
+ * - 送信成功/エラー表示
+ * - リダイレクトパスの設定
+ *
+ * @dependencies
+ * - react-hook-form: フォーム状態管理
+ * - zod: バリデーションスキーマ
+ * - @kit/supabase/hooks/use-request-reset-password: パスワードリセットリクエストフック
+ *
+ * @childComponents
+ * - AuthErrorAlert: エラー表示コンポーネント
+ *
+ * @param {Object} params
+ * @param {string} params.redirectPath - パスワードリセット後のリダイレクトパス
+ *
+ * @example
+ * ```tsx
+ * <PasswordResetRequestContainer
+ *   redirectPath="/auth/reset-password/confirm"
+ * />
+ * ```
+ */
 const PasswordResetSchema = z.object({
   email: z.string().email(),
 });

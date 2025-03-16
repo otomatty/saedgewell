@@ -14,9 +14,19 @@ import { AuthProviderButton } from './auth-provider-button';
 /**
  * @name OAUTH_SCOPES
  * @description
- * The OAuth scopes are used to specify the permissions that the application is requesting from the user.
+ * OAuth認証で使用するスコープ（権限）を定義するオブジェクト。
+ * アプリケーションがユーザーに要求する権限を指定するために使用される。
  *
- * Please add your OAuth providers here and the scopes you want to use.
+ * 必要なOAuthプロバイダーとそのスコープをここに追加する。
+ *
+ * @type {Partial<Record<Provider, string>>}
+ * @example
+ * ```
+ * const OAUTH_SCOPES = {
+ *   google: 'email profile',
+ *   github: 'user:email',
+ * };
+ * ```
  *
  * @see https://supabase.com/docs/guides/auth/social-login
  */
@@ -25,6 +35,48 @@ const OAUTH_SCOPES: Partial<Record<Provider, string>> = {
   // add your OAuth providers here
 };
 
+/**
+ * @name OauthProviders
+ * @description
+ * ソーシャルログイン（OAuth認証）のプロバイダーボタンを表示するコンポーネント。
+ * 有効化されたプロバイダー（Google、Facebook、Twitterなど）のボタンを表示し、
+ * クリック時にSupabaseのOAuth認証フローを開始する。
+ *
+ * @features
+ * - 複数のOAuthプロバイダー対応
+ * - ローディング状態の表示
+ * - エラー表示
+ * - リダイレクトURL設定
+ * - 新規ユーザー作成オプション
+ *
+ * @dependencies
+ * - @supabase/supabase-js: Supabase認証ライブラリ
+ * - @kit/supabase/hooks/use-sign-in-with-provider: プロバイダーサインインフック
+ *
+ * @childComponents
+ * - AuthProviderButton: 各プロバイダーのボタンコンポーネント
+ * - AuthErrorAlert: エラー表示コンポーネント
+ * - LoadingOverlay: ローディングオーバーレイ
+ *
+ * @param {Object} props
+ * @param {boolean} props.shouldCreateUser - 新規ユーザーを作成するかどうか
+ * @param {Provider[]} props.enabledProviders - 有効化するプロバイダーの配列
+ * @param {Object} props.paths - リダイレクトパス設定
+ * @param {string} props.paths.callback - コールバックURL
+ * @param {string} props.paths.returnPath - 認証後のリダイレクトパス
+ *
+ * @example
+ * ```tsx
+ * <OauthProviders
+ *   enabledProviders={['google', 'github']}
+ *   shouldCreateUser={true}
+ *   paths={{
+ *     callback: '/auth/callback',
+ *     returnPath: '/dashboard',
+ *   }}
+ * />
+ * ```
+ */
 export function OauthProviders(props: {
   shouldCreateUser: boolean;
   enabledProviders: Provider[];

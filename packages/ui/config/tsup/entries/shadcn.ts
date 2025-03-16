@@ -21,6 +21,7 @@ export const shadcnEntries = [
   'src/shadcn/dropdown-menu/index.tsx',
   'src/shadcn/form/index.tsx',
   'src/shadcn/input/index.tsx',
+  'src/shadcn/input-otp/index.tsx',
   'src/shadcn/interactive-hover-button/index.tsx',
   'src/shadcn/label/index.tsx',
   'src/shadcn/navigation-menu/index.tsx',

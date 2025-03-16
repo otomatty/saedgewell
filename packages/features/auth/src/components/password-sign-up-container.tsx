@@ -12,6 +12,44 @@ import { useCaptchaToken } from '../captcha/client';
 import { AuthErrorAlert } from './auth-error-alert';
 import { PasswordSignUpForm } from './password-sign-up-form';
 
+/**
+ * @name EmailPasswordSignUpContainer
+ * @description
+ * メールアドレスとパスワードを使用したサインアップ（新規登録）のコンテナコンポーネント。
+ * Supabaseの認証機能と連携し、実際のサインアップ処理を行う。
+ *
+ * @features
+ * - CAPTCHAトークンの管理
+ * - Supabaseを使用したメール/パスワード登録
+ * - エラー表示
+ * - 登録成功時の確認メール送信通知
+ * - サインアップ成功時のコールバック処理
+ *
+ * @dependencies
+ * - @kit/supabase/hooks/use-sign-up-with-email-password: Supabaseサインアップフック
+ * - ../captcha/client: CAPTCHAトークン管理
+ *
+ * @childComponents
+ * - AuthErrorAlert: エラー表示コンポーネント
+ * - PasswordSignUpForm: サインアップフォームコンポーネント
+ * - SuccessAlert: 成功通知コンポーネント
+ *
+ * @param {EmailPasswordSignUpContainerProps} props
+ * @param {boolean} [props.displayTermsCheckbox] - 利用規約チェックボックスを表示するか
+ * @param {Object} [props.defaultValues] - フォームのデフォルト値
+ * @param {string} [props.defaultValues.email] - デフォルトのメールアドレス
+ * @param {Function} [props.onSignUp] - サインアップ成功時のコールバック関数
+ * @param {string} props.emailRedirectTo - 確認メールのリダイレクトURL
+ *
+ * @example
+ * ```tsx
+ * <EmailPasswordSignUpContainer
+ *   emailRedirectTo="https://example.com/auth/callback"
+ *   displayTermsCheckbox={true}
+ *   onSignUp={(userId) => console.log(`User ${userId} signed up`)}
+ * />
+ * ```
+ */
 interface EmailPasswordSignUpContainerProps {
   displayTermsCheckbox?: boolean;
   defaultValues?: {

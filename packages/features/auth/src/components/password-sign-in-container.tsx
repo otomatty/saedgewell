@@ -11,6 +11,34 @@ import type { PasswordSignInSchema } from '../schemas/password-sign-in.schema';
 import { AuthErrorAlert } from './auth-error-alert';
 import { PasswordSignInForm } from './password-sign-in-form';
 
+/**
+ * @name PasswordSignInContainer
+ * @description
+ * メールアドレスとパスワードを使用したサインインのコンテナコンポーネント。
+ * Supabaseの認証機能と連携し、実際のサインイン処理を行う。
+ *
+ * @features
+ * - CAPTCHAトークンの管理
+ * - Supabaseを使用したメール/パスワード認証
+ * - エラー表示
+ * - サインイン成功時のコールバック処理
+ *
+ * @dependencies
+ * - @kit/supabase/hooks/use-sign-in-with-email-password: Supabaseサインインフック
+ * - ../captcha/client: CAPTCHAトークン管理
+ *
+ * @childComponents
+ * - AuthErrorAlert: エラー表示コンポーネント
+ * - PasswordSignInForm: サインインフォームコンポーネント
+ *
+ * @param {Object} props
+ * @param {Function} [props.onSignIn] - サインイン成功時のコールバック関数
+ *
+ * @example
+ * ```tsx
+ * <PasswordSignInContainer onSignIn={(userId) => router.push('/dashboard')} />
+ * ```
+ */
 export function PasswordSignInContainer({
   onSignIn,
 }: {
@@ -39,7 +67,7 @@ export function PasswordSignInContainer({
         resetCaptchaToken();
       }
     },
-    [captchaToken, onSignIn, resetCaptchaToken, signInMutation],
+    [captchaToken, onSignIn, resetCaptchaToken, signInMutation]
   );
 
   return (

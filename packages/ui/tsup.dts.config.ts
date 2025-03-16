@@ -4,7 +4,7 @@ import {
   makerkitEntries,
   magicuiEntries,
   utilEntries,
-} from './src/entries';
+} from './config/tsup/entries';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [

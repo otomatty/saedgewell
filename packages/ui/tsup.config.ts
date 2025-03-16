@@ -5,7 +5,7 @@ import {
   magicuiEntries,
   customEntries,
   utilEntries,
-} from './src/entries';
+} from './config/tsup/entries';
 
 // 外部依存関係を共通の変数として定義
 const externalDependencies = [
@@ -60,6 +60,11 @@ export default defineConfig([
   {
     ...baseConfig,
     entry: magicuiEntries,
+    clean: false,
+  },
+  {
+    ...baseConfig,
+    entry: customEntries,
     clean: false,
   },
   {

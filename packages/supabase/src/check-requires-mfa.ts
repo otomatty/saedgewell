@@ -1,3 +1,38 @@
+/**
+ * check-requires-mfa.ts
+ *
+ * このファイルはユーザーが多要素認証（MFA）を必要とするかどうかを確認するための
+ * ユーティリティ関数を提供します。
+ *
+ * 主な機能:
+ * - 現在のセッションが多要素認証を必要とするかどうかの判定
+ * - 認証保証レベル（Authentication Assurance Level: AAL）の確認
+ *
+ * 処理の流れ:
+ * 1. Supabaseクライアントから現在の認証保証レベル（AAL）を取得
+ * 2. 次の認証保証レベルがAAL2（多要素認証）であり、かつ現在のレベルがそれと
+ *    異なる場合、MFAが必要と判断
+ *
+ * 特記事項:
+ * - Supabase認証のバグを回避するための一時的なワークアラウンドが含まれています
+ *   （suppressGetSessionWarningフラグの設定と解除）
+ * - 認証保証レベルの取得中にエラーが発生した場合は例外をスローします
+ *
+ * 使用例:
+ * ```
+ * const supabase = getSupabaseServerClient();
+ * const requiresMfa = await checkRequiresMultiFactorAuthentication(supabase);
+ *
+ * if (requiresMfa) {
+ *   // ユーザーをMFA検証ページにリダイレクト
+ *   redirect('/auth/verify');
+ * }
+ * ```
+ *
+ * 注意点:
+ * - この関数は通常、require-user.tsと連携して使用されます
+ * - MFAが必要な場合、ユーザーは適切な検証ページにリダイレクトされるべきです
+ */
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 const ASSURANCE_LEVEL_2 = 'aal2';
@@ -9,7 +44,7 @@ const ASSURANCE_LEVEL_2 = 'aal2';
  * @param client
  */
 export async function checkRequiresMultiFactorAuthentication(
-  client: SupabaseClient,
+  client: SupabaseClient
 ) {
   // Suppress the getSession warning. Remove when the issue is fixed.
   // https://github.com/supabase/auth-js/issues/873

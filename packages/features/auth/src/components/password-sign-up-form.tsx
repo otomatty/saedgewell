@@ -20,6 +20,43 @@ import { Input } from '@kit/ui/input';
 import { PasswordSignUpSchema } from '../schemas/password-sign-up.schema';
 import { TermsAndConditionsFormField } from './terms-and-conditions-form-field';
 
+/**
+ * @name PasswordSignUpForm
+ * @description
+ * メールアドレスとパスワードを使用したサインアップ（新規登録）フォームコンポーネント。
+ * React Hook Formを使用してフォームの状態管理と検証を行う。
+ *
+ * @features
+ * - Zodスキーマによるフォームバリデーション
+ * - メールアドレス入力フィールド
+ * - パスワード入力フィールド
+ * - パスワード確認入力フィールド
+ * - オプションの利用規約チェックボックス
+ * - ローディング状態の表示
+ * - 送信ボタン
+ *
+ * @dependencies
+ * - react-hook-form: フォーム状態管理
+ * - zod: バリデーションスキーマ
+ * - @kit/ui: UIコンポーネント
+ *
+ * @param {Object} props
+ * @param {Object} [props.defaultValues] - フォームのデフォルト値
+ * @param {string} [props.defaultValues.email] - デフォルトのメールアドレス
+ * @param {boolean} [props.displayTermsCheckbox] - 利用規約チェックボックスを表示するか
+ * @param {Function} props.onSubmit - フォーム送信時のコールバック関数
+ * @param {boolean} props.loading - ローディング状態
+ *
+ * @example
+ * ```tsx
+ * <PasswordSignUpForm
+ *   defaultValues={{ email: 'user@example.com' }}
+ *   displayTermsCheckbox={true}
+ *   onSubmit={handleSignUp}
+ *   loading={isLoading}
+ * />
+ * ```
+ */
 export function PasswordSignUpForm({
   defaultValues,
   displayTermsCheckbox,

@@ -21,6 +21,37 @@ import { Input } from '@kit/ui/input';
 
 import { PasswordSignInSchema } from '../schemas/password-sign-in.schema';
 
+/**
+ * @name PasswordSignInForm
+ * @description
+ * メールアドレスとパスワードを使用したサインインフォームコンポーネント。
+ * React Hook Formを使用してフォームの状態管理と検証を行う。
+ *
+ * @features
+ * - Zodスキーマによるフォームバリデーション
+ * - メールアドレス入力フィールド
+ * - パスワード入力フィールド
+ * - パスワードリセットへのリンク
+ * - ローディング状態の表示
+ * - 送信ボタン
+ *
+ * @dependencies
+ * - react-hook-form: フォーム状態管理
+ * - zod: バリデーションスキーマ
+ * - @kit/ui: UIコンポーネント
+ *
+ * @param {Object} props
+ * @param {Function} props.onSubmit - フォーム送信時のコールバック関数
+ * @param {boolean} props.loading - ローディング状態
+ *
+ * @example
+ * ```tsx
+ * <PasswordSignInForm
+ *   onSubmit={handleSignIn}
+ *   loading={isLoading}
+ * />
+ * ```
+ */
 export function PasswordSignInForm({
   onSubmit,
   loading,
