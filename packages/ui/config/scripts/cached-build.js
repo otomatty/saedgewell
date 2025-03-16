@@ -41,6 +41,9 @@ switch (componentGroup) {
   case 'magicui':
     sourcePattern = 'src/magicui/**/*.{ts,tsx}';
     break;
+  case 'custom':
+    sourcePattern = 'src/custom/**/*.{ts,tsx}';
+    break;
   case 'utils':
     sourcePattern = 'src/lib/utils/**/*.{ts,tsx}';
     break;
@@ -68,7 +71,7 @@ function calculateHash() {
   // 設定ファイルもハッシュに含める
   const configFile = path.join(
     __dirname,
-    '../tsup',
+    '../tsup/dts',
     `dts.${componentGroup}.config.ts`
   );
   if (fs.existsSync(configFile)) {

@@ -14,7 +14,14 @@ import { zodParseFactory } from '../utils';
 
 /**
  * @name enhanceAction
- * @description Enhance an action with captcha, schema and auth checks
+ * @description サーバーアクションを拡張し、CAPTCHA検証、スキーマ検証、認証チェックを追加します
+ *
+ * この関数は、Next.jsのサーバーアクションに以下の機能を追加します：
+ * 1. 認証チェック: ユーザーが認証されているか確認し、未認証の場合はリダイレクト
+ * 2. CAPTCHA検証: ボット対策のためのCAPTCHAトークン検証
+ * 3. スキーマ検証: Zodを使用した入力データの型と値の検証
+ *
+ * これにより、各サーバーアクションで共通の検証ロジックを繰り返し実装する必要がなくなります。
  */
 export function enhanceAction<
   Args,
@@ -39,31 +46,32 @@ export function enhanceAction<
   ) => {
     type UserParam = Config['auth'] extends false ? undefined : User;
 
+    // 認証が必要かどうかを設定から取得（デフォルトはtrue）
     const requireAuth = config.auth ?? true;
     let user: UserParam = undefined as UserParam;
 
-    // validate the schema passed in the config if it exists
+    // 設定でスキーマが指定されている場合、入力データを検証
     const data = config.schema
       ? zodParseFactory(config.schema)(params)
       : params;
 
-    // by default, the CAPTCHA token is not required
+    // CAPTCHAトークンの検証が必要かどうかを設定から取得（デフォルトはfalse）
     const verifyCaptcha = config.captcha ?? false;
 
-    // verify the CAPTCHA token. It will throw an error if the token is invalid.
+    // CAPTCHAトークンの検証が必要な場合、トークンを検証
     if (verifyCaptcha) {
       const token = (data as Args & { captchaToken: string }).captchaToken;
 
-      // Verify the CAPTCHA token. It will throw an error if the token is invalid.
+      // CAPTCHAトークンを検証。トークンが無効な場合はエラーをスロー
       await verifyCaptchaToken(token);
     }
 
-    // verify the user is authenticated if required
+    // 認証が必要な場合、ユーザーが認証されているか確認
     if (requireAuth) {
-      // verify the user is authenticated if required
+      // Supabaseクライアントを使用してユーザー認証情報を取得
       const auth = await requireUser(getSupabaseServerClient());
 
-      // If the user is not authenticated, redirect to the specified URL.
+      // ユーザーが認証されていない場合、指定されたURLにリダイレクト
       if (!auth.data) {
         redirect(auth.redirectTo);
       }
@@ -71,6 +79,7 @@ export function enhanceAction<
       user = auth.data as UserParam;
     }
 
+    // すべての検証が成功したら、元の関数を実行して結果を返す
     return fn(data, user);
   };
 }

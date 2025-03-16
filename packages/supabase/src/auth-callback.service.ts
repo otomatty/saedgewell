@@ -1,3 +1,46 @@
+/**
+ * auth-callback.service.ts
+ *
+ * このファイルはSupabaseの認証コールバック処理を管理するサービスを提供します。
+ * OAuth認証やマジックリンク認証などの外部認証プロバイダーからのコールバック処理を扱います。
+ *
+ * 主な機能:
+ * - トークンハッシュの検証と適切なリダイレクト処理
+ * - 認証コードとセッションの交換
+ * - エラーハンドリングと適切なエラーメッセージの生成
+ *
+ * 処理の流れ:
+ * 1. createAuthCallbackService関数でAuthCallbackServiceのインスタンスを作成
+ * 2. AuthCallbackServiceクラスが以下の主要メソッドを提供:
+ *    - verifyTokenHash: メール認証やパスワードリセットなどのフローで使用
+ *    - exchangeCodeForSession: OAuth認証フローで使用
+ * 3. エラー発生時は適切なエラーメッセージを生成し、エラーページにリダイレクト
+ *
+ * 特記事項:
+ * - 異なるブラウザでの認証試行など、一般的なエラーケースに対する特別な処理が実装されています
+ * - 認証フローの複雑なエッジケースを処理するための堅牢な実装が含まれています
+ *
+ * 使用例:
+ * ```
+ * // auth-callback.tsなどのルートハンドラ内で
+ * const supabase = getSupabaseServerClient();
+ * const service = createAuthCallbackService(supabase);
+ *
+ * // トークンハッシュの検証
+ * const url = await service.verifyTokenHash(request, {
+ *   redirectPath: '/dashboard'
+ * });
+ *
+ * // または認証コードとセッションの交換
+ * const { nextPath } = await service.exchangeCodeForSession(request, {
+ *   redirectPath: '/dashboard'
+ * });
+ * ```
+ *
+ * 注意点:
+ * - このサービスはサーバーサイドでのみ使用することを想定しています
+ * - 認証コールバックの処理は複雑なため、このサービスを使用して適切に処理することが重要です
+ */
 import 'server-only';
 
 import type {

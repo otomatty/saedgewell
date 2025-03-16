@@ -5,6 +5,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../../lib/utils/cn';
 
+/**
+ * ボタンのスタイルバリエーションを定義するための設定オブジェクトです。
+ * class-variance-authorityを使用して、異なるバリアントとサイズを管理します。
+ *
+ * @property {object} variants - ボタンのバリアント（見た目）とサイズの設定
+ * @property {object} defaultVariants - デフォルトのバリアントとサイズ
+ */
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
@@ -35,12 +42,49 @@ const buttonVariants = cva(
   }
 );
 
+/**
+ * ボタンコンポーネントのプロパティの型定義です。
+ * HTMLButtonElementの属性とボタンバリアントのプロパティを継承します。
+ *
+ * @property {boolean} [asChild] - 子要素をボタンとして扱うかどうか
+ * @property {string} [variant] - ボタンの見た目のバリアント（'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'）
+ * @property {string} [size] - ボタンのサイズ（'default' | 'sm' | 'lg' | 'icon'）
+ */
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
+/**
+ * 汎用的なボタンコンポーネントです。
+ * 様々なスタイルバリエーションとサイズをサポートし、アクセシビリティにも配慮しています。
+ *
+ * @example
+ * ```tsx
+ * // デフォルトのボタン
+ * <Button>クリック</Button>
+ *
+ * // バリアントとサイズを指定
+ * <Button variant="destructive" size="lg">削除</Button>
+ *
+ * // アウトラインスタイル
+ * <Button variant="outline">編集</Button>
+ *
+ * // アイコンボタン
+ * <Button size="icon">
+ *   <IconComponent />
+ * </Button>
+ *
+ * // カスタムクラスの追加
+ * <Button className="my-custom-class">カスタム</Button>
+ * ```
+ *
+ * @property {string} [variant] - ボタンの見た目のバリアント
+ * @property {string} [size] - ボタンのサイズ
+ * @property {boolean} [asChild=false] - 子要素をボタンとして扱うかどうか
+ * @property {string} [className] - 追加のCSSクラス
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';

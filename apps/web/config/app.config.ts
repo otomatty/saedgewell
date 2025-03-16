@@ -1,38 +1,51 @@
+/**
+ * アプリケーション基本設定ファイル
+ *
+ * このファイルはアプリケーション全体の基本設定を管理します。
+ * サイト名、タイトル、説明、URL、ロケール、テーマなどの
+ * 基本的な設定を一元管理し、アプリケーション全体で参照できるようにします。
+ */
+
 import { z } from 'zod';
 
+// 本番環境かどうかを判定
 const production = process.env.NODE_ENV === 'production';
 
+/**
+ * アプリケーション設定のスキーマ定義
+ * Zodを使用して型安全な設定オブジェクトを定義
+ */
 const AppConfigSchema = z
   .object({
     name: z
       .string({
-        description: 'This is the name of your SaaS. Ex. "Makerkit"',
-        required_error: 'Please provide the variable NEXT_PUBLIC_PRODUCT_NAME',
+        description: 'SaaSの名前。例: "Makerkit"',
+        required_error: '環境変数 NEXT_PUBLIC_PRODUCT_NAME を設定してください',
       })
       .min(1),
     title: z
       .string({
-        description: 'This is the default title tag of your SaaS.',
-        required_error: 'Please provide the variable NEXT_PUBLIC_SITE_TITLE',
+        description: 'SaaSのデフォルトのtitleタグ。',
+        required_error: '環境変数 NEXT_PUBLIC_SITE_TITLE を設定してください',
       })
       .min(1),
     description: z.string({
-      description: 'This is the default description of your SaaS.',
+      description: 'SaaSのデフォルトの説明。',
       required_error:
-        'Please provide the variable NEXT_PUBLIC_SITE_DESCRIPTION',
+        '環境変数 NEXT_PUBLIC_SITE_DESCRIPTION を設定してください',
     }),
     url: z
       .string({
-        required_error: 'Please provide the variable NEXT_PUBLIC_SITE_URL',
+        required_error: '環境変数 NEXT_PUBLIC_SITE_URL を設定してください',
       })
       .url({
-        message: `You are deploying a production build but have entered a NEXT_PUBLIC_SITE_URL variable using http instead of https. It is very likely that you have set the incorrect URL. The build will now fail to prevent you from from deploying a faulty configuration. Please provide the variable NEXT_PUBLIC_SITE_URL with a valid URL, such as: 'https://example.com'`,
+        message: `本番ビルドをデプロイしようとしていますが、NEXT_PUBLIC_SITE_URL変数にhttpsではなくhttpを使用したURLが設定されています。これは誤った設定である可能性が高いため、ビルドを中止します。有効なURLを環境変数NEXT_PUBLIC_SITE_URLに設定してください。例: 'https://example.com'`,
       }),
     locale: z
       .string({
-        description: 'This is the default locale of your SaaS.',
+        description: 'SaaSのデフォルトのロケール。',
         required_error:
-          'Please provide the variable NEXT_PUBLIC_DEFAULT_LOCALE',
+          '環境変数 NEXT_PUBLIC_DEFAULT_LOCALE を設定してください',
       })
       .default('en'),
     theme: z.enum(['light', 'dark', 'system']),
@@ -40,6 +53,7 @@ const AppConfigSchema = z
     themeColor: z.string(),
     themeColorDark: z.string(),
   })
+  // 本番環境ではHTTPSのURLのみを許可する検証
   .refine(
     (schema) => {
       const isCI = process.env.NEXT_PUBLIC_CI;
@@ -51,21 +65,24 @@ const AppConfigSchema = z
       return !schema.url.startsWith('http:');
     },
     {
-      message: `Please provide a valid HTTPS URL. Set the variable NEXT_PUBLIC_SITE_URL with a valid URL, such as: 'https://example.com'`,
+      message: `有効なHTTPS URLを設定してください。環境変数NEXT_PUBLIC_SITE_URLに有効なURLを設定してください。例: 'https://example.com'`,
       path: ['url'],
     }
   )
+  // ライトテーマとダークテーマの色が異なることを検証
   .refine(
     (schema) => {
       return schema.themeColor !== schema.themeColorDark;
     },
     {
-      message:
-        'Please provide different theme colors for light and dark themes.',
+      message: 'ライトテーマとダークテーマで異なる色を設定してください。',
       path: ['themeColor'],
     }
   );
 
+/**
+ * 環境変数からアプリケーション設定を読み込み、スキーマに基づいて検証
+ */
 const appConfig = AppConfigSchema.parse({
   name: process.env.NEXT_PUBLIC_PRODUCT_NAME,
   title: process.env.NEXT_PUBLIC_SITE_TITLE,

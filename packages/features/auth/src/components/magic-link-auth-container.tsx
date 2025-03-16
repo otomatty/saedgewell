@@ -23,6 +23,47 @@ import { Input } from '@kit/ui/input';
 import { useCaptchaToken } from '../captcha/client';
 import { TermsAndConditionsFormField } from './terms-and-conditions-form-field';
 
+/**
+ * @name MagicLinkAuthContainer
+ * @description
+ * マジックリンク認証（メールリンク認証）のコンテナコンポーネント。
+ * ユーザーのメールアドレスを入力し、認証リンクを送信する機能を提供する。
+ *
+ * @features
+ * - メールアドレス入力フォーム
+ * - CAPTCHAトークンの管理
+ * - Supabaseを使用したOTP（ワンタイムパスワード）認証
+ * - 送信成功/エラー表示
+ * - オプションの利用規約チェックボックス
+ * - トースト通知
+ *
+ * @dependencies
+ * - react-hook-form: フォーム状態管理
+ * - zod: バリデーションスキーマ
+ * - @kit/supabase/hooks/use-sign-in-with-otp: SupabaseのOTP認証フック
+ * - sonner: トースト通知ライブラリ
+ *
+ * @childComponents
+ * - SuccessAlert: 成功通知コンポーネント
+ * - ErrorAlert: エラー通知コンポーネント
+ * - TermsAndConditionsFormField: 利用規約チェックボックスコンポーネント
+ *
+ * @param {Object} props
+ * @param {string} props.redirectUrl - 認証後のリダイレクトURL
+ * @param {boolean} props.shouldCreateUser - 新規ユーザーを作成するかどうか
+ * @param {boolean} [props.displayTermsCheckbox] - 利用規約チェックボックスを表示するか
+ * @param {Object} [props.defaultValues] - フォームのデフォルト値
+ * @param {string} [props.defaultValues.email] - デフォルトのメールアドレス
+ *
+ * @example
+ * ```tsx
+ * <MagicLinkAuthContainer
+ *   redirectUrl="https://example.com/auth/callback"
+ *   shouldCreateUser={true}
+ *   displayTermsCheckbox={true}
+ * />
+ * ```
+ */
 export function MagicLinkAuthContainer({
   redirectUrl,
   shouldCreateUser,

@@ -1,16 +1,34 @@
+/**
+ * サイトマップ生成ルート
+ *
+ * このファイルはサイトのサイトマップXMLを動的に生成するためのAPIルートです。
+ * 検索エンジンがサイト内のページを効率的にクロールできるように、
+ * サイト内の全ページのURLリストを提供します。
+ */
+
 import { getServerSideSitemap } from 'next-sitemap';
 
 import appConfig from '~/config/app.config';
 
 /**
- * @description The maximum age of the sitemap in seconds.
- * This is used to set the cache-control header for the sitemap. The cache-control header is used to control how long the sitemap is cached.
- * By default, the cache-control header is set to 'public, max-age=600, s-maxage=3600'.
- * This means that the sitemap will be cached for 600 seconds (10 minutes) and will be considered stale after 3600 seconds (1 hour).
+ * サイトマップの最大有効期間（秒）
+ *
+ * この値はサイトマップのCache-Controlヘッダーを設定するために使用されます。
+ * デフォルトでは、Cache-Controlヘッダーは 'public, max-age=600, s-maxage=3600' に設定されます。
+ * これは、サイトマップがブラウザやCDNで600秒（10分）キャッシュされ、
+ * 3600秒（1時間）経過後に古いと見なされることを意味します。
  */
 const MAX_AGE = 60;
 const S_MAX_AGE = 3600;
 
+/**
+ * GETリクエストハンドラー
+ *
+ * サイトマップXMLを生成して返します。
+ * Cache-Controlヘッダーを設定してキャッシュ戦略を制御します。
+ *
+ * @returns サイトマップXMLレスポンス
+ */
 export async function GET() {
   const paths = getPaths();
 
@@ -21,6 +39,14 @@ export async function GET() {
   return getServerSideSitemap([...paths], headers);
 }
 
+/**
+ * サイトマップに含めるパスを取得する関数
+ *
+ * サイト内の全ページのパスを定義し、サイトマップエントリに変換します。
+ * 各エントリには、完全なURL（locプロパティ）と最終更新日（lastmodプロパティ）が含まれます。
+ *
+ * @returns サイトマップエントリの配列
+ */
 function getPaths() {
   const paths = [
     '/',
@@ -28,7 +54,7 @@ function getPaths() {
     '/cookie-policy',
     '/terms-of-service',
     '/privacy-policy',
-    // add more paths here
+    // 他のパスをここに追加
   ];
 
   return paths.map((path) => {

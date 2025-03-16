@@ -12,7 +12,7 @@
 @import './theme.utilities.css';
 @import './shadcn-ui.css';
 @import './markdoc.css';
-@import './makerkit.css';
+@import './super-next-app.css';
 
 /* plugins - update the below if you add a new plugin */
 @plugin "tailwindcss-animate";

@@ -30,16 +30,22 @@ interface HandlerParams<
 }
 
 /**
- * Enhanced route handler function.
+ * 拡張されたルートハンドラ関数。
  *
- * This function takes a request and parameters object as arguments and returns a route handler function.
- * The route handler function can be used to handle HTTP requests and apply additional enhancements
- * based on the provided parameters.
+ * この関数はリクエストとパラメータオブジェクトを引数として受け取り、ルートハンドラ関数を返します。
+ * 返されたルートハンドラ関数は、HTTPリクエストを処理し、提供されたパラメータに基づいて
+ * 追加の機能拡張（認証、CAPTCHA検証、スキーマ検証など）を適用します。
  *
- * Usage:
+ * 主な機能:
+ * 1. 認証チェック: ユーザーが認証されているか確認し、未認証の場合はリダイレクト
+ * 2. CAPTCHA検証: ヘッダーからCAPTCHAトークンを取得して検証
+ * 3. スキーマ検証: Zodを使用したリクエストボディの検証
+ * 4. 型安全性: TypeScriptの型推論を活用した型安全なハンドラ
+ *
+ * 使用例:
  * export const POST = enhanceRouteHandler(
  *   ({ request, body, user }) => {
- *     return new Response(`Hello, ${body.name}!`);
+ *     return new Response(`こんにちは、${body.name}さん!`);
  *   },
  *   {
  *     schema: z.object({
@@ -53,7 +59,7 @@ export const enhanceRouteHandler = <
   Body,
   Params extends Config<z.ZodType<Body, z.ZodTypeDef>>,
 >(
-  // Route handler function
+  // ルートハンドラ関数
   handler:
     | ((
         params: HandlerParams<Params['schema'], Params['auth']>
@@ -61,13 +67,14 @@ export const enhanceRouteHandler = <
     | ((
         params: HandlerParams<Params['schema'], Params['auth']>
       ) => Promise<NextResponse | Response>),
-  // Parameters object
+  // パラメータオブジェクト
   params?: Params
 ) => {
   /**
-   * Route handler function.
+   * ルートハンドラ関数。
    *
-   * This function takes a request object as an argument and returns a response object.
+   * この関数はリクエストオブジェクトを引数として受け取り、レスポンスオブジェクトを返します。
+   * Next.jsのAPIルートで使用されるメインの処理関数です。
    */
   return async function routeHandler(
     request: NextRequest,
@@ -79,31 +86,33 @@ export const enhanceRouteHandler = <
 
     let user: UserParam = undefined as UserParam;
 
-    // Check if the captcha token should be verified
+    // CAPTCHAトークンを検証すべきかどうかを設定から取得（デフォルトはfalse）
     const shouldVerifyCaptcha = params?.captcha ?? false;
 
-    // Verify the captcha token if required and setup
+    // CAPTCHAトークンの検証が必要かつ設定されている場合、トークンを検証
     if (shouldVerifyCaptcha) {
       const token = captchaTokenGetter(request);
 
-      // If the captcha token is not provided, return a 400 response.
+      // CAPTCHAトークンが提供されていない場合、400エラーレスポンスを返す
       if (token) {
         await verifyCaptchaToken(token);
       } else {
-        return new Response('Captcha token is required', { status: 400 });
+        return new Response('CAPTCHAトークンが必要です', { status: 400 });
       }
     }
 
+    // Supabaseクライアントを初期化
     const client = getSupabaseServerClient();
 
+    // 認証が必要かどうかを設定から取得（デフォルトはtrue）
     const shouldVerifyAuth = params?.auth ?? true;
 
-    // Check if the user should be authenticated
+    // 認証が必要な場合、ユーザーが認証されているか確認
     if (shouldVerifyAuth) {
-      // Get the authenticated user
+      // 認証済みユーザーを取得
       const auth = await requireUser(client);
 
-      // If the user is not authenticated, redirect to the specified URL.
+      // ユーザーが認証されていない場合、指定されたURLにリダイレクト
       if (auth.error) {
         return redirect(auth.redirectTo);
       }
@@ -115,11 +124,13 @@ export const enhanceRouteHandler = <
       ? z.infer<Params['schema']>
       : undefined = undefined;
 
+    // スキーマが指定されている場合、リクエストボディを検証
     if (params?.schema) {
-      // clone the request to read the body
-      // so that we can pass it to the handler safely
+      // リクエストをクローンしてボディを読み取り
+      // ハンドラに安全に渡せるようにする
       const json = await request.clone().json();
 
+      // Zodスキーマを使用してリクエストボディを検証
       body = zodParseFactory(params.schema)(
         json
       ) as Params['schema'] extends z.ZodType
@@ -127,6 +138,7 @@ export const enhanceRouteHandler = <
         : never;
     }
 
+    // すべての検証が成功したら、ハンドラ関数を実行して結果を返す
     return handler({
       request,
       body,
@@ -137,8 +149,9 @@ export const enhanceRouteHandler = <
 };
 
 /**
- * Get the captcha token from the request headers.
- * @param request
+ * リクエストヘッダーからCAPTCHAトークンを取得します。
+ * @param request NextRequestオブジェクト
+ * @returns CAPTCHAトークン文字列またはnull
  */
 function captchaTokenGetter(request: NextRequest) {
   return request.headers.get('x-captcha-token');

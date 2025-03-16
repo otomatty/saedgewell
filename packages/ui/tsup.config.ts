@@ -1,9 +1,14 @@
-import { defineConfig } from 'tsup';
-import { allEntries } from './src/entries';
+import { defineConfig, type Format } from 'tsup';
+import {
+  shadcnEntries,
+  makerkitEntries,
+  magicuiEntries,
+  customEntries,
+  utilEntries,
+} from './config/tsup/entries';
 
-export default defineConfig({
-  entry: allEntries,
-  format: ['esm', 'cjs'],
+const baseConfig = {
+  format: ['esm', 'cjs'] as Format[],
   dts: true,
   clean: true,
   external: [
@@ -33,4 +38,35 @@ export default defineConfig({
   outDir: 'dist',
   splitting: true,
   bundle: true,
-});
+  minify: true,
+  workers: 2,
+};
+
+// エントリーポイントを分割してビルドする
+export default defineConfig([
+  {
+    ...baseConfig,
+    entry: shadcnEntries,
+    clean: true, // 最初のビルドでのみtrueに設定
+  },
+  {
+    ...baseConfig,
+    entry: makerkitEntries,
+    clean: false, // 後続のビルドではfalseに設定
+  },
+  {
+    ...baseConfig,
+    entry: magicuiEntries,
+    clean: false,
+  },
+  {
+    ...baseConfig,
+    entry: customEntries,
+    clean: false,
+  },
+  {
+    ...baseConfig,
+    entry: utilEntries,
+    clean: false,
+  },
+]);
