@@ -107,6 +107,7 @@
     "./basic-hero": "./src/custom/basic-hero/index.tsx",
     "./back-link": "./src/custom/back-link/index.tsx",
     "./responsive-dialog": "./src/custom/responsive-dialog/index.tsx",
+    "./markdown": "./src/custom/markdown/index.tsx",
     "./icons": "./src/custom/icons/index.tsx",
     "./animated-circular-progress-bar": "./src/magicui/animated-circular-progress-bar/index.tsx",
     "./animated-grid-pattern": "./src/magicui/animated-grid-pattern/index.tsx",
