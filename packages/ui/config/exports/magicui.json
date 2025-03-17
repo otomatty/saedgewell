@@ -18,6 +18,7 @@
     "./meteors": "./src/magicui/meteors/index.tsx",
     "./neon-gradient-card": "./src/magicui/neon-gradient-card/index.tsx",
     "./note-pattern": "./src/magicui/note-pattern/index.tsx",
+    "./number-ticker": "./src/magicui/number-ticker/index.tsx",
     "./orbit-animation": "./src/magicui/orbit-animation/index.tsx",
     "./orbiting-circles": "./src/magicui/orbiting-circles/index.tsx",
     "./particles": "./src/magicui/particles/index.tsx",

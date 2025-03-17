@@ -20,6 +20,7 @@ export const magicuiEntries = [
   'src/magicui/marquee/index.tsx',
   'src/magicui/meteors/index.tsx',
   'src/magicui/neon-gradient-card/index.tsx',
+  'src/magicui/number-ticker/index.tsx',
   'src/magicui/note-pattern/index.tsx',
   'src/magicui/orbit-animation/index.tsx',
   'src/magicui/orbiting-circles/index.tsx',
