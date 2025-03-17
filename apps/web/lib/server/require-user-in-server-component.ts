@@ -9,9 +9,20 @@ import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
 /**
  * @name requireUserInServerComponent
- * @description Require the user to be authenticated in a server component.
- * We reuse this function in multiple server components - it is cached so that the data is only fetched once per request.
- * Use this instead of `requireUser` in server components, so you don't need to hit the database multiple times in a single request.
+ * @description サーバーコンポーネントでユーザーが認証されていることを要求します。
+ * この関数は複数のサーバーコンポーネントで再利用されます - リクエストごとにデータが一度だけ取得されるようにキャッシュされています。
+ * サーバーコンポーネントでは、1つのリクエスト内で複数回データベースにアクセスする必要がないように、
+ * `requireUser`の代わりにこの関数を使用してください。
+ *
+ * @example
+ * // サーバーコンポーネント内での使用例
+ * const ServerComponent = async () => {
+ *   const user = await requireUserInServerComponent();
+ *   // user オブジェクトを使った処理...
+ *   return <div>ようこそ、{user.name}さん</div>;
+ * };
+ *
+ * @returns ユーザーデータを含むオブジェクト。認証されていない場合はリダイレクトします。
  */
 export const requireUserInServerComponent = cache(async () => {
   const client = getSupabaseServerClient();

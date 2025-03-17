@@ -9,7 +9,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@kit/ui/collapsible';
-import type { DocNode } from '~/lib/mdx/docs';
+import type { DocNode } from '~/lib/mdx/types';
+import { getDocPath } from '~/lib/utils/path';
 
 interface DocTreeProps {
   items: DocNode[];
@@ -56,14 +57,16 @@ interface TreeItemProps {
 }
 
 function TreeItem({ item, docType, pathname }: TreeItemProps) {
-  const isCurrentPage = pathname === `/${docType}/${item.slug}`;
+  // 正しいパスを生成して現在のページかどうかを判定
+  const itemPath = getDocPath(docType, item.slug);
+  const isCurrentPage = pathname === itemPath;
   const isDirectory = !item.slug || item.children?.length > 0;
 
   // ファイルの場合
   if (!isDirectory) {
     return (
       <Link
-        href={`/${docType}/${item.slug}`}
+        href={itemPath}
         className={cn(
           'block w-full rounded-md px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
           isCurrentPage
@@ -82,7 +85,10 @@ function TreeItem({ item, docType, pathname }: TreeItemProps) {
       className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
       defaultOpen={
         isCurrentPage ||
-        item.children?.some((child) => pathname === `/${docType}/${child.slug}`)
+        item.children?.some((child) => {
+          const childPath = getDocPath(docType, child.slug);
+          return pathname === childPath;
+        })
       }
     >
       <CollapsibleTrigger asChild>

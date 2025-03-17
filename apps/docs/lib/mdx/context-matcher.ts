@@ -1,4 +1,4 @@
-import type { DocumentMapping, DocumentMetadata } from './types';
+import type { DocumentMappingItem, DocumentMetadata } from '~/types/mdx';
 
 /**
  * コンテキストを考慮したマッチングを行うクラス
@@ -224,8 +224,8 @@ export class ContextAwareMatcher {
    */
   sortByContextRelevance(
     keyword: string,
-    documents: DocumentMapping[]
-  ): DocumentMapping[] {
+    documents: DocumentMappingItem[]
+  ): DocumentMappingItem[] {
     // ドキュメント数を更新
     this.setDocumentCount(documents.length);
 
@@ -245,7 +245,7 @@ export class ContextAwareMatcher {
    */
   extractRelatedKeywords(
     keyword: string,
-    documents: DocumentMapping[],
+    documents: DocumentMappingItem[],
     maxKeywords = 5
   ): string[] {
     // コンテキストがない場合は空配列を返す

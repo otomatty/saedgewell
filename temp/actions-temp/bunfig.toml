@@ -1,6 +1,0 @@
-[install]
-production = true
-frozen-lockfile = true
-
-[install.dependencies]
-typescript = "latest" 

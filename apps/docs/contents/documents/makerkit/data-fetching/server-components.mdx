@@ -1,15 +1,14 @@
 ---
-title: 'Next.js Supabase SaaS KitでのServer Componentsの使用'
+title: 'Server Components'
 description: 'Next.js Supabase SaaS KitでServer Componentsを使用してデータをフェッチする方法を学ぶ'
 icon: 'server'
 order: 1
 ---
 
-# Next.js Supabase SaaS KitでのServer Componentsの使用
 
 Next.js Supabase SaaS KitでServer Componentsを使用してデータをフェッチする方法を学びましょう。
 
-## Server Componentsとは
+# Server Componentsとは
 
 Server Componentsは、Next.js Supabase SaaS Kitでデータのフェッチとレンダリングを行う主要な方法です。
 
@@ -20,7 +19,7 @@ Server Componentsは、Next.js Supabase SaaS Kitでデータのフェッチと�
 
 Next.jsでは、`use client`を指定しない限り、すべてのコンポーネントはServer Componentです。Client Componentsもサーバーでレンダリングされますが、クライアントでも再度レンダリングされます。一方、Server Componentsはサーバーでのみレンダリングされます - そのため、データフェッチメソッド（この場合はSupabaseを使用）を使用して、特定のレイアウトやページに必要なすべてのデータをフェッチできます。
 
-## 使用例
+# 使用例
 
 例えば、tasksテーブルからタスクのリストを表示するページがあるとします。これはNext.jsのページであり、したがってServer Componentです。つまり、サーバーでのみ実行され、データをフェッチしてクライアントにストリーミングしてレンダリングします。クライアントはこのコンポーネントのReactコードを実行することはありません：受け取ってレンダリングするだけです。
 
@@ -52,7 +51,7 @@ export default async function TasksPage() {
 
 ご覧の通り、データのフェッチとTasksListでのレンダリングがすべてサーバー上で行われます。
 
-## Server Componentsの利点
+# Server Componentsの利点
 
 1. **パフォーマンス**
    - サーバーサイドでのデータフェッチにより、クライアントへのラウンドトリップが削減されます
@@ -66,7 +65,7 @@ export default async function TasksPage() {
    - データフェッチとレンダリングロジックを同じ場所に記述できます
    - 非同期処理が自然に組み込めます
 
-## ベストプラクティス
+# ベストプラクティス
 
 1. **エラーハンドリング**
    - データフェッチ時のエラーを適切に処理し、ユーザーフレンドリーなエラーメッセージを表示します

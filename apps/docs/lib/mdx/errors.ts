@@ -1,5 +1,5 @@
-import type { KeywordError, KeywordIdentifier } from './types';
-import { KeywordErrorType } from './types';
+import type { KeywordError, KeywordIdentifier } from '~/types/mdx/keyword';
+import { KeywordErrorType } from '~/types/mdx/keyword';
 
 /**
  * キーワード解決エラー

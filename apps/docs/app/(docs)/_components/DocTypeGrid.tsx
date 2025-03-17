@@ -15,6 +15,7 @@ import {
   getCategoryDisplayName,
   getCategoryColor,
 } from '~/lib/utils/category';
+import { getDocTypePath } from '~/lib/utils/path';
 import type { DocType } from '~/lib/mdx/types';
 
 interface DocTypeGridProps {
@@ -127,7 +128,7 @@ export function DocTypeGrid({
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {docTypes.map((docType) => (
-        <Link key={docType.id} href={`/${docType.id}`}>
+        <Link key={docType.id} href={getDocTypePath(docType)}>
           <Card className="h-full transition-colors hover:bg-muted/50">
             <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-muted/30">
               {/* スケルトンローディング */}

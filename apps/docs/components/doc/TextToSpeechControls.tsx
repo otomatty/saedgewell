@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSpeechSynthesis } from '~/lib/hooks/useSpeechSynthesis';
+import { useSpeechSynthesis } from '~/hooks/useSpeechSynthesis';
 import { Play, Pause, Square, Settings, Bug } from 'lucide-react';
 
 interface TextToSpeechControlsProps {

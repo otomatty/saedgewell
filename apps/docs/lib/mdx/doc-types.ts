@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { DocType, DocCategory } from './types';
+import type { DocType, DocCategory } from '~/types/mdx';
 
 const docTypesCache = new Map<string, { data: DocType[]; timestamp: number }>();
 const docCategoriesCache = new Map<

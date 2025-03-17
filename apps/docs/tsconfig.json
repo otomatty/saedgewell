@@ -6,8 +6,11 @@
       "~/*": ["./app/*"],
       "~/config/*": ["./config/*"],
       "~/components/*": ["./components/*"],
+      "~/types/*": ["./types/*"],
       "~/lib/*": ["./lib/*"],
-      "~/types/*": ["./types/*"]
+      "~/actions/*": ["./actions/*"],
+      "~/services/*": ["./services/*"],
+      "~/hooks/*": ["./hooks/*"]
     },
     "plugins": [
       {
@@ -15,7 +18,9 @@
       }
     ],
     "typeRoots": ["./types", "./node_modules/@types"],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "skipLibCheck": true,
+    "types": []
   },
   "include": [
     "next-env.d.ts",
@@ -27,7 +32,10 @@
     "lib/**/*.ts",
     "app",
     "docs",
-    "types/**/*.d.ts"
+    "types/**/*.d.ts",
+    "types/mdx/types.ts",
+    "hooks/mdx/hooks",
+    "hooks/mdx/use-scroll-to-anchor.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

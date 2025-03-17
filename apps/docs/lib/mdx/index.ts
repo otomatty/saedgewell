@@ -6,28 +6,16 @@
  */
 
 // 型定義
-export * from './types';
+export * from '../../types/mdx';
 
 // フロントマター処理
 export * from './frontmatter';
 
-// ドキュメントツリー
-export * from './doc-tree';
-
 // ドキュメントタイプ
 export * from './doc-types';
 
-// MDX処理
-export * from './mdx-processor';
-
 // ユーティリティ
 export * from './utils';
-
-// キーワードインデックス
-export * from './keyword-index';
-
-// キャッシュ
-export * from './cache';
 
 // remarkプラグイン
 export * from './remark-keyword-links';
@@ -38,14 +26,18 @@ export * from './errors';
 // パス解決
 export * from './path-resolver';
 
-// コンテキストマッチャー
-export * from './context-matcher';
+// ナビゲーション関連の関数をエクスポート
+export { getAdjacentDocs, getDocsWithOrder } from './navigation';
+export type { DocNavigation, DocNavigationItem } from './navigation';
 
-// キーワード解決
-export * from './keyword-resolver';
+// ドキュメントタイプ関連の関数をエクスポート
+export { getDocTypes } from './docs';
 
-// 優先度解決
-export * from './priority-resolver';
+// フロントマター関連の関数をエクスポート
+export { DocFrontmatterSchema, generateTitleFromFilename } from './frontmatter';
 
-// ドキュメントマッパー
-export * from './document-mapper';
+// Server Actions
+export * from '../../actions/mdx';
+
+// Client Services
+export * from '../../services/mdx';

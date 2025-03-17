@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useGeminiSpeech } from '~/lib/hooks/useGeminiSpeech';
+import { useGeminiSpeech } from '~/hooks/useGeminiSpeech';
 import { Play, Pause, Square, Settings, Bug, RefreshCw } from 'lucide-react';
 
 interface GeminiSpeechControlsProps {

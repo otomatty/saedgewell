@@ -9,9 +9,9 @@
 import { Home, User } from 'lucide-react';
 import type { z } from 'zod';
 
-import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
+import { NavigationConfigSchema } from '../../../packages/ui/src/makerkit/navigation-config/schema';
 
-import pathsConfig from '~/config/paths.config';
+import pathsConfig from './paths.config';
 
 // アイコンのサイズを統一するためのクラス
 const iconClasses = 'w-4';

@@ -1,20 +1,17 @@
 ---
-title: 'Next.js Supabase TurboにおけるSupabaseクライアント'
+title: 'Supabaseクライアント'
 description: 'ブラウザまたはサーバー上でSupabaseと対話するための異なるクライアントの使用方法'
 icon: 'database'
 order: 1
 ---
-
-# Next.js Supabase TurboにおけるSupabaseクライアント
-
 コードがブラウザで実行されているか、サーバー上で実行されているかによって、Supabaseと対話するために異なるクライアントを使用する必要があります。
 サーバーと通信するさまざまな方法について詳しく説明する前に、データベースをホストしているSupabase（つまりデータのソース）とどのように通信するかを紹介する必要があります。
 
-## Supabaseクライアントの使用
+# Supabaseクライアントの使用
 
 コードがブラウザで実行されているか、サーバー上で実行されているかによって、Supabaseと対話するために異なるクライアントを使用する必要があります。
 
-### ブラウザでのSupabaseクライアントの使用
+## ブラウザでのSupabaseクライアントの使用
 
 ブラウザ環境でSupabaseクライアントをインポートするには、`useSupabase`フックを使用できます：
 
@@ -32,7 +29,7 @@ export default function Home() {
 }
 ```
 
-### サーバー環境でのSupabaseクライアントの使用
+## サーバー環境でのSupabaseクライアントの使用
 
 サーバー環境でSupabaseクライアントをインポートするには、`getSupabaseServerClient`関数を使用できます。これはServer Actions、Route Handlers、Server Componentsなど、すべてのサーバー環境で同様に行うことができます：
 
@@ -64,7 +61,7 @@ export async function myServerAction() {
 
 注意：`getSupabaseServerAdminClient`関数は、`SUPABASE_SERVICE_ROLE_KEY`環境変数の設定が必要なため、サーバー環境でのみ使用してください。また、特権が昇格されているため、非常に例外的なケースでのみ使用してください。ほとんどの場合は、`getSupabaseServerClient`関数を使用してください。
 
-## 非推奨：キットの古いバージョン
+# 非推奨：キットの古いバージョン
 
 注意：以下は、キットの古いバージョンに適用されます。
 
@@ -79,7 +76,7 @@ Supabaseと対話するために4つの異なるクライアントを使用で�
 - Route Handlers - Route Handlersで実行され、サーバーからSupabaseと対話するために使用されます
 - Server Components - Server Componentsで実行され、サーバーからSupabaseと対話するために使用されます
 
-### ブラウザ
+## ブラウザ
 
 ブラウザクライアントを使用するには、`useSupabase`フックを使用します：
 
@@ -97,7 +94,7 @@ export default function Home() {
 }
 ```
 
-### Server Actions
+## Server Actions
 
 Server Actionsクライアントを使用するには、`getSupabaseServerActionClient`フックを使用します：
 
@@ -115,7 +112,7 @@ export async function myServerAction() {
 }
 ```
 
-### Route Handlers
+## Route Handlers
 
 Route Handlersクライアントを使用するには、`getSupabaseRouteHandlerClient`関数を使用します：
 
@@ -130,7 +127,7 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-### Server Components
+## Server Components
 
 Server Componentsクライアントを使用するには、`getSupabaseServerComponentClient`関数を使用します：
 

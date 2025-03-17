@@ -4,58 +4,56 @@ import Link from 'next/link';
 import { Button } from '@kit/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface DocNavigationProps {
+/**
+ * ドキュメントナビゲーションのプロパティ
+ */
+export interface DocNavigationProps {
   adjacentDocs?: {
     prev: { title: string; slug: string[] } | null;
     next: { title: string; slug: string[] } | null;
   };
 }
 
-// ナビゲーションボタンの共通スタイル
-const navButtonStyles = {
-  button:
-    'flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 group cursor-pointer',
-  icon: 'h-5 w-5 text-muted-foreground transition-transform duration-200',
-  label: 'text-sm text-muted-foreground',
-  title: 'text-md font-medium line-clamp-1 max-w-[200px]',
-};
-
+/**
+ * ドキュメントの前後ページへのナビゲーションを表示するコンポーネント
+ * @param adjacentDocs 前後のドキュメント情報
+ */
 export function DocNavigation({ adjacentDocs }: DocNavigationProps) {
   if (!adjacentDocs) return null;
 
   return (
-    <div className="flex justify-between items-center mt-12 mb-8 w-full max-w-[800px] mx-auto border-t border-gray-200 dark:border-gray-800 pt-6">
+    <div className="flex justify-between items-center mt-12 mb-8 w-full max-w-[1000px] mx-auto border-t border-gray-200 dark:border-gray-800 pt-6">
       <div>
         {adjacentDocs.prev && (
           <Link href={`/${adjacentDocs.prev.slug.join('/')}`} passHref>
-            <button type="button" className={navButtonStyles.button}>
-              <ChevronLeft
-                className={`${navButtonStyles.icon} group-hover:-translate-x-1`}
-              />
+            <Button variant="ghost" className="flex items-center gap-2">
+              <ChevronLeft className="h-4 w-4" />
               <div className="flex flex-col items-start">
-                <span className={navButtonStyles.label}>前のページ</span>
-                <span className={navButtonStyles.title}>
+                <span className="text-xs text-muted-foreground">
+                  前のページ
+                </span>
+                <span className="text-sm font-medium">
                   {adjacentDocs.prev.title}
                 </span>
               </div>
-            </button>
+            </Button>
           </Link>
         )}
       </div>
       <div>
         {adjacentDocs.next && (
           <Link href={`/${adjacentDocs.next.slug.join('/')}`} passHref>
-            <button type="button" className={navButtonStyles.button}>
+            <Button variant="ghost" className="flex items-center gap-2">
               <div className="flex flex-col items-end">
-                <span className={navButtonStyles.label}>次のページ</span>
-                <span className={navButtonStyles.title}>
+                <span className="text-xs text-muted-foreground">
+                  次のページ
+                </span>
+                <span className="text-sm font-medium">
                   {adjacentDocs.next.title}
                 </span>
               </div>
-              <ChevronRight
-                className={`${navButtonStyles.icon} group-hover:translate-x-1`}
-              />
-            </button>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </Link>
         )}
       </div>

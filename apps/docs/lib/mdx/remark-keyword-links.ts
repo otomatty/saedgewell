@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit';
-import type { KeywordIndex, ResolvedKeyword } from './types';
+import type { KeywordIndex, ResolvedKeyword } from '~/types/mdx';
 import type { Root, Text } from 'mdast';
-import { resolveKeyword } from '../../actions/keywords';
+import { resolveKeyword } from '~/actions/keywords';
 
 // シンプルに型定義する
 interface MdxJsxAttribute {

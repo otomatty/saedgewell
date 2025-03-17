@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@kit/ui/tabs';
-import { Badge } from '@kit/ui/badge';
 import { DocTypeGrid } from './DocTypeGrid';
+import { TagFilter } from './TagFilter';
 import type { DocType, DocCategory } from '~/lib/mdx/types';
 
 interface DocTypeTabsProps {
@@ -18,42 +18,37 @@ export function DocTypeTabs({
   docTypesByCategory,
 }: DocTypeTabsProps) {
   const [activeTab, setActiveTab] = useState('all');
-  const [activeTypeTag, setActiveTypeTag] = useState<string | null>(null);
-  const [activeTechTag, setActiveTechTag] = useState<string | null>(null);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeTagType, setActiveTagType] = useState<'type' | 'tech' | null>(
+    null
+  );
 
   // 利用可能なタグを収集
-  const typeTags = new Set<string>();
-  const techTags = new Set<string>();
+  const allTags = new Map<string, { id: string; type: 'type' | 'tech' }>();
 
   for (const docType of docTypes) {
     if (docType.tags?.type) {
       for (const tag of docType.tags.type) {
-        typeTags.add(tag);
+        allTags.set(`type:${tag}`, { id: tag, type: 'type' });
       }
     }
     if (docType.tags?.tech) {
       for (const tag of docType.tags.tech) {
-        techTags.add(tag);
+        allTags.set(`tech:${tag}`, { id: tag, type: 'tech' });
       }
     }
   }
 
   // タグでフィルタリングされたドキュメントタイプを取得
   const getFilteredDocTypes = (docs: DocType[]) => {
+    if (!activeTag || !activeTagType) return docs;
+
     return docs.filter((docType) => {
-      // タイプタグでフィルタリング
-      if (
-        activeTypeTag &&
-        (!docType.tags?.type || !docType.tags.type.includes(activeTypeTag))
-      ) {
-        return false;
+      if (activeTagType === 'type') {
+        return docType.tags?.type?.includes(activeTag);
       }
-      // 技術タグでフィルタリング
-      if (
-        activeTechTag &&
-        (!docType.tags?.tech || !docType.tags.tech.includes(activeTechTag))
-      ) {
-        return false;
+      if (activeTagType === 'tech') {
+        return docType.tags?.tech?.includes(activeTag);
       }
       return true;
     });
@@ -69,14 +64,24 @@ export function DocTypeTabs({
 
   // タグをリセット
   const resetTags = () => {
-    setActiveTypeTag(null);
-    setActiveTechTag(null);
+    setActiveTag(null);
+    setActiveTagType(null);
   };
 
   // タブ変更時にタグもリセット
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     resetTags();
+  };
+
+  // タグ選択時の処理
+  const handleTagClick = (tagId: string, tagType: 'type' | 'tech') => {
+    if (activeTag === tagId && activeTagType === tagType) {
+      resetTags();
+    } else {
+      setActiveTag(tagId);
+      setActiveTagType(tagType);
+    }
   };
 
   return (
@@ -105,53 +110,13 @@ export function DocTypeTabs({
         </div>
 
         {/* タグフィルター */}
-        <div className="mb-6 flex flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">タイプ:</span>
-            <div className="flex flex-wrap gap-1">
-              {Array.from(typeTags).map((tag) => (
-                <Badge
-                  key={tag}
-                  variant={activeTypeTag === tag ? 'default' : 'outline'}
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setActiveTypeTag(activeTypeTag === tag ? null : tag)
-                  }
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 ml-4">
-            <span className="text-sm font-medium">技術:</span>
-            <div className="flex flex-wrap gap-1">
-              {Array.from(techTags).map((tag) => (
-                <Badge
-                  key={tag}
-                  variant={activeTechTag === tag ? 'default' : 'outline'}
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setActiveTechTag(activeTechTag === tag ? null : tag)
-                  }
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {(activeTypeTag || activeTechTag) && (
-            <button
-              type="button"
-              onClick={resetTags}
-              className="ml-auto text-xs text-muted-foreground hover:text-foreground"
-            >
-              フィルターをリセット
-            </button>
-          )}
-        </div>
+        <TagFilter
+          allTags={allTags}
+          activeTag={activeTag}
+          activeTagType={activeTagType}
+          onTagClick={handleTagClick}
+          onReset={resetTags}
+        />
 
         <TabsContent value="all">
           <DocTypeGrid

@@ -1,4 +1,4 @@
-import type { DocumentMapping } from './types';
+import type { DocumentMappingItem } from '~/types/mdx';
 
 /**
  * ドキュメント優先度設定
@@ -37,7 +37,7 @@ export interface ResolverConfig {
  * ドキュメントとマッチングスコアを含む
  */
 export interface DocumentMatch {
-  document: DocumentMapping;
+  document: DocumentMappingItem;
   score: number;
   docType: string;
 }
@@ -139,7 +139,7 @@ export class PriorityBasedResolver {
    * 新しいドキュメントほど高いスコア
    * @param document ドキュメント
    */
-  private getRecencyScore(document: DocumentMapping): number {
+  private getRecencyScore(document: DocumentMappingItem): number {
     const lastModified = document.metadata.lastModified;
     if (!lastModified) return 0;
 
@@ -156,7 +156,7 @@ export class PriorityBasedResolver {
    * 人気度に基づくスコアを計算
    * @param document ドキュメント
    */
-  private getPopularityScore(document: DocumentMapping): number {
+  private getPopularityScore(document: DocumentMappingItem): number {
     const path = document.path;
     return this.popularityScores.get(path) || 0;
   }
@@ -166,7 +166,7 @@ export class PriorityBasedResolver {
    * ユーザー設定や特定の条件に基づくスコア
    * @param document ドキュメント
    */
-  private getCustomScore(document: DocumentMapping): number {
+  private getCustomScore(document: DocumentMappingItem): number {
     // ユーザー設定による優先度
     const docTypePreference = this.userPreferences[document.docType] || 0;
 

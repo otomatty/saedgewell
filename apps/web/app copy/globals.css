@@ -1,0 +1,402 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(222.2 84% 4.9%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 84% 4.9%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222.2 84% 4.9%);
+
+  --primary: hsl(222.2 47.4% 11.2%);
+  --primary-foreground: hsl(210 40% 98%);
+
+  --secondary: hsl(210 40% 96.1%);
+  --secondary-foreground: hsl(222.2 47.4% 11.2%);
+
+  --muted: hsl(210 40% 96.1%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+
+  --accent: hsl(210 40% 96.1%);
+  --accent-foreground: hsl(222.2 47.4% 11.2%);
+
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
+
+  --border: hsl(214.3 31.8% 91.4%);
+  --input: hsl(214.3 31.8% 91.4%);
+  --ring: hsl(222.2 84% 4.9%);
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222.2 47.4% 11.2%);
+
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(212.7 26.8% 83.9%);
+}
+
+@theme inline {
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-background-line: var(--background-line);
+
+  --color-sidebar: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-color-1: var(--color-1);
+  --color-color-2: var(--color-2);
+  --color-color-3: var(--color-3);
+  --color-color-4: var(--color-4);
+  --color-color-5: var(--color-5);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-shimmer-slide: shimmer-slide 1.5s linear infinite;
+  --animate-spin-around: spin-around 6s ease-in-out infinite;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-ripple: ripple 1.5s ease-in-out infinite;
+  --animate-aurora-border: aurora-border 8s ease-in-out infinite;
+  --animate-aurora-1: aurora-1 15s ease-in-out infinite;
+  --animate-aurora-2: aurora-2 15s ease-in-out infinite;
+  --animate-aurora-3: aurora-3 15s ease-in-out infinite;
+  --animate-aurora-4: aurora-4 15s ease-in-out infinite;
+  --animate-background-position-spin: background-position-spin 3s ease-in-out
+    infinite alternate;
+  --animate-meteor: meteor var(--duration) linear infinite;
+  --animate-aurora-gradient: aurora-gradient 15s ease infinite;
+  --animate-spin-slow: spin 4s linear infinite;
+  --animate-spin-reverse: spin-reverse 1s linear infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg))
+        translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes ripple {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+  }
+  @keyframes aurora-border {
+    0%,
+    100% {
+      border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    }
+    25% {
+      border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+    }
+    50% {
+      border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+    }
+    75% {
+      border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+    }
+  }
+  @keyframes aurora-1 {
+    0%,
+    100% {
+      top: 0;
+      right: 0;
+    }
+    50% {
+      top: 50%;
+      right: 25%;
+    }
+    75% {
+      top: 25%;
+      right: 50%;
+    }
+  }
+  @keyframes aurora-2 {
+    0%,
+    100% {
+      top: 0;
+      left: 0;
+    }
+    60% {
+      top: 75%;
+      left: 25%;
+    }
+    85% {
+      top: 50%;
+      left: 50%;
+    }
+  }
+  @keyframes aurora-3 {
+    0%,
+    100% {
+      bottom: 0;
+      left: 0;
+    }
+    40% {
+      bottom: 50%;
+      left: 25%;
+    }
+    65% {
+      bottom: 25%;
+      left: 50%;
+    }
+  }
+  @keyframes aurora-4 {
+    0%,
+    100% {
+      bottom: 0;
+      right: 0;
+    }
+    50% {
+      bottom: 25%;
+      right: 40%;
+    }
+    90% {
+      bottom: 50%;
+      right: 25%;
+    }
+  }
+  @keyframes background-position-spin {
+    0% {
+      background-position: top center;
+    }
+    100% {
+      background-position: bottom center;
+    }
+  }
+  @keyframes meteor {
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
+    }
+  }
+  @keyframes aurora-gradient {
+    0%,
+    100% {
+      background-size: 400% 400%;
+      background-position: 0% 50%;
+    }
+    50% {
+      background-size: 400% 400%;
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes spin-reverse {
+    from {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility noise-texture {
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    z-index: -1;
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.1)
+      ),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+  }
+
+  &.dark::after {
+    opacity: 0.2;
+  }
+}
+
+@utility dark {
+  &.noise-texture::after {
+    opacity: 0.2;
+  }
+}
+
+@utility aurora-gradient {
+  @apply inline-block bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-aurora-gradient;
+  background-size: 400% 400%;
+}
+
+@layer utilities {
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

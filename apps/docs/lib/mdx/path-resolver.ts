@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { PathAlias } from './types';
+import type { PathAlias } from '../../types/mdx';
 
 /**
  * パス解決ロジック
@@ -7,6 +7,21 @@ import type { PathAlias } from './types';
  */
 export class PathResolver {
   constructor(private basePath: string) {}
+
+  /**
+   * パスを解決する
+   * @param targetPath 解決するパス
+   * @returns 解決されたパス
+   */
+  resolvePath(targetPath: string): string {
+    // 絶対パスの場合
+    if (targetPath.startsWith('/')) {
+      return targetPath;
+    }
+
+    // それ以外は現在のパスからの相対パスとして扱う
+    return path.normalize(`/${targetPath}`);
+  }
 
   /**
    * 相対パスを解決する

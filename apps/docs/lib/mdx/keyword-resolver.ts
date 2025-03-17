@@ -1,5 +1,4 @@
-import type { DocumentMapping, ResolvedKeyword } from './types';
-import { KeywordErrorType } from './types';
+import type { DocumentMapping, ResolvedKeyword } from '~/types/mdx';
 import { KeywordResolutionError, errorReporter } from './errors';
 import { AliasResolver, PathResolver } from './path-resolver';
 import {
@@ -7,8 +6,8 @@ import {
   PriorityCriteria,
   type DocumentMatch,
   type ResolverConfig,
-} from './priority-resolver';
-import { ContextAwareMatcher } from './context-matcher';
+} from '../../services/mdx/priority-resolver';
+import { ContextAwareMatcher } from '~/services/mdx/context-matcher';
 import type { DocumentMapper } from './document-mapper';
 
 /**

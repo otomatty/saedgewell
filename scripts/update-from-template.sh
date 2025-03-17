@@ -18,6 +18,14 @@ EXCLUDED_FILES=(
 
 echo "🔄 テンプレートリポジトリからの更新を確認します..."
 
+# 未コミットの変更があるか確認
+if [ -n "$(git status --porcelain)" ]; then
+  echo "❌ 未コミットの変更があります。更新前に変更をコミットしてください。"
+  echo "📝 git status の結果:"
+  git status
+  exit 1
+fi
+
 # upstreamの最新変更を取得
 git fetch upstream
 
@@ -84,4 +92,5 @@ bun install
 git stash pop || true
 
 echo "✅ 更新が完了しました！"
-echo "🔍 変更内容を確認し、必要に応じてコンフリクトを解決してください。" 
+echo "🔍 変更内容を確認し、必要に応じてコンフリクトを解決してください。"
+echo "📝 更新内容を確認したら、変更をコミットしてください。" 

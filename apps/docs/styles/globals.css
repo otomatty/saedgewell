@@ -47,8 +47,13 @@ pre code {
 }
 
 /* Tailwind proseクラスのmax-width制限をオーバーライド */
-.prose {
+/* .prose {
   max-width: none !important;
+} */
+
+/* 特定のコンテキストでのみproseの最大幅を解除 */
+.full-width-content .prose {
+  max-width: none;
 }
 
 .mdx-content p {

@@ -1,6 +1,7 @@
 import { getDocTypes } from '~/lib/mdx/docs';
 import { DocTypeTabs } from './_components/DocTypeTabs';
 import type { DocType } from '~/lib/mdx/types';
+import { Hero } from '~/components/layout/Hero';
 
 export default async function HomePage() {
   const { categories, docTypes } = getDocTypes();
@@ -21,19 +22,16 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="mx-auto max-w-3xl text-center">
-        <h1 className="mb-4 text-4xl font-bold">ドキュメント</h1>
-        <p className="mb-8 text-lg text-muted-foreground">
-          プロジェクトに関する包括的なドキュメント、ガイドライン、ベストプラクティスを提供します。
-        </p>
-      </div>
+    <div>
+      <Hero />
 
-      <DocTypeTabs
-        categories={categories}
-        docTypes={docTypes}
-        docTypesByCategory={docTypesByCategory}
-      />
+      <div className="container mx-auto px-4 py-12">
+        <DocTypeTabs
+          categories={categories}
+          docTypes={docTypes}
+          docTypesByCategory={docTypesByCategory}
+        />
+      </div>
     </div>
   );
 }

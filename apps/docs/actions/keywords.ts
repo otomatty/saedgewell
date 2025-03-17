@@ -7,8 +7,9 @@ import type {
   KeywordIndex,
   KeywordIdentifier,
   DocumentMetadata,
-} from '../lib/mdx/types';
-import { getDocTree } from '../lib/mdx/docs';
+  DocumentMappingItem,
+} from '~/types/mdx';
+import { getDocTree } from '../lib/mdx/doc-tree';
 
 // 仮のキャッシュ設定
 const DEFAULT_CACHE_CONFIG = {
@@ -204,12 +205,12 @@ export async function resolveKeyword(
  * ドキュメントマッピングを作成する関数
  * @param entry キーワードエントリ
  * @param docType ドキュメントタイプ
- * @returns ドキュメントマッピング
+ * @returns ドキュメントマッピングアイテム
  */
 function createDocumentMapping(
   entry: KeywordIdentifier,
   docType: string
-): DocumentMapping {
+): DocumentMappingItem {
   // パスからスラッグを抽出
   const pathParts = entry.path.split('/');
   const docTypeIndex = pathParts.findIndex((part) => part === entry.docType);
@@ -237,8 +238,9 @@ function createDocumentMapping(
   };
 
   return {
-    docType,
+    title: entry.title,
     path: entry.path,
+    docType,
     slug,
     metadata,
     keywords: [entry.title],

@@ -1,8 +1,8 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import matter from 'gray-matter';
 import { z } from 'zod';
-import type { DocNode } from './types';
+import type { DocNode } from '~/types/mdx';
 import { DocFrontmatterSchema, generateTitleFromFilename } from './frontmatter';
 
 const docTreeCache = new Map<string, { data: DocNode[]; timestamp: number }>();
@@ -23,8 +23,20 @@ export function getDocTree(contentDir = 'contents/docs'): DocNode[] {
   const baseDir = process.cwd();
   const docsDir = join(baseDir, contentDir);
 
+  // ディレクトリが存在しない場合は空の配列を返す
+  if (!existsSync(docsDir)) {
+    console.warn(`Warning: Directory not found: ${docsDir}`);
+    return [];
+  }
+
   function buildTree(dir: string, parentSlug = ''): DocNode[] {
     try {
+      // ディレクトリが存在しない場合は空の配列を返す
+      if (!existsSync(dir)) {
+        console.warn(`Warning: Directory not found: ${dir}`);
+        return [];
+      }
+
       const items = readdirSync(dir, { withFileTypes: true });
       const nodes: DocNode[] = [];
 

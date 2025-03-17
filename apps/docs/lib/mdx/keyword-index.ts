@@ -4,7 +4,7 @@ import type {
   DuplicateTitleError,
   KeywordIdentifier,
   CacheConfig,
-} from './types';
+} from '~/types/mdx';
 
 /**
  * キーワードインデックスを構築する

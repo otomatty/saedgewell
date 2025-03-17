@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { DocFrontmatter } from './types';
 
 /**
  * MDXファイルのフロントマターのスキーマ定義

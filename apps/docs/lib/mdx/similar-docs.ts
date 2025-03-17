@@ -1,5 +1,5 @@
-import { getDocTree } from './docs';
-import type { DocNode } from './types';
+import { getDocTree } from './doc-tree';
+import type { DocNode } from '~/types/mdx';
 
 /**
  * ドキュメントの簡易表現

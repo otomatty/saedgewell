@@ -1,5 +1,5 @@
-import type { KeywordLinkProps, ResolvedKeyword } from '../../lib/mdx/types';
-import { KeywordLinkClient } from '../../components/mdx/KeywordLinkClient';
+import type { KeywordLinkProps, ResolvedKeyword } from '~/types/mdx';
+import { KeywordLinkClient } from '~/components/mdx/';
 import type { ReactNode } from 'react';
 
 /**

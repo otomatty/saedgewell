@@ -1,21 +1,18 @@
 ---
-title: 'Next.js SupabaseでのReact Queryの使用'
+title: 'React Queryの使用'
 description: 'Next.js Supabaseアプリケーションで非同期データフェッチを管理するためのReact Queryの使用方法を学ぶ'
 icon: 'database'
 order: 4
 ---
-
-# Next.js SupabaseでのReact Queryの使用
-
 React Queryは、アプリケーションでの非同期データフェッチを管理するための最高のReactライブラリです。Next.js Supabaseでの使用方法を学びましょう。
 
-## 概要
+# 概要
 
 MakerkitではクライアントサイドのデータフェッチにReact Queryを使用しています。これにより、人間工学に基づいたAPIを使用して、Supabaseデータベースからデータをフェッチし、クライアントサイドで表示することができます。
 
 **注意**: React Hooksを使用するため、コンポーネントの先頭に`use client`ディレクティブを記述する必要があります。このコードをページ内で使用する場合は、別のコンポーネント（`use client`付き）を作成し、ページにインポートしてください。
 
-## データの取得
+# データの取得
 
 以下は、React Queryを使用してタスクリストを取得する例です：
 
@@ -64,7 +61,7 @@ function TasksList(accountId: string) {
 
 `useSupabase`フックを活用することで、ReactコンポーネントからSupabase DBのデータに直接アクセスできます。
 
-## データの更新
+# データの更新
 
 同様に、React Queryを使用してデータの更新（ミューテーション）も行えます：
 
@@ -112,7 +109,7 @@ function CreateTaskForm() {
 }
 ```
 
-## React Queryの利点
+# React Queryの利点
 
 1. **キャッシュ管理**
    - データの自動キャッシュ
@@ -128,7 +125,7 @@ function CreateTaskForm() {
    - バックグラウンドでの更新
    - リトライ機能
 
-## ベストプラクティス
+# ベストプラクティス
 
 1. **クエリキーの管理**
    - 一意で予測可能なクエリキーを使用

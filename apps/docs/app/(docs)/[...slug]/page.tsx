@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getDocFromParams, getAdjacentDocs } from '~/lib/mdx/docs';
+import { getAdjacentDocs } from '~/lib/mdx/docs';
+import { getDocFromParams } from '~/actions/mdx/mdx-processor';
 import { DocContent } from '~/components/doc/DocContent';
 import { ErrorBoundary } from '~/components/error/ErrorBoundary';
 import { existsSync } from 'node:fs';
@@ -89,6 +90,7 @@ export default async function DocPage(props: PageProps) {
           code={doc.code}
           frontmatter={doc.frontmatter}
           adjacentDocs={adjacentDocs}
+          slug={params.slug}
         />
       </ErrorBoundary>
     );
