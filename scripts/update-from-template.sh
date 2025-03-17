@@ -20,6 +20,15 @@
 # - upstreamリポジトリからの更新確認
 # - プロジェクト固有のファイルを保護しながら更新を適用
 # - 依存関係の自動更新
+#
+# 実行前の準備:
+# - コミットされていない変更がないことを確認（git status）
+# - 親リポジトリがupstreamとして登録されていることを確認（git remote -v）
+#   未登録の場合: git remote add upstream https://github.com/otomatty/super-next-app.git
+# - .gitattributesファイルが正しく設定されていることを確認
+# - 最新の親リポジトリの変更を取得（git fetch upstream）
+# - 必要に応じてバックアップを作成
+# - 詳細は docs/TEMPLATE_MANAGEMENT.md を参照
 # ===================================================
 
 # エラーが発生したら停止
