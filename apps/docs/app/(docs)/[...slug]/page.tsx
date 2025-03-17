@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
-import { getDocFromParams } from '~/lib/mdx/docs';
+import { getDocFromParams, getAdjacentDocs } from '~/lib/mdx/docs';
 import { DocContent } from '~/components/doc/DocContent';
 import { ErrorBoundary } from '~/components/error/ErrorBoundary';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 interface PageProps {
   params: Promise<{
@@ -11,6 +13,15 @@ interface PageProps {
 
 export default async function DocPage(props: PageProps) {
   const params = await props.params;
+
+  // デバッグ情報
+  console.log('DocPage: Received slug params:', params.slug);
+
+  // APIパスの場合は404を返す
+  if (params.slug[0] === 'api') {
+    console.log('DocPage: API path detected, returning 404');
+    return notFound();
+  }
 
   // 静的アセットファイルの場合は404を返す
   const staticAssetExtensions = [
@@ -27,19 +38,58 @@ export default async function DocPage(props: PageProps) {
       staticAssetExtensions.some((ext) => segment.endsWith(ext))
     )
   ) {
+    console.log('DocPage: Static asset requested, returning 404');
     return notFound();
   }
 
   try {
-    const doc = await getDocFromParams(params.slug);
-
-    if (!doc) {
+    // パスの検証
+    if (params.slug.length < 2) {
+      console.error(
+        'DocPage: Invalid path - need at least category and docType'
+      );
       return notFound();
     }
 
+    const [category, docType, ...restPath] = params.slug;
+    console.log(
+      `DocPage: Processing document for category=${category}, docType=${docType}`
+    );
+
+    // 許可されたカテゴリのみ処理
+    const allowedCategories = ['documents', 'wiki', 'development'];
+    if (!category || !docType || !allowedCategories.includes(category)) {
+      console.error(
+        `DocPage: Invalid category or docType: ${category}/${docType}`
+      );
+      return notFound();
+    }
+
+    // ディレクトリの存在確認
+    const contentDir = join(process.cwd(), 'contents', category, docType);
+    if (!existsSync(contentDir)) {
+      console.error(`DocPage: Content directory not found: ${contentDir}`);
+      return notFound();
+    }
+
+    // ドキュメントの取得
+    const doc = await getDocFromParams(params.slug);
+
+    if (!doc) {
+      console.error('DocPage: Document not found after processing');
+      return notFound();
+    }
+
+    // 前後のドキュメントを取得
+    const adjacentDocs = await getAdjacentDocs(params.slug);
+
     return (
       <ErrorBoundary>
-        <DocContent code={doc.code} frontmatter={doc.frontmatter} />
+        <DocContent
+          code={doc.code}
+          frontmatter={doc.frontmatter}
+          adjacentDocs={adjacentDocs}
+        />
       </ErrorBoundary>
     );
   } catch (error) {

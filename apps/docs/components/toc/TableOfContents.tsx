@@ -10,31 +10,29 @@ export interface TOCItem {
 
 interface TableOfContentsProps {
   headings: TOCItem[];
-  onToggle?: (isOpen: boolean) => void;
 }
 
-export function TableOfContents({ headings, onToggle }: TableOfContentsProps) {
+export function TableOfContents({ headings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
-  const [isOpen, setIsOpen] = useState(true);
-
-  const handleToggle = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-    onToggle?.(newIsOpen);
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
+        // 画面内に入った見出しのうち、最も上にあるものをアクティブにする
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          // 複数の見出しが表示されている場合は、最も上にあるものを選択
+          const topEntry = visibleEntries.reduce((prev, current) => {
+            return prev.boundingClientRect.top > current.boundingClientRect.top
+              ? current
+              : prev;
+          });
+          setActiveId(topEntry.target.id);
         }
       },
       {
         rootMargin: '-80px 0% -80% 0%',
-        threshold: 1.0,
+        threshold: 0.1, // 少しでも見えたらトリガー
       }
     );
 
@@ -58,71 +56,37 @@ export function TableOfContents({ headings, onToggle }: TableOfContentsProps) {
   };
 
   return (
-    <nav
-      className={`toc fixed right-4 top-20 flex flex-col w-64 max-h-[calc(100vh-6rem)] bg-white dark:bg-gray-900 rounded-lg shadow-lg transition-all duration-300 ${
-        isOpen ? 'translate-x-0' : 'translate-x-[calc(100%-3rem)]'
-      }`}
-    >
-      <div className="sticky top-0 z-10 flex items-center bg-white dark:bg-gray-900 p-4">
-        <button
-          type="button"
-          onClick={handleToggle}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md"
-          aria-label={isOpen ? '目次を閉じる' : '目次を開く'}
-        >
-          <svg
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
-        {isOpen && (
-          <h2 className="text-lg font-semibold ml-4 text-gray-900 dark:text-gray-100">
-            目次
-          </h2>
-        )}
+    <nav className="toc sticky top-20 flex flex-col w-full max-h-[calc(100vh-6rem)]">
+      <div className="sticky top-0 z-10 flex items-center justify-between p-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          目次
+        </h2>
       </div>
-      <div
-        className={`overflow-y-auto transition-all duration-300 ${
-          isOpen ? 'opacity-100' : 'opacity-0 hidden'
-        }`}
-      >
+      <div className="overflow-y-auto">
         <div className="p-4">
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {headings.map((heading) => (
               <li
                 key={heading.id}
                 style={{
-                  paddingLeft: `${(heading.level - 1) * 1}rem`,
+                  paddingLeft: `${(heading.level - 1) * 0.75}rem`,
                 }}
+                className="relative"
               >
+                {activeId === heading.id && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 dark:bg-blue-500 rounded-full" />
+                )}
                 <button
                   type="button"
                   onClick={() => handleClick(heading.id)}
-                  className={`text-sm hover:text-blue-500 transition-colors duration-200 ${
+                  onKeyDown={(e) =>
+                    e.key === 'Entefr' && handleClick(heading.id)
+                  }
+                  className={`text-sm transition-all duration-200 text-left w-full py-1.5 px-2 rounded ${
                     activeId === heading.id
-                      ? 'text-blue-500 font-medium'
-                      : 'text-gray-600 dark:text-gray-400'
-                  } text-left w-full`}
+                      ? 'text-blue-700 dark:text-blue-300 font-medium bg-blue-50 dark:bg-blue-900/30'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/50'
+                  }`}
                 >
                   {heading.text}
                 </button>

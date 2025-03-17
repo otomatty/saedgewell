@@ -6,6 +6,8 @@ import { serialize } from 'next-mdx-remote/serialize';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { cache } from 'react';
 import type { DocFrontmatter } from './types';
 import { DocFrontmatterSchema } from './frontmatter';
@@ -29,6 +31,16 @@ const highlightOptions = {
   },
 };
 
+// rehype-autolink-headingsの設定
+const autolinkHeadingsOptions = {
+  behavior: 'wrap', // 見出しテキスト全体をリンクでラップ
+  properties: {
+    className: ['anchor'], // アンカーリンクのクラス名
+    ariaHidden: true,
+    tabIndex: -1,
+  },
+};
+
 /**
  * スラグからドキュメントを取得する
  * @param slug ドキュメントのスラグ
@@ -42,27 +54,68 @@ export async function getDocFromParams(slug: string[]): Promise<{
     throw new Error('Invalid slug parameter');
   }
 
-  const [docType, ...validPathSegments] = slug;
+  // 最初の2つのセグメントはカテゴリとドキュメントタイプ
+  const [category, docType, ...pathSegments] = slug;
+
+  if (!category || !docType) {
+    throw new Error('Invalid path: category and document type are required');
+  }
+
+  // デバッグ情報
+  console.log('Resolving document with path segments:', {
+    category,
+    docType,
+    pathSegments,
+    fullSlug: slug.join('/'),
+  });
+
+  // APIパスが含まれていないか確認
+  if (category === 'api') {
+    console.error('Invalid path: API path detected in document request');
+    throw new Error('Invalid document path');
+  }
+
+  // 許可されたカテゴリのみ処理
+  const allowedCategories = ['documents', 'wiki', 'development'];
+  if (!allowedCategories.includes(category)) {
+    console.error(`Invalid category: ${category}`);
+    throw new Error('Invalid document category');
+  }
 
   // ファイルパスの構築
-  const pathSegments = [docType, ...validPathSegments];
   const filePath = `${join(
     process.cwd(),
     'contents',
-    ...(docType ? [docType, ...validPathSegments] : validPathSegments)
+    category,
+    docType,
+    ...pathSegments
   )}.mdx`;
+
   const indexPath = join(
     process.cwd(),
     'contents',
-    ...(docType ? [docType, ...validPathSegments] : validPathSegments),
+    category,
+    docType,
+    ...pathSegments,
     'index.mdx'
   );
+
+  // デバッグ情報
+  console.log('Looking for document at:', {
+    filePath,
+    indexPath,
+    exists: {
+      file: existsSync(filePath),
+      index: existsSync(indexPath),
+    },
+  });
 
   let targetPath = filePath;
 
   // index.mdxが存在する場合はそちらを使用
   if (!existsSync(filePath)) {
     if (!existsSync(indexPath)) {
+      console.error(`Document not found: ${filePath} or ${indexPath}`);
       throw new Error('Not found');
     }
     targetPath = indexPath;
@@ -105,7 +158,11 @@ export async function getDocFromParams(slug: string[]): Promise<{
             [remarkKeywordLinks, index], // キーワードリンクプラグインを追加
           ],
           // rehype-highlightとrehype-mermaidを使用
-          rehypePlugins: [[rehypeHighlight, highlightOptions]],
+          rehypePlugins: [
+            [rehypeHighlight, highlightOptions],
+            rehypeSlug, // 見出しにIDを付与
+            [rehypeAutolinkHeadings, autolinkHeadingsOptions], // 見出しにアンカーリンクを追加
+          ],
           format: 'mdx',
         },
         // コンポーネントのスコープ内で使用できる値
@@ -172,7 +229,11 @@ export const processMDX = cache(
             development: process.env.NODE_ENV === 'development',
             remarkPlugins: [remarkGfm],
             // rehype-highlightとrehype-mermaidを使用
-            rehypePlugins: [[rehypeHighlight, highlightOptions]],
+            rehypePlugins: [
+              [rehypeHighlight, highlightOptions],
+              rehypeSlug, // 見出しにIDを付与
+              [rehypeAutolinkHeadings, autolinkHeadingsOptions], // 見出しにアンカーリンクを追加
+            ],
             format: 'mdx',
           },
           // コンポーネントのスコープ内で使用できる値

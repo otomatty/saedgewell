@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, Suspense, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MDXRemote } from 'next-mdx-remote';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import React from 'react';
@@ -474,6 +474,44 @@ export function MDXContent({ code }: MDXContentProps) {
         ref={contentRef}
         className="mdx-content prose prose-stone dark:prose-invert prose-headings:scroll-mt-28 w-full px-4 md:px-6"
       >
+        <style jsx global>{`
+          /* 見出しのアンカーリンクのスタイル */
+          .anchor {
+            position: relative;
+          }
+          
+          h1 .anchor::before,
+          h2 .anchor::before,
+          h3 .anchor::before,
+          h4 .anchor::before,
+          h5 .anchor::before,
+          h6 .anchor::before {
+            content: '#';
+            position: absolute;
+            left: -1.5em;
+            color: var(--tw-prose-links);
+            opacity: 0.2;
+            transition: opacity 0.2s ease;
+          }
+          
+          h1:hover .anchor::before,
+          h2:hover .anchor::before,
+          h3:hover .anchor::before,
+          h4:hover .anchor::before,
+          h5:hover .anchor::before,
+          h6:hover .anchor::before {
+            opacity: 0.8;
+          }
+          
+          /* 見出し自体のスタイル */
+          h1, h2, h3, h4, h5, h6 {
+            transition: color 0.2s ease;
+          }
+          
+          h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+            color: var(--tw-prose-links);
+          }
+        `}</style>
         <MDXRemote {...code} components={MDXComponents} />
       </div>
     );
