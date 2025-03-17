@@ -9,5 +9,6 @@ export const customEntries = [
   'src/custom/back-link/index.tsx',
   'src/custom/responsive-dialog/index.tsx',
   //   'src/custom/emoji-picker/index.tsx',
+  'src/custom/markdown/index.tsx',
   'src/custom/icons/index.tsx',
 ];
