@@ -1,6 +1,6 @@
 'use server';
 
-import { getSupabaseServerClient } from '@kit/supabase/clients/server-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import type { Metric } from '../../types/metrics';
 import { revalidatePath } from 'next/cache';
 

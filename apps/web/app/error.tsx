@@ -7,8 +7,6 @@ import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 
-import { SiteHeader } from '~/(marketing)/_components/site-header';
-
 const ErrorPage = ({
   error,
   reset,
@@ -20,8 +18,6 @@ const ErrorPage = ({
 
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader />
-
       <div
         className={
           'container m-auto flex w-full flex-1 flex-col items-center justify-center'

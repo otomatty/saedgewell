@@ -1,6 +1,6 @@
 'use server';
 
-import { getSupabaseServerClient } from '@kit/supabase/clients/server-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import { revalidatePath } from 'next/cache';
 import { GmailClient, generateAuthUrl } from '../../lib/server';
 import type { GmailToken } from '../../types/gmail';

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Header } from './_layout/Header';
 import { Footer } from './_layout/Footer';
+import { getAuthState } from '~/actions/auth/auth';
 
 export const metadata: Metadata = {
   title: {
@@ -24,11 +25,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   try {
-    const { isAuthenticated, profile } = await getAuthState();
+    const { profile } = await getAuthState();
 
     return (
       <>
-        <Header profile={profile} isAuthenticated={isAuthenticated} />
+        <Header profile={profile} />
         <main className="flex-1">{children}</main>
         <Footer />
       </>
@@ -38,7 +39,7 @@ export default async function RootLayout({
     // エラーが発生した場合は未認証状態として扱う
     return (
       <>
-        <Header profile={null} isAuthenticated={false} />
+        <Header profile={null} />
         <main className="flex-1">{children}</main>
         <Footer />
       </>

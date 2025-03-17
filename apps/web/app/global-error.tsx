@@ -7,8 +7,6 @@ import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 
-import { SiteHeader } from '~/(marketing)/_components/site-header';
-
 const GlobalErrorPage = ({
   error,
   reset,
@@ -22,8 +20,6 @@ const GlobalErrorPage = ({
     <html lang="ja">
       <body>
         <div className={'flex h-screen flex-1 flex-col'}>
-          <SiteHeader />
-
           <div
             className={
               'container m-auto flex w-full flex-1 flex-col items-center justify-center'

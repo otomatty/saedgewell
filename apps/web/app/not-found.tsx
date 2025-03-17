@@ -6,7 +6,6 @@ import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import { Button } from '@kit/ui/button';
 import { Heading } from '@kit/ui/heading';
 
-import { SiteHeader } from '~/(marketing)/_components/site-header';
 import { withI18n } from '~/lib/i18n/with-i18n';
 
 export const generateMetadata = async () => {
@@ -26,8 +25,6 @@ const NotFoundPage = async () => {
 
   return (
     <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader user={user} />
-
       <div
         className={
           'container m-auto flex w-full flex-1 flex-col items-center justify-center'
