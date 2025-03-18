@@ -33,8 +33,8 @@
  *   const response = NextResponse.next();
  *   const supabase = createMiddlewareClient(request, response);
  *
- *   // セッションの確認など
- *   const { data: { session } } = await supabase.auth.getSession();
+ *   // ユーザー情報の確認
+ *   const { data: { user } } = await supabase.auth.getUser();
  *
  *   return response;
  * }

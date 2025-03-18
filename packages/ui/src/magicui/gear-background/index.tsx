@@ -32,7 +32,7 @@ const Gear = ({
       className={cn(
         'absolute',
         clockwise ? 'animate-spin-clockwise' : 'animate-spin-counterclockwise',
-        '[&>img]:opacity-10 dark:[&>img]:opacity-0',
+        '[&>img]:opacity-50 dark:[&>img]:opacity-0',
         className
       )}
       style={{
@@ -44,8 +44,9 @@ const Gear = ({
         opacity: opacity,
       }}
     >
+      {/* require.resolveを使用してビルド時に正しいパスを解決 */}
       <img
-        src={`/images/gears/gear-${actualGearNumber}.svg`}
+        src={require(`./assets/gear-${actualGearNumber}.svg`).default}
         alt={`Gear ${actualGearNumber}`}
         className="w-full h-full"
         style={

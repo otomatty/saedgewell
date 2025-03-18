@@ -41,7 +41,7 @@ const pathsConfig = PathsSchema.parse({
     passwordUpdate: '/update-password', // パスワード更新ページ
   },
   app: {
-    home: '/home', // アプリケーションのホームページ
+    home: '/', // アプリケーションのホームページ
     profileSettings: '/home/settings', // プロフィール設定ページ
   },
 } satisfies z.infer<typeof PathsSchema>);

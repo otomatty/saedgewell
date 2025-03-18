@@ -77,12 +77,12 @@ export async function getAuthState() {
     const response = new Response();
     response.headers.set('Cache-Control', 'no-store');
 
-    // セッション情報を取得
+    // ユーザー情報を取得
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (!user) {
       return {
         isAuthenticated: false,
         profile: null,
@@ -100,7 +100,7 @@ export async function getAuthState() {
 					)
 				)
 			`)
-      .eq('id', session.user.id)
+      .eq('id', user.id)
       .single();
 
     if (!profile) {

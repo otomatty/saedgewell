@@ -55,13 +55,6 @@ interface BentoCardProps extends ComponentPropsWithoutRef<'div'> {
  * @property {string} [gradientFrom] - グラデーションの開始色
  * @property {string} [gradientTo] - グラデーションの終了色
  */
-interface MagicBentoCardProps extends BentoCardProps {
-  gradientSize?: number;
-  gradientColor?: string;
-  gradientOpacity?: number;
-  gradientFrom?: string;
-  gradientTo?: string;
-}
 
 /**
  * ベントーグリッドレイアウトを実現するコンポーネント

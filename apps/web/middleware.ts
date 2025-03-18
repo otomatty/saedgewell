@@ -172,7 +172,8 @@ function getPatterns() {
       },
     },
     {
-      // アプリケーションのホームパスに対するパターン
+      // 認証が必要なパスに対するパターン
+      // /home/から始まるパスのみ認証を要求する
       pattern: new URLPattern({ pathname: '/home/*?' }),
       handler: async (req: NextRequest, res: NextResponse) => {
         const {
