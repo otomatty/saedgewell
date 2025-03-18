@@ -1,22 +1,20 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { serialize } from "next-mdx-remote/serialize";
-import { BlogDetailHero } from "./_components/BlogDetailHero";
-import { BlogContent } from "./_components/BlogContent";
-import {
-	getPublishedSlugsForBuild,
-	getBlogPostBySlug,
-} from "../../../../_actions/blog";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { serialize } from 'next-mdx-remote/serialize';
+import { BlogDetailHero } from './_components/BlogDetailHero';
+import { BlogContent } from './_components/BlogContent';
+import { getBlogPostBySlug, getPublishedSlugsForBuild } from '~/actions/blog';
+import type { BlogPost } from '~/types/blog';
 
 export async function generateStaticParams() {
-	const slugs = await getPublishedSlugsForBuild();
-	return slugs.map((slug) => ({
-		slug,
-	}));
+  const slugs = await getPublishedSlugsForBuild();
+  return slugs.map((slug: string) => ({
+    slug,
+  }));
 }
 
 type PageProps = {
-	params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 };
 
 // export async function generateMetadata(props: {
@@ -48,31 +46,32 @@ type PageProps = {
 // }
 
 export default async function BlogDetailPage({ params }: PageProps) {
-	const { slug } = await params;
-	const post = await getBlogPostBySlug(slug);
+  const { slug } = await params;
+  const post = (await getBlogPostBySlug(slug)) as BlogPost;
 
-	if (!post) {
-		notFound();
-	}
+  if (!post) {
+    notFound();
+  }
 
-	const mdxSource = await serialize(post.content);
+  const mdxSource = await serialize(post.content);
 
-	return (
-		<main>
-			<BlogDetailHero
-				title={post.title}
-				description={post.description}
-				publishedAt={
-					new Date(post.created_at ?? "").toISOString().split("T")[0]
-				}
-				categories={post.blog_posts_categories
-					.map((pc) => pc.blog_categories?.name ?? "")
-					.filter(Boolean)}
-				estimatedReadingTime={post.estimated_reading_time}
-			/>
-			<div className="container py-20">
-				<BlogContent content={mdxSource} />
-			</div>
-		</main>
-	);
+  return (
+    <main>
+      <BlogDetailHero
+        title={post.title}
+        description={post.description}
+        publishedAt={post.created_at || ''}
+        categories={post.blog_posts_categories
+          .map(
+            (pc: { blog_categories: { name: string } }) =>
+              pc.blog_categories.name
+          )
+          .filter(Boolean)}
+        estimatedReadingTime={post.estimated_reading_time}
+      />
+      <div className="container py-20">
+        <BlogContent content={mdxSource} />
+      </div>
+    </main>
+  );
 }

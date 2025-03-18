@@ -1,22 +1,23 @@
-import { atom } from "jotai";
+import { atom } from 'jotai';
 import type {
-	AIQuestion,
-	EstimateFormData,
-	FeatureProposal,
-} from "../_types/estimate";
+  AIQuestion,
+  EstimateFormData,
+  FeatureProposal,
+} from '../_types/estimate';
+import type { StepId } from '../_components/EstimateForm';
 
 // 現在のステップを管理するatom
-export const currentStepAtom = atom<string>("project-type");
+export const currentStepAtom = atom<StepId>('project-type');
 
 // フォームデータを管理するatom
 export const formDataAtom = atom<EstimateFormData>({
-	projectType: "web",
-	description: "",
-	deadline: "flexible",
-	features: [],
-	baseCost: 0,
-	rushFee: 0,
-	totalCost: 0,
+  projectType: 'web',
+  description: '',
+  deadline: 'flexible',
+  features: [],
+  baseCost: 0,
+  rushFee: 0,
+  totalCost: 0,
 });
 
 // AIが生成した質問を管理するatom

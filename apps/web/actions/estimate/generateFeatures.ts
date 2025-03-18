@@ -61,7 +61,7 @@ export async function generateFeatures(
     const featureProposals: FeatureProposal[] = features.map((feature) => ({
       ...feature,
       price: 0,
-      duration: '',
+      duration: 0,
       isRequired: false,
     }));
 
@@ -104,7 +104,7 @@ export async function generateFeatures(
       return {
         ...feature,
         price: estimatedFeature?.price || 0,
-        duration: String(estimatedFeature?.duration || 0),
+        duration: estimatedFeature?.duration || 0,
         difficulty: estimatedFeature?.difficulty,
         difficultyReason: estimatedFeature?.difficultyReason,
         dailyRate: estimatedFeature?.dailyRate,

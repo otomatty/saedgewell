@@ -1,6 +1,6 @@
 import { getDocTypes } from '~/lib/mdx/docs';
 import { DocTypeTabs } from './_components/DocTypeTabs';
-import type { DocType } from '~/lib/mdx/types';
+import type { DocType } from '~/types/mdx';
 import { Hero } from '~/components/layout/Hero';
 
 export default async function HomePage() {

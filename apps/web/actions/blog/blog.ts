@@ -1,6 +1,6 @@
 'use server';
 
-import { getSupabaseServerClient } from '@kit/supabase/clients/server-client';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import { revalidatePath } from 'next/cache';
 import { snakeToCamel } from '../../lib/utils/case';
 import type { BlogPost, BlogCategory } from '../../types/blog';
@@ -468,4 +468,22 @@ export async function createBlogCategory(name: string) {
 
   revalidatePath('/admin/categories'); // 管理画面のカテゴリー一覧を再検証
   return data;
+}
+
+/**
+ * ビルド時に公開済みの記事のスラッグを取得
+ */
+export async function getPublishedSlugsForBuild() {
+  const supabase = await getSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('slug')
+    .eq('status', 'published');
+
+  if (error) {
+    throw new Error(`Failed to fetch blog slugs: ${error.message}`);
+  }
+
+  return data.map((post) => post.slug);
 }

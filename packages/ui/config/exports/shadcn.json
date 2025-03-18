@@ -16,6 +16,7 @@
     "./input": "./src/shadcn/input/index.tsx",
     "./label": "./src/shadcn/label/index.tsx",
     "./popover": "./src/shadcn/popover/index.tsx",
+    "./progress": "./src/shadcn/progress/index.tsx",
     "./scroll-area": "./src/shadcn/scroll-area/index.tsx",
     "./select": "./src/shadcn/select/index.tsx",
     "./sheet": "./src/shadcn/sheet/index.tsx",

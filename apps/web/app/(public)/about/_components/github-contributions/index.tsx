@@ -1,17 +1,12 @@
-import type React from "react";
-import type { ContributionDay } from "../../../../../../../../packages/types/src/github";
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from "../../../../../../../../packages/components/src/components/core/tabs";
-import { GithubContributionCalendar } from "./GithubContributionCalendar";
-import { GithubContributionChart } from "./GithubContributionChart";
-import { SectionTitle } from "../../../../../../../../packages/sample/src/components/layout/section-title";
+import type React from 'react';
+import type { ContributionDay } from '~/types/github';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@kit/ui/tabs';
+import { GithubContributionCalendar } from './GithubContributionCalendar';
+import { GithubContributionChart } from './GithubContributionChart';
+import { SectionTitle } from '@kit/ui/section-title';
 
 interface GithubContributionsProps {
-	contributions: ContributionDay[];
+  contributions: ContributionDay[];
 }
 
 /**
@@ -20,27 +15,27 @@ interface GithubContributionsProps {
  * @returns {JSX.Element}
  */
 export const GithubContributions: React.FC<GithubContributionsProps> = ({
-	contributions,
+  contributions,
 }) => {
-	return (
-		<div>
-			<SectionTitle
-				title="GitHub Contributions"
-				subtitle="GitHubのコントリビューションを表示します。"
-			/>
-			<Tabs defaultValue="calendar">
-				<TabsList>
-					<TabsTrigger value="calendar">Calendar</TabsTrigger>
-					<TabsTrigger value="chart">Chart</TabsTrigger>
-				</TabsList>
-				<TabsContent value="calendar">
-					<GithubContributionCalendar contributions={contributions} />
-				</TabsContent>
+  return (
+    <div>
+      <SectionTitle
+        title="GitHub Contributions"
+        subtitle="GitHubのコントリビューションを表示します。"
+      />
+      <Tabs defaultValue="calendar">
+        <TabsList>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="chart">Chart</TabsTrigger>
+        </TabsList>
+        <TabsContent value="calendar">
+          <GithubContributionCalendar contributions={contributions} />
+        </TabsContent>
 
-				<TabsContent value="chart">
-					<GithubContributionChart contributions={contributions} />
-				</TabsContent>
-			</Tabs>
-		</div>
-	);
+        <TabsContent value="chart">
+          <GithubContributionChart contributions={contributions} />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
 };

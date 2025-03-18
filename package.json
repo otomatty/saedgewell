@@ -34,10 +34,18 @@
     "update": "bun update",
     "syncpack:list": "bun x syncpack list-mismatches",
     "syncpack:fix": "bun x syncpack fix-mismatches",
-    "supabase:web:start": "bun --cwd apps/web supabase:start",
-    "supabase:web:stop": "bun --cwd apps/web supabase:stop",
-    "supabase:web:typegen": "bun --cwd apps/web supabase:typegen",
-    "supabase:web:reset": "bun --cwd apps/web supabase:reset"
+
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:typegen": "supabase gen types typescript --local > packages/supabase/src/database.types.ts",
+    "supabase:migration:new": "supabase migration new",
+    "supabase:migration:up": "supabase migration up",
+
+    "supabase:web:start": "echo 'Warning: Please use root level supabase:start instead' && exit 1",
+    "supabase:web:stop": "echo 'Warning: Please use root level supabase:stop instead' && exit 1",
+    "supabase:web:typegen": "echo 'Warning: Please use root level supabase:typegen instead' && exit 1",
+    "supabase:web:reset": "echo 'Warning: Please use root level supabase:reset instead' && exit 1"
   },
   "packageManager": "bun@1.2.4",
   "devDependencies": {

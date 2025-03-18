@@ -1,7 +1,6 @@
 'use server';
 
-import { getSupabaseServerClient } from '@kit/supabase/clients/server-client';
-// import { createClient as createStaticClient } from "@saedgewell/lib";
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
 import type { Work, WorksFilter } from '../../types/work';
 import { revalidatePath } from 'next/cache';
 
@@ -126,20 +125,23 @@ export async function getWorksByCategory(category: string) {
   return data;
 }
 
-// ビルド時用の関数
-// export async function getWorkSlugsForBuild() {
-// 	const supabase = createStaticClient();
-// 	const { data, error } = await supabase
-// 		.from("works")
-// 		.select("slug")
-// 		.eq("status", "published");
+/**
+ * ビルド時用の関数
+ */
+export async function getWorkSlugsForBuild() {
+  const supabase = await getSupabaseServerClient();
 
-// 	if (error) {
-// 		throw new Error(`Failed to fetch works: ${error.message}`);
-// 	}
+  const { data: works, error } = await supabase
+    .from('works')
+    .select('slug')
+    .eq('published', true);
 
-// 	return data;
-// }
+  if (error) {
+    throw new Error('Failed to fetch work slugs');
+  }
+
+  return works;
+}
 
 /**
  * 実績を削除
