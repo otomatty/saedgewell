@@ -59,5 +59,6 @@ yarn-error.log*
 .contentlayer/
 *storybook.log
 
+
 # database
 supabase/seed.sql
