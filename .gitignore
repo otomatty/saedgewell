@@ -58,9 +58,6 @@ yarn-error.log*
 # contentlayer
 .contentlayer/
 *storybook.log
-<<<<<<< HEAD
-=======
 
-# cache
-.cache/
->>>>>>> upstream/main
+# database
+supabase/seed.sql
