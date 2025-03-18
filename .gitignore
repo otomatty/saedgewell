@@ -62,3 +62,8 @@ yarn-error.log*
 
 # database
 supabase/seed.sql
+
+# cache
+.cache/
+*/.cache/
+**/.cache/
