@@ -6,7 +6,7 @@ import { getAuthState } from '@kit/next/actions';
 export const metadata: Metadata = {
   title: {
     default: 'Saedgewell | 菅井瑛正',
-    template: '%s | Saedgewell | 菅井瑛正',
+    template: ' Saedgewell | 菅井瑛正',
   },
   description: 'プロダクトエンジニア 菅井瑛正のポートフォリオサイトです。',
   keywords: [

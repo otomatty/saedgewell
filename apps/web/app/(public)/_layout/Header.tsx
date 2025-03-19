@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Navigation } from './Navigation';
 import { MobileSidebar } from './MobileSidebar';
 import { Skeleton } from '@kit/ui/skeleton';
-import { UserMenu } from './_components/UserMenu';
+import { UserMenu } from './UserMenu';
 import type { ProfileWithRole } from '@kit/types/profile';
 import { ContactDialog } from '~/components/contacts/contact-dialog';
 import { ThemeToggle } from '@kit/ui/theme-toggle';

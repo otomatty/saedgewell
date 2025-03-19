@@ -1,12 +1,12 @@
-import { PageHeader } from "@/components/custom/page-header";
-import { EmailListSkeleton } from "./_components/email-list-skeleton";
-import { GmailAuthButton } from "../../../../../../packages/ui/src/components/features/gmail/auth-button";
+import { PageHeader } from '@kit/ui/page-header';
+import { EmailListSkeleton } from './_components/email-list-skeleton';
+import { GmailAuthButton } from '@kit/ui/gmail/auth-button';
 
 export default function Loading() {
-	return (
-		<div className="space-y-4">
-			<PageHeader title="メール管理" actions={<GmailAuthButton />} />
-			<EmailListSkeleton />
-		</div>
-	);
+  return (
+    <div className="space-y-4">
+      <PageHeader title="メール管理" actions={<GmailAuthButton />} />
+      <EmailListSkeleton />
+    </div>
+  );
 }

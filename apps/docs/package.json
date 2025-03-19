@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "analyze": "ANALYZE=true bun run build",
-    "build": "bun run with-env next build",
+    "build": "bun run with-env next build && npm run build:search",
     "build:test": "NODE_ENV=test bun run with-env:test next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "bun run with-env next dev --turbo --port 7511 | pino-pretty -c",
@@ -31,7 +31,8 @@
     "supabase:db:dump:local": "supabase db dump --local --data-only",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "build:search": "tsx scripts/build-search-index.ts"
   },
   "dependencies": {
     "@edge-csrf/nextjs": "2.5.3-cloudflare-rc1",
@@ -110,9 +111,5 @@
     "typescript": "5.8.2",
     "vitest": "3.0.9"
   },
-  "browserslist": [
-    "last 1 versions",
-    "> 0.7%",
-    "not dead"
-  ]
+  "browserslist": ["last 1 versions", "> 0.7%", "not dead"]
 }

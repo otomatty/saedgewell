@@ -53,6 +53,11 @@
       "types": "./dist/github.d.ts",
       "import": "./dist/github/index.mjs",
       "require": "./dist/github/index.js"
+    },
+    "./project": {
+      "types": "./dist/project.d.ts",
+      "import": "./dist/project/index.mjs",
+      "require": "./dist/project/index.js"
     }
   },
   "devDependencies": {
@@ -63,9 +68,7 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "src/*"
-      ]
+      "*": ["src/*"]
     }
   }
 }

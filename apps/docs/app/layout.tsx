@@ -10,6 +10,7 @@ import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { generateRootMetadata } from '~/lib/root-metdata';
 import RootLayout from '~/components/layout/RootLayout';
 import { Header } from './_components/Header';
+import { getAuthState } from '@kit/next/actions';
 
 import '../styles/globals.css';
 
@@ -21,13 +22,14 @@ export default async function AppLayout({
   const { language } = await createI18nServerInstance();
   const theme = await getTheme();
   const className = getClassName(theme);
+  const { profile } = await getAuthState();
 
   return (
     <html lang={language} className={className}>
       <body suppressHydrationWarning>
         <StrictMode>
           <RootProviders theme={theme} lang={language}>
-            <Header profile= />
+            <Header profile={profile} />
             <main>{children}</main>
           </RootProviders>
 

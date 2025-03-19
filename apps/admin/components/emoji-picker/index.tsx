@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '../../shadcn/dialog';
 import { Input } from '../../shadcn/input';
-import { suggestEmojis } from '@saedgewell/actions';
+import { suggestEmojis } from '@kit/actions/suggest-emojis';
 import { Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 

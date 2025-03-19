@@ -1,1 +1,1 @@
-import './requirements.mjs';
+import './requirements';
