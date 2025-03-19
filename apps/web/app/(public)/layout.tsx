@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Header } from './_layout/Header';
 import { Footer } from './_layout/Footer';
-import { getAuthState } from '~/actions/auth/auth';
+import { getAuthState } from '@kit/next/actions';
 
 export const metadata: Metadata = {
   title: {
@@ -36,7 +36,7 @@ export default async function RootLayout({
     );
   } catch (error) {
     console.error('認証状態の取得に失敗しました:', error);
-    // エラーが発生した場合は未認証状態として扱う
+    console.log('認証状態: 未認証です（エラーが発生しました）');
     return (
       <>
         <Header profile={null} />

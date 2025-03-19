@@ -1,15 +1,10 @@
 import { Suspense } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '../../../../../packages/components/src/components/core/card';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '../../../../../packages/components/src/components/core/skeleton';
-import { getUsers } from '../../_actions/users';
-import { getAdminStats } from '../../_actions/admin';
-import { DataTable } from '../../../../../packages/components/src/components/core/data-table';
+import { Card, CardContent } from '@kit/ui/card';
+import { Button } from '@kit/ui/button';
+import { Skeleton } from '@kit/ui/skeleton';
+import { getUsers } from '@kit/next/actions';
+import { getAdminStats } from '~/actions/site';
+import { DataTable } from '@kit/ui/data-table';
 import { UserFilter } from '../_components/user-filter';
 import { columns } from '../_components/columns';
 import { StatsCard } from '../_components/stats-card';
@@ -22,7 +17,7 @@ import {
   Settings,
   PlusCircle,
 } from 'lucide-react';
-import { PageHeader } from '@/components/custom/page-header';
+import { PageHeader } from '@kit/ui/page-header';
 
 export default async function AdminPage() {
   const [initialData, stats] = await Promise.all([

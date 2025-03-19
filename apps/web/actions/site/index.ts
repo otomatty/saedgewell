@@ -1,5 +1,5 @@
 /**
  * サイト設定関連のアクションをエクスポートするモジュール
  */
-export * from "./settings";
-export * from "./admin";
+export * from './settings';
+export * from '../../../admin/actions/site';

@@ -9,6 +9,7 @@ import { heading, sans } from '~/lib/fonts';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
 import { generateRootMetadata } from '~/lib/root-metdata';
 import RootLayout from '~/components/layout/RootLayout';
+import { Header } from './_components/Header';
 
 import '../styles/globals.css';
 
@@ -26,7 +27,8 @@ export default async function AppLayout({
       <body suppressHydrationWarning>
         <StrictMode>
           <RootProviders theme={theme} lang={language}>
-            <RootLayout>{children}</RootLayout>
+            <Header profile= />
+            <main>{children}</main>
           </RootProviders>
 
           <Toaster richColors={true} theme={theme} position="top-center" />

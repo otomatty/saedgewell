@@ -316,3 +316,65 @@ CloudflareダッシュボードでNode.js互換性を有効にすることを忘
 - [Turborepo](https://turborepo.org/)
 
 より詳細な情報は[credits](docs/credits)ディレクトリをご確認ください。
+
+## サブドメイン間共通認証
+
+このプロジェクトは、複数のアプリケーション（サブドメイン）間で共通の認証機能を使用できるように設定されています。
+
+### 設定方法
+
+1. **ローカル開発環境の設定**
+
+ローカル環境でサブドメイン認証をテストするには、以下の手順を実行してください：
+
+- `/etc/hosts` ファイルに以下の行を追加します：
+```
+127.0.0.1 localhost
+127.0.0.1 web.localhost
+127.0.0.1 admin.localhost
+127.0.0.1 docs.localhost
+```
+
+- 各アプリケーションを起動する際に、サブドメインごとにポート番号を指定します：
+```bash
+# Web アプリケーション
+cd apps/web && npm run dev -- -p 3000
+
+# Admin アプリケーション
+cd apps/admin && npm run dev -- -p 3001
+
+# Docs アプリケーション
+cd apps/docs && npm run dev -- -p 3002
+```
+
+- ブラウザで各サブドメインにアクセスします：
+  - http://web.localhost:3000
+  - http://admin.localhost:3001
+  - http://docs.localhost:3002
+
+2. **本番環境の設定**
+
+本番環境では、以下の設定が必要です：
+
+- 各サブドメインに対するDNSレコードの設定
+- Supabaseの環境変数を適切に設定（`NEXT_PUBLIC_SUPABASE_URL`と`NEXT_PUBLIC_SUPABASE_ANON_KEY`）
+- 本番環境のSupabase設定で適切なリダイレクトURLを追加
+
+### 仕組み
+
+サブドメイン間認証は以下の技術で実現されています：
+
+1. **共有Cookieドメイン**: 
+   - すべてのCookieは共通のトップレベルドメイン（`.localhost`または`.example.com`など）に設定され、すべてのサブドメインからアクセス可能です。
+
+2. **共通のSupabase認証**: 
+   - `packages/supabase`の共通認証ライブラリを使用し、すべてのアプリが同じSupabase環境と認証機能を共有します。
+
+3. **CSRF保護**: 
+   - 各アプリケーションのミドルウェアはCSRF保護を実装し、Cookieドメインを適切に設定して共有を可能にしています。
+
+### 注意点
+
+- ローカル開発環境では、`.localhost`ドメインはCookieを共有できますが、実際のブラウザの動作はブラウザによって異なる場合があります。
+- 本番環境では、すべてのサブドメインは同じトップレベルドメインに属している必要があります（例：`web.example.com`と`admin.example.com`）。
+- サブドメイン間認証はセキュリティ上の考慮事項があるため、適切なCSRF保護とセキュリティ設定を確認してください。

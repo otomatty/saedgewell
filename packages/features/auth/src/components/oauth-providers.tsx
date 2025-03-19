@@ -137,6 +137,17 @@ export function OauthProviders(props: {
                   const redirectTo = [origin, redirectPath].join('');
                   const scopesOpts = OAUTH_SCOPES[provider] ?? {};
 
+                  console.log('[AUTH DEBUG] OAuthプロバイダー情報:', {
+                    provider,
+                    redirectTo,
+                    origin,
+                    redirectPath,
+                    shouldCreateUser: props.shouldCreateUser,
+                    scopesOpts,
+                    callbackUrl: props.paths.callback,
+                    returnPath: props.paths.returnPath,
+                  });
+
                   const credentials = {
                     provider,
                     options: {
@@ -146,9 +157,13 @@ export function OauthProviders(props: {
                     },
                   };
 
-                  return onSignInWithProvider(() =>
-                    signInWithProviderMutation.mutateAsync(credentials)
-                  );
+                  return onSignInWithProvider(() => {
+                    console.log(
+                      '[AUTH DEBUG] 認証リクエスト送信:',
+                      credentials
+                    );
+                    return signInWithProviderMutation.mutateAsync(credentials);
+                  });
                 }}
               >
                 {provider}でログイン

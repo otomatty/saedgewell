@@ -17,9 +17,9 @@
 @import 'tailwindcss';
 
 /* ローカルスタイル - 新しいスタイルを追加した場合は以下を更新してください */
+@import './shadcn-ui.css';
 @import './theme.css';
 @import './theme.utilities.css';
-@import './shadcn-ui.css';
 @import './markdoc.css';
 @import './super-next-app.css';
 

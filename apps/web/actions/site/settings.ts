@@ -1,8 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { getSupabaseServerClient } from '@kit/supabase/clients/server-client';
-import { requireAdmin } from '../role/roles';
+import { getSupabaseServerClient } from '@kit/supabase/server-client';
+import { requireAdmin } from '@kit/next/actions';
 import type {
   SiteSettings,
   UpdateSiteSettingsInput,

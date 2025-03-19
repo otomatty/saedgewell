@@ -88,427 +88,137 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* アニメーション変数の定義 */
-  --animate-fade-up: fade-up 0.5s;  /* フェードアップアニメーション */
-  --animate-fade-down: fade-down 0.5s;  /* フェードダウンアニメーション */
-  --animate-accordion-down: accordion-down 0.2s ease-out;  /* アコーディオン展開 */
-  --animate-accordion-up: accordion-up 0.2s ease-out;  /* アコーディオン収縮 */
-  --animate-shimmer-slide: shimmer-slide 1.5s linear infinite;  /* シマーエフェクト */
-  --animate-spin-around: spin-around 6s ease-in-out infinite;  /* 回転アニメーション */
-  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;  /* 軌道アニメーション */
-  --animate-marquee: marquee var(--duration) linear infinite;  /* マーキー（横スクロール） */
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;  /* 縦マーキー */
-  --animate-ripple: ripple 1.5s ease-in-out infinite;  /* リップルエフェクト */
-  --animate-aurora-border: aurora-border 8s ease-in-out infinite;  /* オーロラボーダー */
-  --animate-aurora-1: aurora-1 15s ease-in-out infinite;  /* オーロラエフェクト1 */
-  --animate-aurora-2: aurora-2 15s ease-in-out infinite;  /* オーロラエフェクト2 */
-  --animate-aurora-3: aurora-3 15s ease-in-out infinite;  /* オーロラエフェクト3 */
-  --animate-aurora-4: aurora-4 15s ease-in-out infinite;  /* オーロラエフェクト4 */
-  --animate-background-position-spin: background-position-spin 3s ease-in-out infinite alternate;  /* 背景位置の回転 */
-  --animate-meteor: meteor var(--duration) linear infinite;  /* 流星エフェクト */
-  --animate-aurora-gradient: aurora-gradient 15s ease infinite;  /* オーロラグラデーション */
-  --animate-spin-slow: spin 4s linear infinite;  /* ゆっくりした回転 */
-  --animate-spin-reverse: spin-reverse 1s linear infinite;  /* 逆回転 */
+  --animate-fade-up: fade-up 0.5s;
+  --animate-fade-down: fade-down 0.5s;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-shimmer-slide: shimmer-slide 1.5s linear infinite;
+  --animate-spin-around: spin-around 6s ease-in-out infinite;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-ripple: ripple 1.5s ease-in-out infinite;
+  --animate-aurora-border: aurora-border 8s ease-in-out infinite;
+  --animate-aurora-1: aurora-1 15s ease-in-out infinite;
+  --animate-aurora-2: aurora-2 15s ease-in-out infinite;
+  --animate-aurora-3: aurora-3 15s ease-in-out infinite;
+  --animate-aurora-4: aurora-4 15s ease-in-out infinite;
+  --animate-background-position-spin: background-position-spin 3s ease-in-out infinite alternate;
+  --animate-meteor: meteor var(--duration) linear infinite;
+  --animate-aurora-gradient: aurora-gradient 15s ease infinite;
+  --animate-spin-slow: spin 4s linear infinite;
+  --animate-spin-reverse: spin-reverse 1s linear infinite;
 
-  /* アコーディオンアニメーション */
+  /* キーフレーム定義を一元化 */
   @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
   }
 
-  /* アコーディオン（上方向）アニメーション */
   @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
   }
 
-  /* フェードアップアニメーション */
   @keyframes fade-up {
     0% {
       opacity: 0;
       transform: translateY(10px);
     }
-    80% {
-      opacity: 0.6;
-    }
+    80% { opacity: 0.6; }
     100% {
       opacity: 1;
       transform: translateY(0px);
     }
   }
 
-  /* フェードダウンアニメーション */
   @keyframes fade-down {
     0% {
       opacity: 0;
       transform: translateY(-10px);
     }
-    80% {
-      opacity: 0.6;
-    }
+    80% { opacity: 0.6; }
     100% {
       opacity: 1;
       transform: translateY(0px);
     }
   }
 
-  /* シマースライドアニメーション */
   @keyframes shimmer-slide {
-    to {
-      transform: translate(calc(100cqw - 100%), 0);
-    }
-  }
-
-  /* 回転アニメーション */
-  @keyframes spin-around {
-    0% {
-      transform: translateZ(0) rotate(0);
-    }
-    15%, 35% {
-      transform: translateZ(0) rotate(90deg);
-    }
-    65%, 85% {
-      transform: translateZ(0) rotate(270deg);
-    }
-    100% {
-      transform: translateZ(0) rotate(360deg);
-    }
-  }
-
-  /* 軌道アニメーション */
-  @keyframes orbit {
-    0% {
-      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
-    }
-    100% {
-      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
-    }
-  }
-
-  /* マーキーアニメーション（横スクロール） */
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
-  }
-
-  /* マーキーアニメーション（縦スクロール） */
-  @keyframes marquee-vertical {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(calc(-100% - var(--gap)));
-    }
-  }
-
-  /* リップルエフェクトアニメーション */
-  @keyframes ripple {
-    0%, 100% {
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      transform: translate(-50%, -50%) scale(0.9);
-    }
-  }
-
-  /* オーロラボーダーアニメーション */
-  @keyframes aurora-border {
-    0%, 100% {
-      border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
-    }
-    25% {
-      border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
-    }
-    50% {
-      border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
-    }
-    75% {
-      border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
-    }
-  }
-
-  /* オーロラエフェクト1アニメーション */
-  @keyframes aurora-1 {
-    0%, 100% {
-      top: 0;
-      right: 0;
-    }
-    50% {
-      top: 50%;
-      right: 25%;
-    }
-    75% {
-      top: 25%;
-      right: 50%;
-    }
-  }
-
-  /* オーロラエフェクト2アニメーション */
-  @keyframes aurora-2 {
-    0%, 100% {
-      top: 0;
-      left: 0;
-    }
-    60% {
-      top: 75%;
-      left: 25%;
-    }
-    85% {
-      top: 50%;
-      left: 50%;
-    }
-  }
-
-  /* オーロラエフェクト3アニメーション */
-  @keyframes aurora-3 {
-    0%, 100% {
-      bottom: 0;
-      left: 0;
-    }
-    40% {
-      bottom: 50%;
-      left: 25%;
-    }
-    65% {
-      bottom: 25%;
-      left: 50%;
-    }
-  }
-
-  /* オーロラエフェクト4アニメーション */
-  @keyframes aurora-4 {
-    0%, 100% {
-      bottom: 0;
-      right: 0;
-    }
-    50% {
-      bottom: 25%;
-      right: 40%;
-    }
-    90% {
-      bottom: 50%;
-      right: 25%;
-    }
-  }
-
-  /* 背景位置の回転アニメーション */
-  @keyframes background-position-spin {
-    0% {
-      background-position: top center;
-    }
-    100% {
-      background-position: bottom center;
-    }
-  }
-
-  /* 流星エフェクトアニメーション */
-  @keyframes meteor {
-    0% {
-      transform: rotate(var(--angle)) translateX(0);
-      opacity: 1;
-    }
-    70% {
-      opacity: 1;
-    }
-    100% {
-      transform: rotate(var(--angle)) translateX(-500px);
-      opacity: 0;
-    }
-  }
-
-  /* オーロラグラデーションアニメーション */
-  @keyframes aurora-gradient {
-    0%, 100% {
-      background-size: 400% 400%;
-      background-position: 0% 50%;
-    }
-    50% {
-      background-size: 400% 400%;
-      background-position: 100% 50%;
-    }
-  }
-
-  /* 逆回転アニメーション */
-  @keyframes spin-reverse {
-    from {
-      transform: rotate(360deg);
-    }
-  }
-}
-
-@layer base {
-  /* 既存のコード */
-}
-
-@layer utilities {
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
-
-  @keyframes shimmer-slide {
-    to {
-      transform: translate(calc(100cqw - 100%), 0);
-    }
+    to { transform: translate(calc(100cqw - 100%), 0); }
   }
 
   @keyframes spin-around {
-    0% {
-      transform: translateZ(0) rotate(0);
-    }
-    15%, 35% {
-      transform: translateZ(0) rotate(90deg);
-    }
-    65%, 85% {
-      transform: translateZ(0) rotate(270deg);
-    }
-    100% {
-      transform: translateZ(0) rotate(360deg);
-    }
+    0% { transform: translateZ(0) rotate(0); }
+    15%, 35% { transform: translateZ(0) rotate(90deg); }
+    65%, 85% { transform: translateZ(0) rotate(270deg); }
+    100% { transform: translateZ(0) rotate(360deg); }
   }
 
   @keyframes orbit {
     0% {
-      transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+      transform: 
+        rotate(calc(var(--angle) * 1deg))
+        translateX(calc(var(--radius) * 1px))
+        rotate(calc(var(--angle) * -1deg));
     }
     100% {
-      transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+      transform: 
+        rotate(calc(var(--angle) * 1deg + 360deg))
+        translateX(calc(var(--radius) * 1px))
+        rotate(calc(var(--angle) * -1deg - 360deg));
     }
   }
 
   @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - var(--gap))); }
   }
 
   @keyframes marquee-vertical {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(calc(-100% - var(--gap)));
-    }
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(-100% - var(--gap))); }
   }
 
   @keyframes ripple {
-    0%, 100% {
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      transform: translate(-50%, -50%) scale(0.9);
-    }
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(0.9); }
   }
 
   @keyframes aurora-border {
-    0%, 100% {
-      border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
-    }
-    25% {
-      border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
-    }
-    50% {
-      border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
-    }
-    75% {
-      border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
-    }
+    0%, 100% { border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%; }
+    25% { border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%; }
+    50% { border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%; }
+    75% { border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%; }
   }
 
   @keyframes aurora-1 {
-    0%, 100% {
-      top: 0;
-      right: 0;
-    }
-    50% {
-      top: 50%;
-      right: 25%;
-    }
-    75% {
-      top: 25%;
-      right: 50%;
-    }
+    0%, 100% { top: 0; right: 0; }
+    50% { top: 50%; right: 25%; }
+    75% { top: 25%; right: 50%; }
   }
 
   @keyframes aurora-2 {
-    0%, 100% {
-      top: 0;
-      left: 0;
-    }
-    60% {
-      top: 75%;
-      left: 25%;
-    }
-    85% {
-      top: 50%;
-      left: 50%;
-    }
+    0%, 100% { top: 0; left: 0; }
+    60% { top: 75%; left: 25%; }
+    85% { top: 50%; left: 50%; }
   }
 
   @keyframes aurora-3 {
-    0%, 100% {
-      bottom: 0;
-      left: 0;
-    }
-    40% {
-      bottom: 50%;
-      left: 25%;
-    }
-    65% {
-      bottom: 25%;
-      left: 50%;
-    }
+    0%, 100% { bottom: 0; left: 0; }
+    40% { bottom: 50%; left: 25%; }
+    65% { bottom: 25%; left: 50%; }
   }
 
   @keyframes aurora-4 {
-    0%, 100% {
-      bottom: 0;
-      right: 0;
-    }
-    50% {
-      bottom: 25%;
-      right: 40%;
-    }
-    90% {
-      bottom: 50%;
-      right: 25%;
-    }
+    0%, 100% { bottom: 0; right: 0; }
+    50% { bottom: 25%; right: 40%; }
+    90% { bottom: 50%; right: 25%; }
   }
 
   @keyframes background-position-spin {
-    0% {
-      background-position: top center;
-    }
-    100% {
-      background-position: bottom center;
-    }
+    0% { background-position: top center; }
+    100% { background-position: bottom center; }
   }
 
   @keyframes meteor {
@@ -516,9 +226,7 @@
       transform: rotate(var(--angle)) translateX(0);
       opacity: 1;
     }
-    70% {
-      opacity: 1;
-    }
+    70% { opacity: 1; }
     100% {
       transform: rotate(var(--angle)) translateX(-500px);
       opacity: 0;
@@ -537,64 +245,7 @@
   }
 
   @keyframes spin-reverse {
-    from {
-      transform: rotate(360deg);
-    }
-    to {
-      transform: rotate(0deg);
-    }
-  }
-
-  /* アニメーションクラス */
-  .animate-accordion-down {
-    animation: accordion-down 0.2s ease-out;
-  }
-
-  .animate-accordion-up {
-    animation: accordion-up 0.2s ease-out;
-  }
-
-  .animate-shimmer-slide {
-    animation: shimmer-slide var(--speed) ease-in-out infinite alternate;
-  }
-
-  .animate-spin-around {
-    animation: spin-around calc(var(--speed) * 2) infinite linear;
-  }
-
-  .animate-orbit {
-    animation: orbit calc(var(--duration)*1s) linear infinite;
-  }
-
-  .animate-marquee {
-    animation: marquee var(--duration) infinite linear;
-  }
-
-  .animate-marquee-vertical {
-    animation: marquee-vertical var(--duration) linear infinite;
-  }
-
-  .animate-ripple {
-    animation: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
-  }
-
-  .animate-background-position-spin {
-    animation: background-position-spin 3000ms infinite alternate;
-  }
-
-  .animate-meteor {
-    animation: meteor 5s linear infinite;
-  }
-
-  .animate-aurora {
-    animation: aurora-gradient 6s ease-in-out infinite;
-  }
-
-  .animate-spin-clockwise {
-    animation: spin 20s linear infinite;
-  }
-
-  .animate-spin-counterclockwise {
-    animation: spin-reverse 20s linear infinite;
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
   }
 }

@@ -56,7 +56,7 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
     // プロフィールカード（左上）
     {
       name: 'Akimasa Sugai',
-      className: 'col-span-12 row-span-2 lg:col-span-8 lg:row-span-2',
+      className: 'col-span-12 row-span-2 lg:col-span-8',
       background: (
         <div className="relative w-full h-full min-h-[300px] md:min-h-[400px]">
           <Image
@@ -66,7 +66,7 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
             className="object-contain object-right-bottom grayscale transition-all duration-300 group-hover:scale-105 absolute z-30"
             priority
           />
-          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-background/80 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background/80 to-transparent" />
           <FlickeringGrid
             className="relative inset-0 z-0 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]"
             squareSize={4}
@@ -132,7 +132,7 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
     },
     {
       name: '技術記事',
-      className: 'col-span-6  md:col-span-3 lg:col-start-9 lg:col-span-2',
+      className: 'col-span-6 md:col-span-3 lg:col-start-9 lg:col-span-2',
       background: (
         <div className="relative w-full h-full min-h-[150px]">
           <NumberDisplay value={articleCount} unit="記事" />
@@ -177,7 +177,7 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
           <div className="absolute inset-0 flex items-center justify-center">
             <GitHubImages />
           </div>
-          <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/50 to-transparent z-40 transition-opacity duration-500 group-hover:opacity-0" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/50 to-transparent z-40 transition-opacity duration-500 group-hover:opacity-0" />
           <Ripple
             className={cn(
               'absolute inset-0 z-0 [mask-image:radial-gradient(450px_circle_at_center,white,transparent)]'
@@ -192,10 +192,16 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
     {
       name: '興味・価値観',
       description: '興味と価値観',
-      className: 'hidden lg:block lg:col-start-5 lg:col-span-2',
+      className: 'hidden lg:!block lg:col-start-5 lg:col-span-2',
       background: (
-        <div className="relative w-full h-full min-h-[150px] flex items-center justify-center">
-          <div className="absolute inset-0 w-full h-full scale-150" />
+        <div className="relative w-full h-full min-h-[150px]">
+          <GridPattern
+            width={20}
+            height={20}
+            x={-1}
+            y={-1}
+            className="absolute inset-0 [mask-image:radial-gradient(150px_circle_at_center,white,transparent)] z-10 opacity-60"
+          />
         </div>
       ),
       Icon: Telescope,
@@ -205,9 +211,11 @@ export const Introduction: React.FC<IntroductionProps> = ({ metrics }) => {
     {
       name: 'スガイのメモ',
       description: '知識とアイデア',
-      className: 'hidden lg:block lg:col-start-5 lg:col-span-2',
+      className: 'hidden lg:!block lg:col-start-5 lg:col-span-2',
       background: (
-        <div className="relative w-full h-full min-h-[150px] flex items-center justify-center" />
+        <div className="relative w-full h-full min-h-[150px]">
+          <DotPattern className="absolute inset-0 [mask-image:radial-gradient(150px_circle_at_center,white,transparent)] z-10 opacity-60" />
+        </div>
       ),
       Icon: Notebook,
       href: '/note',

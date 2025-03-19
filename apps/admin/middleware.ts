@@ -58,13 +58,29 @@ export async function middleware(request: NextRequest) {
 
 async function withCsrfMiddleware(
   request: NextRequest,
-  response = new NextResponse(),
+  response = new NextResponse()
 ) {
+  // ホスト名からドメイン設定を決定
+  const host = request.headers.get('host') || '';
+  let domain = undefined;
+
+  if (host.includes('localhost')) {
+    // ローカル開発環境ではCookieをサブドメイン間で共有するために '.localhost' を使用
+    domain = '.localhost';
+  } else if (host.includes('.')) {
+    // 本番環境では、example.comのようなトップレベルドメインを抽出
+    const parts = host.split('.');
+    if (parts.length >= 2) {
+      domain = `.${parts.slice(-2).join('.')}`;
+    }
+  }
+
   // set up CSRF protection
   const csrfProtect = createCsrfProtect({
     cookie: {
       secure: appConfig.production,
       name: CSRF_SECRET_COOKIE,
+      domain, // サブドメイン間でCookieを共有するためのドメイン設定
     },
     // ignore CSRF errors for server actions since protection is built-in
     ignoreMethods: isServerAction(request)
@@ -118,7 +134,7 @@ function getPatterns() {
         // redirect to home page.
         if (!isVerifyMfa) {
           return NextResponse.redirect(
-            new URL(pathsConfig.app.home, req.nextUrl.origin).href,
+            new URL(pathsConfig.app.home, req.nextUrl.origin).href
           );
         }
       },
@@ -149,7 +165,7 @@ function getPatterns() {
         // If user requires multi-factor authentication, redirect to MFA page.
         if (requiresMultiFactorAuthentication) {
           return NextResponse.redirect(
-            new URL(pathsConfig.auth.verifyMfa, origin).href,
+            new URL(pathsConfig.auth.verifyMfa, origin).href
           );
         }
       },

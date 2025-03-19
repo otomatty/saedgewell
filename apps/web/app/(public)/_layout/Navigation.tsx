@@ -13,6 +13,15 @@ import {
 } from '@kit/ui/navigation-menu';
 import { cn } from '@kit/ui/utils';
 
+// 環境変数の型定義
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      NEXT_PUBLIC_DOCS_URL: string;
+    }
+  }
+}
+
 type NavigationSubItem = {
   title: string;
   href: string;
@@ -72,8 +81,8 @@ const navigationItems: NavigationItem[] = [
         description: '技術情報や開発に関する記事を公開しています。',
       },
       {
-        title: 'ノート',
-        href: '/notes',
+        title: 'スガイのメモ',
+        href: process.env.NEXT_PUBLIC_DOCS_URL || 'https://docs.saedgewell.net',
         description: '日々の開発や学習で得た知見をまとめています。',
       },
       {
@@ -108,6 +117,10 @@ export const Navigation = () => {
                                 'bg-accent': pathname === subItem.href,
                               }
                             )}
+                            {...(subItem.href.startsWith('http') && {
+                              target: '_blank',
+                              rel: 'noopener noreferrer',
+                            })}
                           >
                             <div className="text-sm font-medium leading-none">
                               {subItem.title}

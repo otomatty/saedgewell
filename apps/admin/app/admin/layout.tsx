@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import { requireAdmin } from '../../_actions/roles';
-import { getProfile } from '../../_actions/profile';
-import { getProjects } from '../../_actions/projects/projects';
+import { requireAdmin } from '@kit/next/actions';
+import { getProfile } from '@kit/next/actions';
+import { getProjects } from '@kit/next/actions';
 import { redirect } from 'next/navigation';
 import { AdminLayoutClient } from '../_components/admin-layout-client';
-import { Skeleton } from '../../../../../packages/components/src/components/core/skeleton';
+import { Skeleton } from '@kit/ui/skeleton';
 
 // プロジェクトデータを取得するコンポーネント
 async function ProjectsLoader() {

@@ -95,11 +95,27 @@ async function withCsrfMiddleware(
   request: NextRequest,
   response = new NextResponse()
 ) {
+  // ホスト名からドメイン設定を決定
+  const host = request.headers.get('host') || '';
+  let domain = undefined;
+
+  if (host.includes('localhost')) {
+    // ローカル開発環境ではCookieをサブドメイン間で共有するために '.localhost' を使用
+    domain = '.localhost';
+  } else if (host.includes('.')) {
+    // 本番環境では、example.comのようなトップレベルドメインを抽出
+    const parts = host.split('.');
+    if (parts.length >= 2) {
+      domain = `.${parts.slice(-2).join('.')}`;
+    }
+  }
+
   // CSRF保護の設定
   const csrfProtect = createCsrfProtect({
     cookie: {
       secure: appConfig.production, // 本番環境ではセキュアCookieを使用
       name: CSRF_SECRET_COOKIE, // CSRFシークレットを保存するCookie名
+      domain, // サブドメイン間でCookieを共有するためのドメイン設定
     },
     // サーバーアクションの場合はPOSTメソッドをCSRF検証から除外（Next.jsに組み込み保護があるため）
     // それ以外の場合は常にGET、HEAD、OPTIONSメソッドを除外

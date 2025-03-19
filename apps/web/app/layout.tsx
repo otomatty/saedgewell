@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers';
-import { StrictMode } from 'react';
 
 import { Toaster } from '@kit/ui/sonner';
 import { cn } from '@kit/ui/utils';
@@ -22,14 +21,12 @@ export default async function RootLayout({
 
   return (
     <html lang={language} className={className}>
-      <body>
-        <StrictMode>
-          <RootProviders theme={theme} lang={language}>
-            {children}
-          </RootProviders>
+      <body suppressHydrationWarning>
+        <RootProviders theme={theme} lang={language}>
+          {children}
+        </RootProviders>
 
-          <Toaster richColors={true} theme={theme} position="top-center" />
-        </StrictMode>
+        <Toaster richColors={true} theme={theme} position="top-center" />
       </body>
     </html>
   );

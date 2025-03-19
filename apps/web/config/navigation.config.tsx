@@ -9,7 +9,7 @@
 import { Home, User } from 'lucide-react';
 import type { z } from 'zod';
 
-import { NavigationConfigSchema } from '../../../packages/ui/src/makerkit/navigation-config/schema';
+import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
 
 import pathsConfig from './paths.config';
 

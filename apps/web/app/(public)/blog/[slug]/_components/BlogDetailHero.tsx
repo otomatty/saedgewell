@@ -2,7 +2,7 @@
 
 import { Badge } from '@kit/ui/badge';
 import { BasicHero } from '@kit/ui/basic-hero';
-import { formatDate } from '~/lib/utils/format';
+import { formatDate } from '../../../../../../../packages/shared/src/utils/format';
 
 interface BlogDetailHeroProps {
   title: string;

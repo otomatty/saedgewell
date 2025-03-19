@@ -1,0 +1,32 @@
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: [
+    'src/index.ts',
+    'src/profile/index.ts',
+    'src/error/index.ts',
+    'src/notification/index.ts',
+    'src/blog/index.ts',
+    'src/contact/index.ts',
+    'src/github/index.ts',
+    'src/project/index.ts',
+    'src/auth/index.ts',
+  ],
+  format: ['esm', 'cjs'],
+  dts: {
+    entry: {
+      index: 'src/index.ts',
+      profile: 'src/profile/index.ts',
+      error: 'src/error/index.ts',
+      notification: 'src/notification/index.ts',
+      blog: 'src/blog/index.ts',
+      contact: 'src/contact/index.ts',
+      github: 'src/github/index.ts',
+      project: 'src/project/index.ts',
+      auth: 'src/auth/index.ts',
+    },
+  },
+  clean: true,
+  treeshake: true,
+  sourcemap: true,
+});

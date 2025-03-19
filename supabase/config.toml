@@ -106,7 +106,20 @@ enabled = true
 # in emails.
 site_url = "http://localhost:3000"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["http://localhost:3000", "http://localhost:3000/auth/callback"]
+additional_redirect_urls = [
+  "http://localhost:3000", 
+  "http://localhost:3000/auth/callback",
+  "http://localhost:3001", 
+  "http://localhost:3001/auth/callback",
+  "http://localhost:3002", 
+  "http://localhost:3002/auth/callback",
+  "http://web.localhost:3000",
+  "http://web.localhost:3000/auth/callback",
+  "http://admin.localhost:3000",
+  "http://admin.localhost:3000/auth/callback",
+  "http://docs.localhost:3000",
+  "http://docs.localhost:3000/auth/callback"
+]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 seconds (one
 # week).
 jwt_expiry = 3600
@@ -258,15 +271,15 @@ enabled = false
 # Google OAuth
 [auth.external.google]
 enabled = true
-client_id = "env(SUPABASE_AUTH_GOOGLE_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_GOOGLE_SECRET)"
+client_id = env("GOOGLE_OAUTH_CLIENT_ID")
+secret = env("GOOGLE_OAUTH_CLIENT_SECRET")
 redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
 
 # GitHub OAuth
 [auth.external.github]
 enabled = true
-client_id = "env(SUPABASE_AUTH_GITHUB_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_GITHUB_SECRET)"
+client_id = env("GITHUB_OAUTH_CLIENT_ID")
+secret = env("GITHUB_OAUTH_CLIENT_SECRET")
 redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
 
 [edge_runtime]

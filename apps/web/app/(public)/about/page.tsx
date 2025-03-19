@@ -9,7 +9,7 @@ import { Interests } from './_components/Interests';
 import { Featured } from './_components/Featured';
 import { GithubContributions } from './_components/github-contributions';
 import { getGithubCalendarContributions } from '~/actions/integration';
-import type { ContributionDay } from '~/types/github';
+import type { ContributionDay } from '~/types/share/github';
 
 export const metadata: Metadata = {
   title: 'About Me',

@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { notificationSettingsAtom } from '~/store/notification';
 import { Switch } from '@kit/ui/switch';
 import { Label } from '@kit/ui/label';
-import type { UpdateNotificationSettings } from '~/types/notification';
+import type { UpdateNotificationSettings } from '../../../../packages/types/src/notification';
 
 interface NotificationSettingsProps {
   onUpdate: (settings: UpdateNotificationSettings) => Promise<void>;

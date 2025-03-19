@@ -2,14 +2,14 @@
   "name": "scripts",
   "private": true,
   "version": "0.1.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "dev": "node --loader ts-node/esm ./src/dev.mts",
-    "checks": "node --loader ts-node/esm ./src/checks.mts",
-    "requirements": "node --loader ts-node/esm ./src/requirements.mts"
+    "dev": "ts-node ./src/dev.ts",
+    "checks": "ts-node ./src/checks.ts",
+    "requirements": "ts-node ./src/requirements.ts"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "ts-node": "10.9.2",
+    "typescript": "5.8.2"
   }
 }

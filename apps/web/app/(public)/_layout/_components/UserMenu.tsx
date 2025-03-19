@@ -12,7 +12,7 @@ import {
 import { User, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useSignOut } from '@kit/supabase/hooks/use-sign-out';
-import type { ProfileWithRole } from '~/types/profile';
+import type { ProfileWithRole } from '@kit/types/profile';
 
 interface UserMenuProps {
   profile: ProfileWithRole;

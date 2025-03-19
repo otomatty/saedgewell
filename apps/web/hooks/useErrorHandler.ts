@@ -1,7 +1,7 @@
 'use client';
 
 import { useToast } from './useToast';
-import type { AppError } from '../types/error';
+import type { AppError } from '../../../packages/types/src/error';
 
 /**
  * エラーハンドリング用のカスタムフック

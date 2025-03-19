@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import type { ContributionDay } from '~/types/github';
+import type { ContributionDay } from '~/types/share/github';
 
 interface GithubContributionCalendarProps {
   contributions: ContributionDay[];

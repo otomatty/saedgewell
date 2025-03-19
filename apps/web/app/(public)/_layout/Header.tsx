@@ -6,9 +6,9 @@ import { Navigation } from './Navigation';
 import { MobileSidebar } from './MobileSidebar';
 import { Skeleton } from '@kit/ui/skeleton';
 import { UserMenu } from './_components/UserMenu';
-import type { ProfileWithRole } from '~/types/profile';
+import type { ProfileWithRole } from '@kit/types/profile';
 import { ContactDialog } from '~/components/contacts/contact-dialog';
-import { ThemeToggle } from '~/components/theme/theme-toggle';
+import { ThemeToggle } from '@kit/ui/theme-toggle';
 import { LoginDialog } from '~/components/auth/login-dialog';
 
 interface HeaderProps {
@@ -24,7 +24,7 @@ export const Header = ({ profile }: HeaderProps) => {
       animate={{ y: 0 }}
       className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60"
     >
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-16 items-center mx-auto px-4">
         <div className="mr-8">
           <Link href="/" className="text-xl font-bold">
             Saedgewell

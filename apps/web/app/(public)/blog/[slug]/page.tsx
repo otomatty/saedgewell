@@ -4,7 +4,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { BlogDetailHero } from './_components/BlogDetailHero';
 import { BlogContent } from './_components/BlogContent';
 import { getBlogPostBySlug, getPublishedSlugsForBuild } from '~/actions/blog';
-import type { BlogPost } from '~/types/blog';
+import type { BlogPost } from '../../../../../../packages/types/src/blog';
 
 export async function generateStaticParams() {
   const slugs = await getPublishedSlugsForBuild();

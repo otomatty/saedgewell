@@ -11,4 +11,5 @@ export const customEntries = [
   //   'src/custom/emoji-picker/index.tsx',
   'src/custom/markdown/index.tsx',
   'src/custom/icons/index.tsx',
+  'src/custom/theme-toggle/index.tsx',
 ];

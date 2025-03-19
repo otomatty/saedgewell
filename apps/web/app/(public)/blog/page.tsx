@@ -4,7 +4,10 @@ import { BlogCard } from './_components/BlogCard';
 import { Input } from '@kit/ui/input';
 import { Badge } from '@kit/ui/badge';
 import { getBlogPosts, getBlogCategories } from '~/actions/blog';
-import type { BlogCategory, BlogPost } from '~/types/blog';
+import type {
+  BlogCategory,
+  BlogPost,
+} from '../../../../../packages/types/src/blog';
 
 export const metadata: Metadata = {
   title: 'Blog',

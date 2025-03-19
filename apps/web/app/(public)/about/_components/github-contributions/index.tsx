@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { ContributionDay } from '~/types/github';
+import type { ContributionDay } from '~/types/share/github';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@kit/ui/tabs';
 import { GithubContributionCalendar } from './GithubContributionCalendar';
 import { GithubContributionChart } from './GithubContributionChart';

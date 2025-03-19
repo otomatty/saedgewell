@@ -25,6 +25,8 @@
  * - クッキーの設定は、requestとresponseの両方に対して行われます。これは、
  *   現在のリクエスト処理中にクッキーを読み取れるようにするためと、
  *   レスポンスでクライアントにクッキーを送信するためです。
+ * - サブドメイン間でクッキーを共有するために、domain属性を設定しています。
+ *   ローカル開発環境では '.localhost' を使用し、本番環境ではトップレベルドメインに設定します。
  *
  * 使用例:
  * ```
@@ -44,6 +46,7 @@
  * - このクライアントはNext.jsのミドルウェア内でのみ使用することを想定しています
  * - 環境変数 NEXT_PUBLIC_SUPABASE_URL と NEXT_PUBLIC_SUPABASE_ANON_KEY が
  *   設定されている必要があります
+ * - サブドメイン間でクッキーを共有するには、同じトップレベルドメインが必要です
  */
 import 'server-only';
 
@@ -66,6 +69,24 @@ export function createMiddlewareClient<GenericSchema = Database>(
 ) {
   const keys = getSupabaseClientKeys();
 
+  // ホスト名からドメイン設定を決定
+  // localhost の場合は '.localhost' を使用し、それ以外の場合はホスト名からトップレベルドメインを抽出
+  const host = request.headers.get('host') || '';
+  let domain = undefined;
+
+  if (host.includes('localhost')) {
+    // ローカル開発環境ではCookieをサブドメイン間で共有するために '.localhost' を使用
+    domain = '.localhost';
+  } else if (host.includes('.')) {
+    // 本番環境では、example.comのようなトップレベルドメインを抽出
+    // www.example.com や sub.example.com から .example.com を取得
+    const parts = host.split('.');
+    if (parts.length >= 2) {
+      // 最後の2つのパーツを結合して、'.example.com' の形式にする
+      domain = `.${parts.slice(-2).join('.')}`;
+    }
+  }
+
   return createServerClient<GenericSchema>(keys.url, keys.anonKey, {
     cookies: {
       getAll() {
@@ -77,7 +98,14 @@ export function createMiddlewareClient<GenericSchema = Database>(
         }
 
         for (const { name, value, options } of cookiesToSet) {
-          response.cookies.set(name, value, options);
+          // すべてのクッキーにドメイン設定を追加
+          const cookieOptions = {
+            ...options,
+            // domain が存在する場合のみ設定
+            ...(domain ? { domain } : {}),
+          };
+
+          response.cookies.set(name, value, cookieOptions);
         }
       },
     },

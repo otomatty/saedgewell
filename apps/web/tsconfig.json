@@ -29,7 +29,9 @@
     "./config/**/*.ts",
     "components/**/*",
     "lib/**/*.ts",
-    "app"
+    "app",
+    "../../packages/features/auth/src/components/login-dialog.tsx",
+    "../../packages/ui/src/custom/theme-toggle.tsx"
   ],
   "exclude": ["node_modules", ".next"]
 }

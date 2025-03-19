@@ -89,6 +89,7 @@ export function OrbitingCircles({
   ...props
 }: OrbitingCirclesProps) {
   const calculatedDuration = duration / speed;
+
   return (
     <>
       {path && (
@@ -100,7 +101,7 @@ export function OrbitingCircles({
           className="pointer-events-none absolute inset-0 size-full"
         >
           <circle
-            className="stroke-black/10 stroke-1 dark:stroke-white/10"
+            className="stroke-black/10 dark:stroke-white/10"
             cx="50%"
             cy="50%"
             r={radius}
@@ -110,6 +111,7 @@ export function OrbitingCircles({
       )}
       {React.Children.map(children, (child, index) => {
         const angle = (360 / React.Children.count(children)) * index;
+
         return (
           <div
             style={

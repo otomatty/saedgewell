@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader } from '@kit/ui/card';
 import { Badge } from '@kit/ui/badge';
-import { formatDate } from '~/lib/utils/format';
+import { formatDate } from '../../../../../../packages/shared/src/utils/format';
 
 interface BlogCardProps {
   title: string;

@@ -4,7 +4,7 @@ export default defineConfig({
   entry: [
     'src/index.ts',
     'src/logger/index.ts',
-    'src/utils.ts',
+    'src/utils/index.ts',
     'src/hooks/index.ts',
     'src/events/index.tsx',
   ],

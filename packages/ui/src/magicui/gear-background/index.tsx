@@ -2,6 +2,15 @@
 
 import { cn } from '../../lib/utils';
 import { useEffect, useRef } from 'react';
+import {
+  Gear1,
+  Gear2,
+  Gear3,
+  Gear4,
+  Gear5,
+  Gear6,
+  Gear7,
+} from './assets/gears';
 
 interface GearProps {
   size: number;
@@ -27,12 +36,32 @@ const Gear = ({
   // gear-7は使用しないようにする
   const actualGearNumber = gearNumber > 6 ? 1 : gearNumber;
 
+  // Gearコンポーネントの取得
+  const getGearComponent = (number: number) => {
+    switch (number) {
+      case 1:
+        return <Gear1 />;
+      case 2:
+        return <Gear2 />;
+      case 3:
+        return <Gear3 />;
+      case 4:
+        return <Gear4 />;
+      case 5:
+        return <Gear5 />;
+      case 6:
+        return <Gear6 />;
+      default:
+        return <Gear1 />;
+    }
+  };
+
   return (
     <div
       className={cn(
         'absolute',
         clockwise ? 'animate-spin-clockwise' : 'animate-spin-counterclockwise',
-        '[&>img]:opacity-50 dark:[&>img]:opacity-0',
+        '[&>svg]:opacity-10 dark:[&>svg]:opacity-0',
         className
       )}
       style={{
@@ -44,18 +73,7 @@ const Gear = ({
         opacity: opacity,
       }}
     >
-      {/* require.resolveを使用してビルド時に正しいパスを解決 */}
-      <img
-        src={require(`./assets/gear-${actualGearNumber}.svg`).default}
-        alt={`Gear ${actualGearNumber}`}
-        className="w-full h-full"
-        style={
-          {
-            '--gear-color': '#122116',
-            '--gear-inner-color': '#0e1a12',
-          } as React.CSSProperties
-        }
-      />
+      {getGearComponent(actualGearNumber)}
     </div>
   );
 };

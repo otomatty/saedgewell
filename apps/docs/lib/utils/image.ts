@@ -5,7 +5,7 @@
 /**
  * デフォルト画像パス
  */
-export const DEFAULT_THUMBNAIL_PATH = '/thumbnails/no-image.webp';
+export const DEFAULT_THUMBNAIL_PATH = '/thumbnails/no-image.svg';
 
 /**
  * URLがWebサイトのURLかどうかを判断する

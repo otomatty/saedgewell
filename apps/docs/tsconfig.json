@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "react": ["./node_modules/@types/react"],
       "~/*": ["./app/*"],
       "~/config/*": ["./config/*"],
       "~/components/*": ["./components/*"],
@@ -17,10 +18,7 @@
         "name": "next"
       }
     ],
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "skipLibCheck": true,
-    "types": []
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
     "next-env.d.ts",

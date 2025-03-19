@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@kit/ui/tabs';
 import { NotificationIcon } from './notification-icon';
 import { NotificationList } from './notification-list';
 import { NotificationSettings } from './notification-settings';
-import type { UpdateNotificationSettings } from '~/types/notification';
+import type { UpdateNotificationSettings } from '../../../../packages/types/src/notification';
 
 interface NotificationPopoverProps {
   onUpdateSettings: (settings: UpdateNotificationSettings) => Promise<void>;

@@ -6,7 +6,13 @@
       "~/*": ["./app/*"],
       "~/config/*": ["./config/*"],
       "~/components/*": ["./components/*"],
-      "~/lib/*": ["./lib/*"]
+      "~/types/*": ["./types/*"],
+      "~/lib/*": ["./lib/*"],
+      "~/actions/*": ["./actions/*"],
+      "~/services/*": ["./services/*"],
+      "~/hooks/*": ["./hooks/*"],
+      "~/store/*": ["./store/*"],
+      "~/data/*": ["./data/*"]
     },
     "plugins": [
       {

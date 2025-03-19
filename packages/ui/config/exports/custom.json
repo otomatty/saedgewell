@@ -6,6 +6,7 @@
     "./back-link": "./src/custom/back-link/index.tsx",
     "./responsive-dialog": "./src/custom/responsive-dialog/index.tsx",
     "./markdown": "./src/custom/markdown/index.tsx",
-    "./icons": "./src/custom/icons/index.tsx"
+    "./icons": "./src/custom/icons/index.tsx",
+    "./theme-toggle": "./src/custom/theme-toggle/index.tsx"
   }
 }
