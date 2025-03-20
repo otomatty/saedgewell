@@ -1,0 +1,513 @@
+# フェーズ4: Nginx設定
+
+このフェーズでは、複数のNext.jsアプリケーションを単一のドメイン下で管理できるようにNginxを設定します。サブドメインを使用した統合により、統一された認証フローを実現します。
+
+## 目標
+
+- サブドメインを使用したアプリケーションの統合
+- リバースプロキシによる効率的なルーティング
+- セキュリティヘッダーの設定
+- WebSocketサポートの有効化
+- サブドメイン間での認証共有の実現
+
+## タスク
+
+### 4.1 基本的なNginx設定
+
+- [ ] Nginx設定ファイル (`docker/nginx/default.conf`) の作成
+
+  ```nginx
+  # レート制限の設定
+  limit_req_zone $binary_remote_addr zone=mylimit:10m rate=10r/s;
+
+  # アップストリームの定義
+  upstream web_upstream {
+    server web:7510;
+    keepalive 32;
+  }
+
+  upstream docs_upstream {
+    server docs:7511;
+    keepalive 32;
+  }
+
+  upstream admin_upstream {
+    server admin:7512;
+    keepalive 32;
+  }
+
+  upstream supabase_upstream {
+    server supabase:54321;
+    keepalive 32;
+  }
+
+  # 共通のセキュリティヘッダー
+  map $sent_http_content_type $security_headers {
+    default "frame-ancestors 'none'; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' http://*.localhost http://supabase:54321 http://localhost:54321 https: ws:;";
+  }
+
+  # クロスドメインCookieサポート用の共通設定
+  map $http_origin $cors_origin_header {
+    default "";
+    "~^https?://(web|docs|admin)\.localhost(:[0-9]+)?$" "$http_origin";
+    "~^https?://localhost(:[0-9]+)?$" "$http_origin";
+  }
+
+  # CORS設定用マップ
+  map $cors_origin_header $cors_cred {
+    default "";
+    "~^.+$" "true";
+  }
+
+  # Webアプリケーション
+  server {
+    listen 80;
+    server_name web.localhost;
+    
+    # セキュリティヘッダー
+    add_header X-Frame-Options "DENY";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Content-Security-Policy $security_headers;
+    
+    # CORSヘッダー (認証共有に必要)
+    add_header Access-Control-Allow-Origin $cors_origin_header always;
+    add_header Access-Control-Allow-Credentials $cors_cred always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept" always;
+    
+    # OPTIONSリクエストの処理
+    if ($request_method = OPTIONS) {
+      return 204;
+    }
+    
+    # プロキシ設定
+    location / {
+      limit_req zone=mylimit burst=20 nodelay;
+      proxy_pass http://web_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      
+      # WebSocket設定
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      
+      # Cookieプロキシ設定
+      proxy_cookie_domain web.localhost .localhost;
+      proxy_cookie_path / /;
+    }
+  }
+
+  # Docsアプリケーション
+  server {
+    listen 80;
+    server_name docs.localhost;
+    
+    # セキュリティヘッダー
+    add_header X-Frame-Options "DENY";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Content-Security-Policy $security_headers;
+    
+    # CORSヘッダー (認証共有に必要)
+    add_header Access-Control-Allow-Origin $cors_origin_header always;
+    add_header Access-Control-Allow-Credentials $cors_cred always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept" always;
+    
+    # OPTIONSリクエストの処理
+    if ($request_method = OPTIONS) {
+      return 204;
+    }
+    
+    location / {
+      limit_req zone=mylimit burst=20 nodelay;
+      proxy_pass http://docs_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      
+      # WebSocket設定
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      
+      # Cookieプロキシ設定
+      proxy_cookie_domain docs.localhost .localhost;
+      proxy_cookie_path / /;
+    }
+  }
+
+  # Adminアプリケーション
+  server {
+    listen 80;
+    server_name admin.localhost;
+    
+    # セキュリティヘッダー
+    add_header X-Frame-Options "DENY";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Content-Security-Policy $security_headers;
+    
+    # CORSヘッダー (認証共有に必要)
+    add_header Access-Control-Allow-Origin $cors_origin_header always;
+    add_header Access-Control-Allow-Credentials $cors_cred always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept" always;
+    
+    # OPTIONSリクエストの処理
+    if ($request_method = OPTIONS) {
+      return 204;
+    }
+    
+    location / {
+      limit_req zone=mylimit burst=20 nodelay;
+      proxy_pass http://admin_upstream;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      
+      # WebSocket設定
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      
+      # Cookieプロキシ設定
+      proxy_cookie_domain admin.localhost .localhost;
+      proxy_cookie_path / /;
+    }
+  }
+  
+  # Supabase Auth APIプロキシ
+  server {
+    listen 80;
+    server_name api.localhost;
+    
+    # セキュリティヘッダー
+    add_header X-Frame-Options "DENY";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
+    
+    # CORSヘッダー (認証共有に必要)
+    add_header Access-Control-Allow-Origin $cors_origin_header always;
+    add_header Access-Control-Allow-Credentials $cors_cred always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept, apikey, X-Client-Info" always;
+    
+    # OPTIONSリクエストの処理
+    if ($request_method = OPTIONS) {
+      return 204;
+    }
+    
+    # Supabase認証エンドポイントのみプロキシ
+    location /auth/v1/ {
+      proxy_pass http://supabase_upstream/auth/v1/;
+      proxy_http_version 1.1;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      
+      # Cookieプロキシ設定
+      proxy_cookie_domain api.localhost .localhost;
+      proxy_cookie_path / /;
+    }
+  }
+  ```
+
+- [ ] `docker-compose.yml`にNginxサービスを追加
+
+  ```yaml
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+      - docs
+      - admin
+      - supabase
+    networks:
+      - saedgewell_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  ```
+
+### 4.2 Supabaseの設定更新
+
+- [ ] Supabaseの認証サービス設定を更新 (`supabase/config.toml`)
+
+  ```toml
+  # 既存の設定に追加
+  [auth]
+  site_url = "http://web.localhost"
+  additional_redirect_urls = [
+    "http://web.localhost/api/auth/callback",
+    "http://docs.localhost/api/auth/callback",
+    "http://admin.localhost/api/auth/callback"
+  ]
+  jwt_expiry = 3600
+  enable_signup = true
+  
+  [auth.cookie]
+  domain = ".localhost"
+  same_site = "lax"
+  secure = false
+  ```
+
+### 4.3 システム全体の起動・停止スクリプト
+
+- [ ] 起動スクリプト (`scripts/dev/start-dev.sh`)
+
+  ```bash
+  #!/bin/bash
+  set -e
+
+  echo "開発環境を起動しています..."
+  
+  # /etc/hostsファイルにエントリがあるか確認
+  if ! grep -q "web.localhost" /etc/hosts; then
+    echo "localhostエントリを/etc/hostsファイルに追加しています..."
+    echo "/etc/hostsファイルを変更するためにパスワードを入力してください"
+    sudo sh -c "echo '127.0.0.1 web.localhost docs.localhost admin.localhost api.localhost' >> /etc/hosts"
+  fi
+
+  # Supabase起動
+  if ! docker compose ps | grep -q "supabase.*running"; then
+    echo "Supabaseを起動しています..."
+    ./scripts/dev/start-supabase.sh
+  fi
+
+  # アプリケーション起動
+  echo "アプリケーションを起動しています..."
+  docker compose up -d web docs admin nginx
+
+  echo "開発環境が正常に起動しました！"
+  echo ""
+  echo "アクセスURL:"
+  echo "- Web: http://web.localhost"
+  echo "- Docs: http://docs.localhost"
+  echo "- Admin: http://admin.localhost"
+  echo "- Supabase Studio: http://localhost:54323"
+  ```
+
+- [ ] 停止スクリプト (`scripts/dev/stop-dev.sh`)
+
+  ```bash
+  #!/bin/bash
+  set -e
+
+  echo "開発環境を停止しています..."
+  
+  # すべてのコンテナを停止
+  docker compose stop
+
+  echo "開発環境が正常に停止しました。"
+  ```
+
+### 4.4 ローカルDNS設定
+
+- [ ] hostsファイル設定スクリプト (`scripts/dev/setup-hosts.sh`)
+
+  ```bash
+  #!/bin/bash
+
+  HOSTS=("web.localhost" "docs.localhost" "admin.localhost" "api.localhost")
+  HOSTS_FILE="/etc/hosts"
+  IP="127.0.0.1"
+
+  # すでに設定があるか確認
+  NEEDS_UPDATE=false
+  for HOST in "${HOSTS[@]}"; do
+    if ! grep -q "$HOST" "$HOSTS_FILE"; then
+      NEEDS_UPDATE=true
+      break
+    fi
+  done
+
+  if $NEEDS_UPDATE; then
+    echo "ホストエントリを $HOSTS_FILE に追加しています..."
+    echo "$HOSTS_FILE を変更するためにパスワードを入力してください"
+    
+    # ホストエントリを追加
+    ENTRIES=""
+    for HOST in "${HOSTS[@]}"; do
+      ENTRIES="$ENTRIES $HOST"
+    done
+    
+    sudo sh -c "echo '$IP$ENTRIES' >> $HOSTS_FILE"
+    
+    # DNS再キャッシュ（Mac OS X）
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      echo "DNSキャッシュをクリアしています..."
+      sudo dscacheutil -flushcache
+      sudo killall -HUP mDNSResponder
+    fi
+    
+    echo "ローカルドメイン設定が完了しました！"
+  else
+    echo "ホストエントリは既に存在しています。変更は必要ありません。"
+  fi
+  ```
+
+### 4.5 認証テストスクリプト
+
+- [ ] 認証接続テストスクリプト (`scripts/test/test-auth-sharing.sh`)
+
+  ```bash
+  #!/bin/bash
+  set -e
+
+  echo "認証共有テストを実行しています..."
+
+  # ドメイン到達性テスト
+  echo "ドメイン到達性テスト:"
+  for DOMAIN in web.localhost docs.localhost admin.localhost api.localhost; do
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$DOMAIN)
+    if [[ $HTTP_CODE == 200 || $HTTP_CODE == 204 ]]; then
+      echo "✅ $DOMAIN にアクセス可能 (HTTP $HTTP_CODE)"
+    else
+      echo "❌ $DOMAIN にアクセスできません (HTTP $HTTP_CODE)"
+    fi
+  done
+  
+  # Supabase Auth APIテスト
+  echo -e "\nSupabase認証APIテスト:"
+  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://api.localhost/auth/v1/health)
+  
+  if [[ $HTTP_CODE == 200 || $HTTP_CODE == 204 ]]; then
+    echo "✅ Supabase認証APIは正常に動作しています (HTTP $HTTP_CODE)"
+  else
+    echo "❌ Supabase認証APIにアクセスできません (HTTP $HTTP_CODE)"
+  fi
+  
+  echo -e "\nこのテストが成功した場合でも、ブラウザでの実際の認証共有をテストすることをお勧めします:"
+  echo "1. http://web.localhost にアクセスしてログイン"
+  echo "2. 新しいタブで http://docs.localhost にアクセス（自動的にログインされているはず）"
+  echo "3. 同様に http://admin.localhost でも確認"
+  
+  echo -e "\n認証共有テスト完了"
+  ```
+
+### 4.6 Docker Composeプロファイル設定
+
+- [ ] 特定のワークロード向けにDocker Composeプロファイルを設定
+
+  ```yaml
+  # docker-compose.yml（既存ファイルに追加）
+  
+  # プロファイル設定
+  services:
+    web:
+      # 既存の設定...
+      profiles: ["default", "web", "apps"]
+      
+    docs:
+      # 既存の設定...
+      profiles: ["default", "docs", "apps"]
+      
+    admin:
+      # 既存の設定...
+      profiles: ["default", "admin", "apps"]
+      
+    supabase:
+      # 既存の設定...
+      profiles: ["default", "db", "web", "docs", "admin"]
+      
+    nginx:
+      # 既存の設定...
+      profiles: ["default", "web", "docs", "admin", "apps"]
+  ```
+
+- [ ] 特定のプロファイルのみを起動するスクリプト (`scripts/dev/start-profile.sh`)
+
+  ```bash
+  #!/bin/bash
+  set -e
+
+  if [ -z "$1" ]; then
+    echo "使用方法: $0 <profile>"
+    echo "利用可能なプロファイル: web, docs, admin, db, apps"
+    exit 1
+  fi
+
+  PROFILE=$1
+
+  echo "プロファイル $PROFILE で開発環境を起動しています..."
+  
+  # hostsファイルの設定
+  ./scripts/dev/setup-hosts.sh
+  
+  # 指定されたプロファイルで起動
+  docker compose --profile $PROFILE up -d
+
+  echo "プロファイル $PROFILE で開発環境を起動しました"
+  
+  # 接続情報の表示
+  case $PROFILE in
+    web)
+      echo "アクセスURL: http://web.localhost"
+      ;;
+    docs)
+      echo "アクセスURL: http://docs.localhost"
+      ;;
+    admin)
+      echo "アクセスURL: http://admin.localhost"
+      ;;
+    db)
+      echo "Supabase Studio: http://localhost:54323"
+      ;;
+    apps)
+      echo "アクセスURL:"
+      echo "- Web: http://web.localhost"
+      echo "- Docs: http://docs.localhost"
+      echo "- Admin: http://admin.localhost"
+      ;;
+  esac
+  ```
+
+## Apple SiliconでのNginx実行に関する注意
+
+M1/M2 Mac（Apple Silicon）でNginxを実行する際の注意点：
+
+1. Nginxの公式イメージは、ARM64アーキテクチャをサポートしているため、追加設定なしで動作します
+2. DNSキャッシュの更新を忘れずに行ってください（`sudo killall -HUP mDNSResponder`）
+3. hostsファイルの更新後、ブラウザのキャッシュをクリアする必要がある場合があります
+4. Apple Silicon上では、バックグラウンドサービスの動作がより効率的になるよう、Docker Desktopのリソース割り当てを適切に設定してください
+
+## 検証ポイント
+
+- 各サブドメインが正しくルーティングされるか
+- ホットリロードがWebSocket経由で機能するか
+- セキュリティヘッダーが正しく設定されているか
+- アプリケーション間での認証状態の共有が機能するか
+- api.localhostを通じてSupabase認証APIにアクセスできるか
+- Cookie設定が正しく.localhostドメイン全体に適用されるか
+
+## エラーと解決策
+
+| エラー | 解決策 |
+|-------|--------|
+| サブドメインへのアクセスエラー | hostsファイルに正しいエントリが追加されているか確認 |
+| WebSocket接続エラー | Nginxの設定でアップグレードヘッダーが正しく設定されているか確認 |
+| CSPエラー | Content-Security-Policyヘッダーを調整し、必要なドメインを許可リストに追加 |
+| 認証状態が共有されない | ブラウザ開発ツールでCookieを確認し、.localhostドメインとパスが正しく設定されているか確認 |
+| CORS問題 | Nginxの設定でAccess-Control-Allow-*ヘッダーが正しく設定されているか検証 |
+| クッキー設定エラー | Supabaseの設定で正しいドメイン設定(`.localhost`)が適用されているか確認 |
+
+## 次のステップ
+
+フェーズ4が完了したら、[フェーズ5: 最適化とテスト](./phase5.md)に進みます。 

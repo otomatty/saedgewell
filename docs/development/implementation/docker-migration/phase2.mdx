@@ -1,0 +1,211 @@
+# フェーズ2: Supabaseの連携
+
+このフェーズでは、既存のSupabase CLIを活用し、Docker環境との効率的な連携をセットアップします。Supabase自体は既にDocker上で動作しているため、再度コンテナ化する代わりに、適切な連携と設定に焦点を当てます。
+
+## 前提条件
+
+- フェーズ1の完了
+- Supabase CLIがインストールされていること
+- `.env.docker`ファイルに基本設定が含まれていること
+
+## 目標
+
+- Supabase CLIと Docker環境を適切に連携させる
+- サブドメイン間で認証を共有するための設定を実装
+- 開発環境で使用するための環境変数設定を最適化
+- 本番環境を想定したSupabase連携の設計
+
+## タスク
+
+### 1. Supabase接続設定の最適化
+
+- [ ] 既存のSupabaseプロセスをチェックするスクリプトの作成
+  - [ ] `scripts/dev/check-local-supabase.sh`スクリプトで既存のプロセスを検出
+  - [ ] 必要に応じてプロセスを停止する機能を実装
+
+- [ ] Docker環境とSupabase CLIの連携設定
+  - [ ] 環境変数ファイル`secrets/supabase.env`の作成
+  - [ ] Docker ComposeでのSupabase接続設定の最適化
+
+### 2. サブドメイン間認証共有の実装
+
+- [ ] クッキーオプションの設定
+  - [ ] 共通ドメイン（`.localhost`）での認証共有の設定
+  - [ ] セキュアクッキー設定の実装
+
+- [ ] Supabase認証クライアントの設定
+  - [ ] サーバー側認証の設定
+  - [ ] クライアント側認証の設定
+
+### 3. 環境変数の整理と最適化
+
+- [ ] Docker Compose用の環境変数設定
+  - [ ] SupabaseのURL、API Keyなどの統一管理
+  - [ ] 秘密鍵の安全な管理方法の実装
+
+- [ ] 開発環境と本番環境の環境変数分離
+  - [ ] 環境別の変数ファイルの作成
+  - [ ] 環境変数のフォールバック設定
+
+### 4. クライアントSDK接続設定
+
+- [ ] 各アプリケーションでのSupabase接続設定の統一
+  - [ ] 共通の接続設定モジュールの作成
+  - [ ] サブドメイン対応の設定の実装
+
+## 実装詳細
+
+### Supabase接続設定
+
+#### 環境変数ファイルの設定
+
+```env
+# secrets/supabase.env
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_ANON_KEY=<your-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
+
+# データベース設定
+SUPABASE_DB_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+SUPABASE_DB_PASSWORD=postgres
+```
+
+#### Docker Compose設定への統合
+
+```yaml
+# docker-compose.yml (一部抜粋)
+services:
+  web:
+    # ... 既存の設定 ...
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    networks:
+      - app_network
+    # ... 他の設定 ...
+  
+  # 他のサービス定義 ...
+
+networks:
+  app_network:
+    driver: bridge
+```
+
+### サブドメイン間認証共有の設定
+
+#### クッキーオプションの実装
+
+次のコードをクライアントの初期化時に使用することで、サブドメイン間で認証を共有できます：
+
+```typescript
+// apps/shared/supabase/client.ts
+import { createClient } from '@supabase/supabase-js'
+
+export const createSupabaseClient = (supabaseUrl: string, supabaseKey: string) => {
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      cookieOptions: {
+        name: 'supabase-auth-token',
+        domain: '.localhost', // すべてのサブドメインで共有
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+      }
+    }
+  })
+}
+```
+
+#### サーバーサイド認証の設定
+
+Next.js 15のサーバーコンポーネントでの使用例：
+
+```typescript
+// apps/web/app/auth-provider.tsx
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export function createServerSupabaseClient() {
+  const cookieStore = cookies()
+  
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value
+        },
+        set(name, value, options) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name, options) {
+          cookieStore.set({ name, value: '', ...options })
+        },
+      },
+    }
+  )
+}
+```
+
+### 環境変数の整理
+
+#### 秘密鍵管理
+
+秘密鍵は`secrets`ディレクトリで管理し、環境変数として注入します：
+
+```bash
+# scripts/dev/generate-secrets.sh
+#!/bin/bash
+
+mkdir -p ./secrets
+echo "SUPABASE_ANON_KEY=$(supabase status -o json | jq -r '.project_info.anon_key')" > ./secrets/supabase.env
+echo "SUPABASE_SERVICE_ROLE_KEY=$(supabase status -o json | jq -r '.project_info.service_role_key')" >> ./secrets/supabase.env
+echo "SUPABASE_URL=http://127.0.0.1:54321" >> ./secrets/supabase.env
+echo "SUPABASE_DB_PASSWORD=postgres" >> ./secrets/supabase.env
+```
+
+#### Docker Composeでの環境変数注入
+
+```bash
+# 開発環境での実行コマンド
+docker compose --env-file ./secrets/supabase.env up -d web docs admin
+```
+
+## 注意点とベストプラクティス
+
+1. **Supabase CLIとの関係**:
+   - Supabase CLIを優先的に使用し、Docker環境とSupabase CLIが連携するように設定します
+   - 既存のSupabaseプロセスが起動している場合、適切なポートとURLを設定してください
+
+2. **認証共有**:
+   - クッキーのドメイン設定が正しく `.localhost` (または本番環境では実際のドメイン) に設定されていることを確認
+   - サブドメイン間でのセッション共有が機能していることをテスト
+
+3. **本番環境との違い**:
+   - 開発環境では`localhost`を使用しますが、本番環境では実際のドメインを使用する必要があります
+   - 環境に応じて適切なセキュリティ設定を行ってください
+
+## トラブルシューティング
+
+- **Supabase接続エラー**: 
+  - Supabase CLIが正しく起動しているか確認
+  - 環境変数が正しく設定されているか確認
+  - Supabaseのステータスを `supabase status` で確認
+
+- **認証エラー**:
+  - ブラウザのストレージとクッキーを確認
+  - ネットワークタブでクッキーの設定が正しいか確認
+  - 開発者ツールでクッキードメインを確認
+
+- **ポート競合**:
+  - `lsof -i :54321` などのコマンドを使用して競合を確認
+  - 既存のプロセスを終了させてから再試行
+
+## 次のステップ
+
+フェーズ2が完了したら、フェーズ3「アプリケーションの移行」に進みます。 

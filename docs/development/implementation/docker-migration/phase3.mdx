@@ -1,0 +1,475 @@
+# フェーズ3: アプリケーションの移行
+
+このフェーズでは、モノレポ内の各Next.jsアプリケーションをDockerコンテナ化します。
+
+## 目標
+
+- Next.jsアプリケーション用のDockerfile作成
+- Turborepoキャッシュの最適化
+- サブドメイン間での認証共有の実装
+- 開発環境と本番環境の両方に対応
+- ホットリロードの維持
+
+## タスク
+
+### 3.1 Web アプリケーションの設定
+
+- [ ] Webアプリ用Dockerfile (`docker/web/Dockerfile`)
+
+  ```dockerfile
+  # マルチステージビルド用のDockerfile
+  ARG BUN_VERSION=1.2.4
+  
+  # ベースステージ（依存関係管理用）
+  FROM oven/bun:${BUN_VERSION} AS pruner
+  WORKDIR /app
+  RUN apt-get update && apt-get install -y curl
+  RUN npm install -g turbo@^2
+  COPY . .
+  RUN turbo prune web --docker
+  
+  # 依存関係インストールステージ
+  FROM oven/bun:${BUN_VERSION} AS installer
+  WORKDIR /app
+  COPY --from=pruner /app/out/json/ .
+  RUN bun install --frozen-lockfile
+  
+  # 開発ステージ
+  FROM oven/bun:${BUN_VERSION} AS dev
+  WORKDIR /app
+  
+  # 環境変数設定
+  ENV NODE_ENV=development
+  ENV NEXT_TELEMETRY_DISABLED=1
+  ENV WATCHPACK_POLLING=true
+  ENV CHOKIDAR_USEPOLLING=true
+  ENV BUN_INSTALL_CACHE="/app/.bun-cache"
+  ENV PORT=7510
+  
+  # 開発用設定
+  COPY --from=installer /app/node_modules ./node_modules
+  COPY . .
+  EXPOSE 7510
+  
+  # Volumeマウントポイント
+  VOLUME [ "/app/.turbo", "/app/.bun-cache" ]
+  
+  CMD ["bun", "run", "dev:web"]
+  
+  # ビルドステージ
+  FROM installer AS builder
+  WORKDIR /app
+  COPY --from=pruner /app/out/full/ .
+  RUN bun run build --filter=web
+  
+  # 本番用ステージ
+  FROM oven/bun:${BUN_VERSION} AS runner
+  WORKDIR /app
+  
+  # 本番用環境変数
+  ENV NODE_ENV=production
+  ENV NEXT_TELEMETRY_DISABLED=1
+  ENV PORT=7510
+  
+  # アプリケーションのコピー (Next.js standalone output)
+  COPY --from=builder /app/apps/web/.next/standalone ./
+  COPY --from=builder /app/apps/web/public ./apps/web/public
+  COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
+  
+  EXPOSE 7510
+  
+  CMD ["node", "apps/web/server.js"]
+  ```
+
+- [ ] `docker-compose.yml`にwebサービスを追加
+
+  ```yaml
+  web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+      target: dev
+    ports:
+      - "${WEB_PORT:-7510}:7510"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+      - turbo_cache:/app/.turbo
+      - bun_cache:/app/.bun-cache
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL:-http://127.0.0.1:54321}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-.localhost}
+      - SUPABASE_AUTH_COOKIE_SECURE=${SUPABASE_AUTH_COOKIE_SECURE:-false}
+      - SUPABASE_AUTH_COOKIE_SAME_SITE=${SUPABASE_AUTH_COOKIE_SAME_SITE:-lax}
+    networks:
+      - app_network
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web
+          target: /app/apps/web
+          ignore:
+            - .next/
+            - node_modules/
+        - action: sync
+          path: ./packages
+          target: /app/packages
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+          target: /app/package.json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7510/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  ```
+
+### 3.2 Docs・Admin アプリケーションの設定
+
+- [ ] Docsアプリ用Dockerfile (`docker/docs/Dockerfile`)
+  ```dockerfile
+  # マルチステージビルド用のDockerfile
+  ARG BASE_IMAGE=oven/bun:1.2.4
+  
+  # ベースステージ（依存関係管理用）
+  FROM ${BASE_IMAGE} AS pruner
+  WORKDIR /app
+  RUN apt-get update && apt-get install -y curl
+  RUN npm install -g turbo@^2
+  COPY . .
+  RUN turbo prune docs --docker
+  
+  # 依存関係インストールステージ
+  FROM ${BASE_IMAGE} AS installer
+  WORKDIR /app
+  COPY --from=pruner /app/out/json/ .
+  RUN bun install --frozen-lockfile
+  
+  # 開発ステージ
+  FROM ${BASE_IMAGE} AS dev
+  WORKDIR /app
+  
+  # 環境変数設定
+  ENV NODE_ENV=development
+  ENV NEXT_TELEMETRY_DISABLED=1
+  ENV WATCHPACK_POLLING=true
+  ENV CHOKIDAR_USEPOLLING=true
+  ENV BUN_INSTALL_CACHE="/app/.bun-cache"
+  ENV PORT=7511
+  
+  # 開発用設定
+  COPY --from=installer /app/node_modules ./node_modules
+  COPY . .
+  EXPOSE 7511
+  
+  # Volumeマウントポイント
+  VOLUME [ "/app/.turbo", "/app/.bun-cache" ]
+  
+  CMD ["bun", "run", "dev:docs"]
+  
+  # ビルドステージ
+  FROM installer AS builder
+  WORKDIR /app
+  COPY --from=pruner /app/out/full/ .
+  RUN bun run build --filter=docs
+  
+  # 本番用ステージ
+  FROM ${BASE_IMAGE} AS runner
+  WORKDIR /app
+  
+  # 本番用環境変数
+  ENV NODE_ENV=production
+  ENV NEXT_TELEMETRY_DISABLED=1
+  ENV PORT=7511
+  
+  # アプリケーションのコピー (Next.js standalone output)
+  COPY --from=builder /app/apps/docs/.next/standalone ./
+  COPY --from=builder /app/apps/docs/public ./apps/docs/public
+  COPY --from=builder /app/apps/docs/.next/static ./apps/docs/.next/static
+  
+  EXPOSE 7511
+  
+  CMD ["node", "apps/docs/server.js"]
+  ```
+
+- [ ] `docker-compose.yml`にdocsサービスを追加
+
+  ```yaml
+  docs:
+    build:
+      context: .
+      dockerfile: docker/docs/Dockerfile
+      target: dev
+    ports:
+      - "${DOCS_PORT:-7511}:7511"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+      - turbo_cache:/app/.turbo
+      - bun_cache:/app/.bun-cache
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL:-http://127.0.0.1:54321}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-.localhost}
+      - SUPABASE_AUTH_COOKIE_SECURE=${SUPABASE_AUTH_COOKIE_SECURE:-false}
+      - SUPABASE_AUTH_COOKIE_SAME_SITE=${SUPABASE_AUTH_COOKIE_SAME_SITE:-lax}
+    networks:
+      - app_network
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/docs
+          target: /app/apps/docs
+          ignore:
+            - .next/
+            - node_modules/
+        - action: sync
+          path: ./packages
+          target: /app/packages
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+          target: /app/package.json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7511/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  ```
+
+- [ ] 同様にAdminアプリケーション用の設定ファイルも作成（`docker/admin/Dockerfile`およびdocker-compose.ymlへの追加）
+
+### 3.3 Next.js設定の調整
+
+- [ ] Supabase認証用の共通モジュールの作成 (`packages/shared/supabase/client.ts`)
+
+  ```typescript
+  import { createClient } from '@supabase/supabase-js'
+  
+  export const createSupabaseClient = (supabaseUrl: string, supabaseKey: string) => {
+    return createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        cookieOptions: {
+          name: 'supabase-auth-token',
+          domain: process.env.COOKIE_DOMAIN || '.localhost',
+          path: '/',
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production'
+        }
+      }
+    })
+  }
+  ```
+
+- [ ] サーバーサイド認証用のヘルパー関数 (`packages/shared/supabase/server.ts`)
+
+  ```typescript
+  import { createServerClient } from '@supabase/ssr'
+  import { cookies } from 'next/headers'
+  
+  export function createServerSupabaseClient() {
+    const cookieStore = cookies()
+    
+    return createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name) {
+            return cookieStore.get(name)?.value
+          },
+          set(name, value, options) {
+            cookieStore.set({ name, value, ...options })
+          },
+          remove(name, options) {
+            cookieStore.set({ name, value: '', ...options })
+          },
+        },
+      }
+    )
+  }
+  ```
+
+### 3.4 Turborepo最適化設定
+
+- [ ] `turbo.json`の設定変更
+
+  ```json
+  {
+    "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": [".env", ".env.local", ".env.docker"],
+    "pipeline": {
+      "build": {
+        "dependsOn": ["^build"],
+        "outputs": [".next/**", "dist/**", "build/**", "standalone/**"]
+      },
+      "lint": {},
+      "dev": {
+        "cache": false,
+        "persistent": true
+      },
+      "dev:web": {
+        "cache": false,
+        "persistent": true
+      },
+      "dev:docs": {
+        "cache": false,
+        "persistent": true
+      },
+      "dev:admin": {
+        "cache": false,
+        "persistent": true
+      },
+      "clean": {
+        "cache": false
+      }
+    }
+  }
+  ```
+
+### 3.5 開発環境起動統合スクリプト
+
+- [ ] アプリケーション起動スクリプト (`scripts/dev/start-apps.sh`)
+
+  ```bash
+  #!/bin/bash
+  set -e
+  
+  # 既存のSupabaseを確認して必要に応じて起動
+  supabase status >/dev/null 2>&1 || {
+    echo "Supabaseが起動していません。起動しています..."
+    supabase start
+  }
+  
+  # Supabaseの環境変数を準備
+  mkdir -p ./secrets
+  
+  # Supabase環境変数ファイルが存在しない場合は生成
+  if [ ! -f ./secrets/supabase.env ]; then
+    echo "Supabase環境変数ファイルを生成しています..."
+    echo "SUPABASE_ANON_KEY=$(supabase status -o json | jq -r '.project_info.anon_key')" > ./secrets/supabase.env
+    echo "SUPABASE_SERVICE_ROLE_KEY=$(supabase status -o json | jq -r '.project_info.service_role_key')" >> ./secrets/supabase.env
+    echo "SUPABASE_URL=http://127.0.0.1:54321" >> ./secrets/supabase.env
+  fi
+  
+  # アプリケーションを起動
+  echo "アプリケーションコンテナを起動しています..."
+  docker compose --env-file ./secrets/supabase.env up -d web docs admin
+  
+  echo "✅ 開発環境が起動しました！"
+  echo "Web: http://localhost:7510 (web.localhost)"
+  echo "Docs: http://localhost:7511 (docs.localhost)"
+  echo "Admin: http://localhost:7512 (admin.localhost)"
+  echo "注意: ホスト名を使用するには、'/etc/hosts'に適切なエントリを追加してください。"
+  echo "スクリプト'./scripts/dev/setup-hosts.sh'を実行することでこれを自動化できます。"
+  ```
+
+- [ ] アプリケーション停止スクリプト (`scripts/dev/stop-apps.sh`)
+
+  ```bash
+  #!/bin/bash
+  
+  echo "アプリケーションコンテナを停止しています..."
+  docker compose stop web docs admin
+  
+  echo "✅ アプリケーションが停止しました！"
+  ```
+
+### 3.6 Docker Volumeの設定
+
+- [ ] `docker-compose.yml`にボリューム定義を追加
+
+  ```yaml
+  volumes:
+    node_modules:
+      driver: local
+    turbo_cache:
+      driver: local
+    bun_cache:
+      driver: local
+  ```
+
+### 3.7 Docker Compose ネットワーク設定
+
+- [ ] ネットワーク設定の追加
+
+  ```yaml
+  networks:
+    app_network:
+      driver: bridge
+  ```
+
+## 注意点とベストプラクティス
+
+### Next.js 15の特性を活かす
+
+- App Routerの利用
+- Server ComponentsとClient Componentsの適切な分離
+- Standalone出力の利用による最適化
+
+### Dockerでの開発体験の改善
+
+1. **ホットリロードの最適化**
+   - `WATCHPACK_POLLING=true`の設定
+   - ホスト・コンテナ間のファイル同期設定
+
+2. **ビルドパフォーマンスの向上**
+   - マルチステージビルドの活用
+   - キャッシュレイヤーの最適化
+   - Turborepoキャッシュの永続化
+
+3. **Apple Siliconでのパフォーマンス最適化**
+   - VirtioFS利用のためのDocker Desktop設定
+   - メモリ割り当ての最適化
+
+### Supabase認証の使用
+
+- 統一されたSupabase接続設定
+- サブドメイン間でのクッキー共有
+- Next.js 15のサーバーコンポーネントでの認証状態管理
+
+## 検証項目
+
+- [ ] 各アプリケーションが単独で起動するか
+- [ ] ホットリロードが機能するか
+- [ ] Turborepoキャッシュが適切に保存・復元されるか
+- [ ] サブドメイン間で認証状態が共有されるか
+- [ ] Intel CPUとApple Siliconの両方でパフォーマンスが良好か
+
+## エラー対応ガイド
+
+| エラー | 解決策 |
+|-------|--------|
+| `Cannot find module 'xxxx'` | `node_modules`ボリュームが正しくマウントされているか確認、`bun install`の再実行 |
+| ホットリロードが機能しない | `WATCHPACK_POLLING=true`などの環境変数が設定されているか確認、Docker Desktop設定でファイル共有最適化を有効化 |
+| 認証エラー | ブラウザでのCookieドメイン設定を確認、環境変数`COOKIE_DOMAIN`を`.localhost`に設定 |
+| ビルドが遅い | Turborepoキャッシュが正しく設定されているか確認、Docker Desktop設定でリソース割り当てを増加 |
+| `next dev`によるポートの競合 | Docker ComposeでのPORTS設定を確認、アプリケーションの起動スクリプトの調整 |
+
+## シナリオテスト
+
+1. **新規ログインテスト**
+   - webアプリでログイン
+   - docsアプリへの遷移でログイン状態が保持されているか確認
+
+2. **リアルタイム更新テスト**
+   - コンテナ内のファイルを編集して変更が反映されるか確認
+   - 編集〜反映までの時間を測定
+
+3. **ビルドパフォーマンステスト**
+   - キャッシュなしでの初回ビルド時間
+   - キャッシュありでの2回目以降のビルド時間
+   - キャッシュの永続化確認
+
+## 次のステップ
+
+アプリケーションがDockerで正常に動作するようになったら、[フェーズ4: Nginx設定](./phase4.md)に進みます。 

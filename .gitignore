@@ -67,3 +67,4 @@ supabase/seed.sql
 .cache/
 */.cache/
 **/.cache/
+/secrets/
