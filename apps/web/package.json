@@ -9,7 +9,7 @@
     "build": "bun run with-env next build",
     "build:test": "NODE_ENV=test bun run with-env:test next build",
     "clean": "git clean -xdf .next .turbo node_modules",
-    "dev": "bun run with-env next dev --turbo --port 7510 | pino-pretty -c",
+    "dev": "bun run with-env next dev --turbo  | pino-pretty -c",
     "lint": "biome lint .",
     "format": "biome format .",
     "start": "bun run with-env next start",
@@ -91,9 +91,5 @@
     "tailwindcss-animate": "1.0.7",
     "typescript": "5.8.2"
   },
-  "browserslist": [
-    "last 1 versions",
-    "> 0.7%",
-    "not dead"
-  ]
+  "browserslist": ["last 1 versions", "> 0.7%", "not dead"]
 }

@@ -78,6 +78,7 @@
     "tooling/*"
   ],
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
     "mermaid": "^11.4.1"
   }
 }
