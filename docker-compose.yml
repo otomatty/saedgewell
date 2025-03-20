@@ -1,0 +1,15 @@
+version: '3.8'
+  
+services:
+  # 基本設定（後で各サービスを追加）
+    
+networks:
+  saedgewell_net:
+    driver: bridge
+
+volumes:
+  node_modules:
+  turbo_cache:
+  bun_cache:
+  supabase_data:
+  postgres_data:
