@@ -14,6 +14,7 @@ import { cache } from 'react';
 import type { DocFrontmatter } from '../../types/mdx';
 import { DocFrontmatterSchema } from '../../lib/mdx/frontmatter';
 import { remarkKeywordLinks } from '../../lib/mdx/remark-keyword-links';
+import { getContentPath } from '../../config/paths';
 
 // rehype-highlightの設定
 const highlightOptions = {
@@ -64,7 +65,7 @@ export const getDocBySlug = cache(async (slug: string[]) => {
   }
 
   // スラッグからファイルパスを構築
-  const filePath = join(process.cwd(), 'contents', ...slug);
+  const filePath = getContentPath(...slug);
 
   // ファイルが存在するか確認
   let fullPath = '';
@@ -179,7 +180,7 @@ export async function doesDocExist(slug: string[]): Promise<boolean> {
   }
 
   // スラッグからファイルパスを構築
-  const filePath = join(process.cwd(), 'contents', ...slug);
+  const filePath = getContentPath(...slug);
 
   // ファイルが存在するか確認
   return (
@@ -201,7 +202,7 @@ export async function getDocContent(slug: string[]): Promise<string> {
   }
 
   // スラッグからファイルパスを構築
-  const filePath = join(process.cwd(), 'contents', ...slug);
+  const filePath = getContentPath(...slug);
 
   // ファイルが存在するか確認
   let fullPath = '';

@@ -4,24 +4,25 @@ import matter from 'gray-matter';
 import { z } from 'zod';
 import type { DocNode } from '~/types/mdx';
 import { DocFrontmatterSchema, generateTitleFromFilename } from './frontmatter';
+import { getDocRootPath } from '~/config/paths';
 
 const docTreeCache = new Map<string, { data: DocNode[]; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5分
 
 /**
  * ドキュメントツリーを構築する
- * @param contentDir コンテンツディレクトリのパス
+ * @param contentDir コンテンツディレクトリのパス（.docsからの相対パス）
  * @returns ドキュメントツリー
  */
-export function getDocTree(contentDir = 'contents/docs'): DocNode[] {
+export function getDocTree(contentDir = ''): DocNode[] {
   // キャッシュチェック
   const cached = docTreeCache.get(contentDir);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     return cached.data;
   }
 
-  const baseDir = process.cwd();
-  const docsDir = join(baseDir, contentDir);
+  const baseDir = getDocRootPath();
+  const docsDir = contentDir ? join(baseDir, contentDir) : baseDir;
 
   // ディレクトリが存在しない場合は空の配列を返す
   if (!existsSync(docsDir)) {

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDocTree } from '~/lib/mdx/docs';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { getContentPath } from '~/config/paths';
 
 export async function GET(
   request: Request,
@@ -13,9 +14,7 @@ export async function GET(
     const subDir = url.searchParams.get('subDir');
 
     // ディレクトリの存在確認
-    const baseDir = process.cwd();
-    const contentDir = `contents/${type}`;
-    const fullPath = join(baseDir, contentDir);
+    const fullPath = getContentPath(type);
 
     if (!existsSync(fullPath)) {
       console.warn(`Directory not found: ${fullPath}`);
@@ -30,7 +29,7 @@ export async function GET(
         return NextResponse.json([], { status: 404 });
       }
 
-      const allDocs = getDocTree(`contents/${type}`);
+      const allDocs = getDocTree(type);
 
       // 指定されたサブディレクトリに対応するDocNodeを探す
       const subDirNode = allDocs.find((item) => {
@@ -48,7 +47,7 @@ export async function GET(
     }
 
     // 通常のケース：すべてのドキュメントを返す
-    const docTree = getDocTree(`contents/${type}`);
+    const docTree = getDocTree(type);
     return NextResponse.json(docTree);
   } catch (error) {
     console.error('Error in /api/docs/[type]:', error);

@@ -5,6 +5,7 @@ import { DocContent } from '~/components/doc/DocContent';
 import { ErrorBoundary } from '~/components/error/ErrorBoundary';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { getContentPath } from '~/config/paths';
 
 interface PageProps {
   params: Promise<{
@@ -67,7 +68,7 @@ export default async function DocPage(props: PageProps) {
     }
 
     // ディレクトリの存在確認
-    const contentDir = join(process.cwd(), 'contents', category, docType);
+    const contentDir = getContentPath(category, docType);
     if (!existsSync(contentDir)) {
       console.error(`DocPage: Content directory not found: ${contentDir}`);
       return notFound();
