@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@kit/ui/tabs';
 import { DocTypeGrid } from './DocTypeGrid';
 import { TagFilter } from './TagFilter';
-import type { DocType, DocCategory } from '~/lib/mdx/types';
+import type { DocType, DocCategory } from '~/types/mdx';
 
 interface DocTypeTabsProps {
   categories: DocCategory[];

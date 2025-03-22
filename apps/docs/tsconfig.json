@@ -11,7 +11,8 @@
       "~/lib/*": ["./lib/*"],
       "~/actions/*": ["./actions/*"],
       "~/services/*": ["./services/*"],
-      "~/hooks/*": ["./hooks/*"]
+      "~/hooks/*": ["./hooks/*"],
+      "~/store/*": ["./store/*"]
     },
     "plugins": [
       {
