@@ -45,4 +45,4 @@
 - [🐛 バグ修正](?expand=1&template=bugfix.md)
 - [♻️ リファクタリング](?expand=1&template=refactoring.md)
 - [📝 ドキュメント更新](?expand=1&template=documentation.md)
-- [�� 汎用PR](?expand=1) 
+- [📂 汎用PR](?expand=1) 
