@@ -4,7 +4,6 @@ import { getDocFromParams } from '~/actions/mdx/mdx-processor';
 import { DocContent } from '~/components/doc/DocContent';
 import { ErrorBoundary } from '~/components/error/ErrorBoundary';
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { getContentPath } from '~/config/paths';
 
 interface PageProps {
