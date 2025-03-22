@@ -94,6 +94,20 @@ export function getDocTypes() {
           if (existsSync(indexPath)) {
             try {
               const indexContent = JSON.parse(readFileSync(indexPath, 'utf-8'));
+
+              // タグ処理: 新しい形式に変換
+              let tags = indexContent.tags || {};
+              if (typeof tags === 'object' && !Array.isArray(tags)) {
+                // タグを配列に変換
+                const tagArray: string[] = [];
+                for (const tagType in tags) {
+                  if (Array.isArray(tags[tagType])) {
+                    tagArray.push(...tags[tagType]);
+                  }
+                }
+                tags = tagArray;
+              }
+
               docTypes.push({
                 id: docTypeId,
                 title: indexContent.title || docTypeId,
@@ -101,7 +115,7 @@ export function getDocTypes() {
                 category: 'documents',
                 thumbnail: indexContent.thumbnail || undefined,
                 icon: indexContent.icon || undefined,
-                tags: indexContent.tags || {},
+                tags: tags,
               });
             } catch (error) {
               console.error(`Error parsing ${indexPath}:`, error);
@@ -151,22 +165,16 @@ export function getDocTypes() {
             const icon = iconMatch?.[1]?.trim();
 
             // タグを抽出
-            let tags: { tech?: string[]; type?: string[] } | undefined =
-              undefined;
+            const tags: string[] = [];
 
             if (tagsMatch) {
               const tagValue = tagsMatch[1]?.trim();
               if (tagValue === 'technical') {
-                const techTags: string[] = [];
-                if (content.includes('nextjs')) techTags.push('nextjs');
-                if (content.includes('react')) techTags.push('react');
-                if (content.includes('supabase')) techTags.push('supabase');
-
-                if (techTags.length > 0) {
-                  tags = { tech: techTags };
-                }
+                if (content.includes('nextjs')) tags.push('nextjs');
+                if (content.includes('react')) tags.push('react');
+                if (content.includes('supabase')) tags.push('supabase');
               } else if (tagValue === 'business') {
-                tags = { type: ['business'] };
+                tags.push('business');
               }
             }
 
@@ -222,10 +230,7 @@ export function getDocTypes() {
                 category: 'journals',
                 thumbnail: indexContent.thumbnail,
                 icon: indexContent.icon,
-                tags: {
-                  type: ['date'],
-                  date: [dateDir.name],
-                },
+                tags: [],
                 date: indexContent.date || dateDir.name,
                 author: indexContent.author,
                 githubCommits, // GitHubコミット情報を追加
@@ -239,9 +244,23 @@ export function getDocTypes() {
 
                   // MDXファイルが存在するか確認
                   if (existsSync(mdxPath)) {
-                    // タグ情報をマージ
-                    const tags = { ...entry.tags };
-                    if (!tags.date) tags.date = [dateDir.name];
+                    // タグ情報を処理
+                    let tags: string[] = [dateDir.name];
+
+                    // 旧形式のタグを新形式に変換
+                    if (
+                      entry.tags &&
+                      typeof entry.tags === 'object' &&
+                      !Array.isArray(entry.tags)
+                    ) {
+                      for (const tagType in entry.tags) {
+                        if (Array.isArray(entry.tags[tagType])) {
+                          tags.push(...entry.tags[tagType]);
+                        }
+                      }
+                    } else if (Array.isArray(entry.tags)) {
+                      tags = [...entry.tags, dateDir.name];
+                    }
 
                     wikiEntries.push({
                       id: `journals/${dateDir.name}/${entryId}`,
@@ -281,10 +300,7 @@ export function getDocTypes() {
                 title: `${dateDir.name}の作業記録`,
                 description: `${dateDir.name}の作業記録`,
                 category: 'journals',
-                tags: {
-                  type: ['date'],
-                  date: [dateDir.name],
-                },
+                tags: [],
               });
 
               // 各MDXファイルも個別にエントリとして追加
@@ -300,7 +316,9 @@ export function getDocTypes() {
                   // フロントマターから情報を抽出（簡易的な実装）
                   const titleMatch = content.match(/title:\s*(.+)/);
                   const descriptionMatch = content.match(/description:\s*(.+)/);
-                  const tagsMatch = content.match(/tags:\s*(.+)/);
+                  const tagsMatch = content.match(
+                    /tags:\s*(.+\n(?:\s+-\s+.+\n)*)/s
+                  ); // 複数行のYAMLリストに対応
                   const thumbnailMatch = content.match(/thumbnail:\s*(.+)/);
                   const iconMatch = content.match(/icon:\s*(.+)/);
 
@@ -311,26 +329,45 @@ export function getDocTypes() {
                   const thumbnail = thumbnailMatch?.[1]?.trim();
                   const icon = iconMatch?.[1]?.trim();
 
-                  // タグを抽出（配列形式を想定）
-                  const tags: {
-                    tech?: string[];
-                    type?: string[];
-                    date?: string[];
-                  } = { date: [dateDir.name] };
+                  // タグを抽出（配列形式とYAMLリスト形式の両方に対応）
+                  let tags: string[] = [];
 
                   if (tagsMatch?.[1]) {
                     try {
-                      // YAML形式のタグを解析（簡易実装）
-                      const tagLine = tagsMatch[1].trim();
-                      if (tagLine.startsWith('[') && tagLine.endsWith(']')) {
-                        const tagArray = tagLine
+                      const tagContent = tagsMatch[1].trim();
+
+                      // インライン配列形式: [tag1, tag2, tag3]
+                      if (
+                        tagContent.startsWith('[') &&
+                        tagContent.endsWith(']')
+                      ) {
+                        const tagArray = tagContent
                           .slice(1, -1)
                           .split(',')
-                          .map((t) =>
-                            t.trim().replace(/'/g, '').replace(/"/g, '')
-                          );
+                          .map((t) => t.trim().replace(/['"]/g, ''));
 
-                        tags.tech = tagArray;
+                        tags = [...tagArray];
+                      }
+                      // YAMLリスト形式:
+                      // tags:
+                      //   - tag1
+                      //   - tag2
+                      else if (tagContent.includes('\n')) {
+                        const tagArray = tagContent
+                          .split('\n')
+                          .map((line) => {
+                            const match = line.match(/\s*-\s*(.+)/);
+                            return match?.[1]?.trim() || null;
+                          })
+                          .filter(Boolean) as string[];
+
+                        if (tagArray.length > 0) {
+                          tags = [...tagArray];
+                        }
+                      }
+                      // 単一文字列形式: tag
+                      else {
+                        tags = [tagContent];
                       }
                     } catch (e) {
                       console.error(`Error parsing tags for ${filePath}:`, e);

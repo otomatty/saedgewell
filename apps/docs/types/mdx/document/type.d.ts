@@ -38,12 +38,11 @@ export interface DocType {
   /** エンティティの種類（ドキュメントタイプ） */
   type?: 'docType';
   /** タグ情報 */
-  tags?: {
-    type?: string[];
-    tech?: string[];
-    date?: string[];
-    [key: string]: string[] | undefined;
-  };
+  tags?:
+    | string[]
+    | {
+        [key: string]: string[] | undefined;
+      };
   /** ドキュメントの要約（主に日記用） */
   summary?: string;
   /** ドキュメントの日付（主に日記用） */

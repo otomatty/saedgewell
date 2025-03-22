@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@kit/ui/tabs';
 import { DocTypeGrid } from './DocTypeGrid';
 import { JournalList } from './JournalList';
@@ -20,38 +20,71 @@ export function DocTypeTabs({
 }: DocTypeTabsProps) {
   const [activeTab, setActiveTab] = useState(categories[0]?.id || '');
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [activeTagType, setActiveTagType] = useState<'type' | 'tech' | null>(
-    null
-  );
 
-  // 利用可能なタグを収集
-  const allTags = new Map<string, { id: string; type: 'type' | 'tech' }>();
+  // 利用可能なタグを収集し、使用頻度でソート
+  const allTags = useMemo(() => {
+    // タグの使用回数をカウント
+    const tagCounts = new Map<string, number>();
 
-  for (const docType of docTypes) {
-    if (docType.tags?.type) {
-      for (const tag of docType.tags.type) {
-        allTags.set(`type:${tag}`, { id: tag, type: 'type' });
+    for (const docType of docTypes) {
+      if (Array.isArray(docType.tags)) {
+        // 新しい形式: タグが配列の場合
+        for (const tag of docType.tags) {
+          tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+        }
+      } else if (docType.tags && typeof docType.tags === 'object') {
+        // 互換性のための処理: 旧形式のタグ
+        for (const [tagType, tagList] of Object.entries(docType.tags)) {
+          if (Array.isArray(tagList)) {
+            for (const tag of tagList) {
+              tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+            }
+          }
+        }
       }
     }
-    if (docType.tags?.tech) {
-      for (const tag of docType.tags.tech) {
-        allTags.set(`tech:${tag}`, { id: tag, type: 'tech' });
-      }
+
+    // タグをMap形式に変換し、使用頻度でソート
+    const tagsMap = new Map<string, { id: string; count: number }>();
+
+    // 使用頻度でソートしたタグのリストを作成
+    const sortedTags = [...tagCounts.entries()]
+      .sort((a, b) => b[1] - a[1]) // 使用回数で降順ソート
+      .map(([tagId, count]) => ({ id: tagId, count }));
+
+    // ソートされたタグをMapに追加
+    for (const tag of sortedTags) {
+      tagsMap.set(tag.id, tag);
     }
-  }
+
+    return tagsMap;
+  }, [docTypes]);
 
   // タグでフィルタリングされたドキュメントタイプを取得
   const getFilteredDocTypes = (docs: DocType[]) => {
-    if (!activeTag || !activeTagType) return docs;
+    if (!activeTag) return docs;
 
     return docs.filter((docType) => {
-      if (activeTagType === 'type') {
-        return docType.tags?.type?.includes(activeTag);
+      // Journalsカテゴリの場合は、フィルタリングをJournalListに任せる
+      if (docType.category === 'journals' && !docType.parentId) {
+        return true;
       }
-      if (activeTagType === 'tech') {
-        return docType.tags?.tech?.includes(activeTag);
+
+      if (Array.isArray(docType.tags)) {
+        // 新しい形式: タグが配列の場合
+        return docType.tags.includes(activeTag);
       }
-      return true;
+
+      if (docType.tags && typeof docType.tags === 'object') {
+        // 互換性のための処理: 旧形式のタグ
+        for (const tagList of Object.values(docType.tags)) {
+          if (Array.isArray(tagList) && tagList.includes(activeTag)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
     });
   };
 
@@ -63,7 +96,6 @@ export function DocTypeTabs({
   // タグをリセット
   const resetTags = () => {
     setActiveTag(null);
-    setActiveTagType(null);
   };
 
   // タブ変更時にタグもリセット
@@ -73,12 +105,11 @@ export function DocTypeTabs({
   };
 
   // タグ選択時の処理
-  const handleTagClick = (tagId: string, tagType: 'type' | 'tech') => {
-    if (activeTag === tagId && activeTagType === tagType) {
+  const handleTagClick = (tagId: string) => {
+    if (activeTag === tagId) {
       resetTags();
     } else {
       setActiveTag(tagId);
-      setActiveTagType(tagType);
     }
   };
 
@@ -108,7 +139,6 @@ export function DocTypeTabs({
         <TagFilter
           allTags={allTags}
           activeTag={activeTag}
-          activeTagType={activeTagType}
           onTagClick={handleTagClick}
           onReset={resetTags}
         />
@@ -126,6 +156,7 @@ export function DocTypeTabs({
               {category.id === 'journals' ? (
                 <JournalList
                   docTypes={getCurrentDocTypes()}
+                  activeTag={activeTag}
                   emptyMessage={`条件に一致する${category.title}はありません。`}
                 />
               ) : (

@@ -8,6 +8,7 @@ export const DocFrontmatterSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   order: z.number().default(9999),
+  tags: z.array(z.string()).optional(),
 });
 
 /**

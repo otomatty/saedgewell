@@ -4,17 +4,15 @@ import { Badge } from '@kit/ui/badge';
 import { getTagDisplayName } from '~/lib/mdx/tag-mappings';
 
 interface TagFilterProps {
-  allTags: Map<string, { id: string; type: 'type' | 'tech' }>;
+  allTags: Map<string, { id: string; count?: number }>;
   activeTag: string | null;
-  activeTagType: 'type' | 'tech' | null;
-  onTagClick: (tagId: string, tagType: 'type' | 'tech') => void;
+  onTagClick: (tagId: string) => void;
   onReset: () => void;
 }
 
 export function TagFilter({
   allTags,
   activeTag,
-  activeTagType,
   onTagClick,
   onReset,
 }: TagFilterProps) {
@@ -24,16 +22,17 @@ export function TagFilter({
         <div className="flex flex-wrap gap-2">
           {Array.from(allTags.values()).map((tag) => (
             <Badge
-              key={`${tag.type}:${tag.id}`}
-              variant={
-                activeTag === tag.id && activeTagType === tag.type
-                  ? 'default'
-                  : 'outline'
-              }
-              className="cursor-pointer"
-              onClick={() => onTagClick(tag.id, tag.type)}
+              key={tag.id}
+              variant={activeTag === tag.id ? 'default' : 'outline'}
+              className="cursor-pointer flex items-center gap-1.5"
+              onClick={() => onTagClick(tag.id)}
             >
-              #{getTagDisplayName(tag.id, tag.type)}
+              <span># {getTagDisplayName(tag.id)}</span>
+              {tag.count && (
+                <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-1.5 text-xs font-medium">
+                  {tag.count}
+                </span>
+              )}
             </Badge>
           ))}
         </div>

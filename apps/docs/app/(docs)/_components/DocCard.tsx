@@ -4,8 +4,10 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAtom } from 'jotai';
-import { Card, CardContent, CardHeader } from '@kit/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@kit/ui/card';
+import { Badge } from '@kit/ui/badge';
 import { Skeleton } from '@kit/ui/skeleton';
+import { getTagDisplayName } from '~/lib/mdx/tag-mappings';
 import {
   generatePlaceholderImage,
   DEFAULT_THUMBNAIL_PATH,
@@ -32,6 +34,9 @@ interface DocCardProps {
 
 // 標準的なプレースホルダー画像
 const DEFAULT_PLACEHOLDER = generatePlaceholderImage();
+
+// タグの表示数の制限
+const MAX_TAGS_TO_DISPLAY = 3;
 
 export function DocCard({ docType }: DocCardProps) {
   // グローバルな画像URLキャッシュを使用
@@ -153,6 +158,20 @@ export function DocCard({ docType }: DocCardProps) {
 
   const imageState = getImageState();
 
+  // タグを処理
+  const tags = Array.isArray(docType.tags)
+    ? docType.tags
+    : docType.tags && typeof docType.tags === 'object'
+      ? Object.values(docType.tags)
+          .filter(Array.isArray)
+          .flat()
+          .filter((tag): tag is string => typeof tag === 'string')
+      : [];
+
+  // 表示するタグを最大数に制限
+  const displayTags = tags.slice(0, MAX_TAGS_TO_DISPLAY);
+  const hasMoreTags = tags.length > MAX_TAGS_TO_DISPLAY;
+
   return (
     <Link href={getDocTypePath(docType)}>
       <Card className="h-full transition-colors hover:bg-muted/50">
@@ -203,6 +222,25 @@ export function DocCard({ docType }: DocCardProps) {
               {docType.description}
             </p>
           </CardContent>
+        )}
+        {displayTags.length > 0 && (
+          <CardFooter>
+            <div className="flex flex-wrap gap-1.5">
+              {displayTags.map((tag) => (
+                <Badge key={tag} variant="outline" className="text-xs">
+                  # {getTagDisplayName(tag)}
+                </Badge>
+              ))}
+              {hasMoreTags && (
+                <Badge
+                  variant="outline"
+                  className="text-xs text-muted-foreground"
+                >
+                  +{tags.length - MAX_TAGS_TO_DISPLAY}
+                </Badge>
+              )}
+            </div>
+          </CardFooter>
         )}
       </Card>
     </Link>

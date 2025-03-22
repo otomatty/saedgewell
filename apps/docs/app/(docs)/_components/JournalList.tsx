@@ -11,6 +11,7 @@ import type { DocType } from '~/types/mdx';
 interface JournalListProps {
   docTypes: DocType[];
   emptyMessage?: string;
+  activeTag?: string | null;
 }
 
 // 年月のセクション（スティッキーヘッダー用）
@@ -22,6 +23,7 @@ interface YearMonthSection {
 export function JournalList({
   docTypes,
   emptyMessage = '日記はまだありません。',
+  activeTag = null,
 }: JournalListProps) {
   // 親エントリ（日付）のみをフィルタリング
   const parentEntries = useMemo(() => {
@@ -34,6 +36,19 @@ export function JournalList({
 
     for (const doc of docTypes) {
       if (doc.parentId) {
+        // タグフィルタリングが適用されている場合、タグが一致する子エントリのみを表示
+        if (activeTag) {
+          const tags = doc.tags || [];
+          const hasTag = Array.isArray(tags)
+            ? tags.includes(activeTag)
+            : Object.values(tags).some(
+                (tagList) =>
+                  Array.isArray(tagList) && tagList.includes(activeTag)
+              );
+
+          if (!hasTag) continue;
+        }
+
         if (!result[doc.parentId]) {
           result[doc.parentId] = [];
         }
@@ -52,7 +67,17 @@ export function JournalList({
     }
 
     return result;
-  }, [docTypes]);
+  }, [docTypes, activeTag]);
+
+  // 親エントリがあり、かつ対応する子エントリがある場合のみ表示
+  const validParentEntries = useMemo(() => {
+    if (!activeTag) return parentEntries;
+
+    return parentEntries.filter((parent) => {
+      const entries = entriesByParent[parent.id];
+      return entries !== undefined && entries.length > 0;
+    });
+  }, [parentEntries, entriesByParent, activeTag]);
 
   // 年月ごとのエントリをグループ化
   const entriesByYearMonth = useMemo(() => {
@@ -60,7 +85,7 @@ export function JournalList({
     const yearMonthMap = new Map<string, DocType[]>();
 
     // 日付で降順ソート
-    const sortedEntries = [...parentEntries].sort((a, b) =>
+    const sortedEntries = [...validParentEntries].sort((a, b) =>
       (b.date || '').localeCompare(a.date || '')
     );
 
@@ -81,7 +106,7 @@ export function JournalList({
     }
 
     return groups;
-  }, [parentEntries]);
+  }, [validParentEntries]);
 
   // 現在見えている年月セクションを追跡
   const [activeYearMonth, setActiveYearMonth] = useState<string>('');
@@ -120,10 +145,19 @@ export function JournalList({
     };
   }, [activeYearMonth]);
 
-  if (parentEntries.length === 0) {
+  // タグフィルタリングが適用されていて、表示する子エントリがない場合
+  const allFilteredChildrenEmpty =
+    activeTag &&
+    Object.values(entriesByParent).every((entries) => entries.length === 0);
+
+  if (validParentEntries.length === 0 || allFilteredChildrenEmpty) {
     return (
       <div className="flex min-h-[200px] items-center justify-center rounded-lg border bg-muted/50 p-8">
-        <p className="text-center text-muted-foreground">{emptyMessage}</p>
+        <p className="text-center text-muted-foreground">
+          {activeTag
+            ? `「${activeTag}」のタグが付いた日記はありません。`
+            : emptyMessage}
+        </p>
       </div>
     );
   }
@@ -150,42 +184,55 @@ export function JournalList({
 
           {/* 各日付のエントリ */}
           <div className="space-y-8">
-            {entries.map((parent) => (
-              <div key={parent.id} className="space-y-4">
-                {/* 日付ヘッダー（曜日付き） */}
-                <h3
-                  className={`text-lg font-semibold flex items-center gap-2 ${
-                    parent.date && isWeekend(parent.date)
-                      ? parent.date.includes('-01-') // 1月1日は特別
-                        ? 'text-red-500'
-                        : parent.date.endsWith('-01') // 日曜日は赤
+            {entries.map((parent) => {
+              // この親エントリに対応する子エントリがあるか確認
+              const childEntries = entriesByParent[parent.id] || [];
+              const hasChildren = childEntries.length > 0;
+
+              // タグフィルタリングが適用されていて子エントリがない場合はスキップ
+              if (activeTag && !hasChildren) {
+                return null;
+              }
+
+              return (
+                <div key={parent.id} className="space-y-4">
+                  {/* 日付ヘッダー（曜日付き） */}
+                  <h3
+                    className={`text-lg font-semibold flex items-center gap-2 ${
+                      parent.date && isWeekend(parent.date)
+                        ? parent.date.includes('-01-') // 1月1日は特別
                           ? 'text-red-500'
-                          : 'text-blue-500' // 土曜日は青
-                      : ''
-                  }`}
-                >
-                  <Calendar className="size-5" />
-                  {parent.date ? getFormattedDay(parent.date) : parent.title}
-                </h3>
+                          : parent.date.endsWith('-01') // 日曜日は赤
+                            ? 'text-red-500'
+                            : 'text-blue-500' // 土曜日は青
+                        : ''
+                    }`}
+                  >
+                    <Calendar className="size-5" />
+                    {parent.date ? getFormattedDay(parent.date) : parent.title}
+                  </h3>
 
-                {/* GitHubコミット表示（存在する場合） */}
-                {parent.githubCommits && parent.githubCommits.length > 0 && (
-                  <GitHubCommits
-                    commits={parent.githubCommits}
-                    className="mt-3 mb-4"
-                  />
-                )}
+                  {/* GitHubコミット表示（存在する場合） */}
+                  {parent.githubCommits && parent.githubCommits.length > 0 && (
+                    <GitHubCommits
+                      commits={parent.githubCommits}
+                      className="mt-3 mb-4"
+                    />
+                  )}
 
-                <Separator className="my-4" />
+                  <Separator className="my-4" />
 
-                {/* この日の記事一覧 */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {entriesByParent[parent.id]?.map((entry) => (
-                    <DocCard key={entry.id} docType={entry} />
-                  ))}
+                  {/* この日の記事一覧 - タグでフィルタリングされている場合は一致する記事のみ表示 */}
+                  {hasChildren && (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {childEntries.map((entry) => (
+                        <DocCard key={entry.id} docType={entry} />
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}
