@@ -52,6 +52,21 @@ export interface DocType {
   author?: string;
   /** 親ドキュメントの識別子（階層構造を表現） */
   parentId?: string;
+  /** GitHubコミット情報（主に日記用） */
+  githubCommits?: Array<{
+    message: string;
+    sha: string;
+    date: string;
+    authorName: string;
+    authorLogin?: string;
+    authorAvatar?: string;
+    commitUrl: string;
+    repoName?: string;
+    repoOwner?: string;
+    repoUrl?: string;
+    additions?: number;
+    deletions?: number;
+  }>;
 }
 
 /**

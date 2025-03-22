@@ -210,6 +210,9 @@ export function getDocTypes() {
                 readFileSync(indexJsonPath, 'utf-8')
               );
 
+              // GitHubコミット情報があれば含める
+              const githubCommits = indexContent.commits || [];
+
               // index.jsonからの情報を使用してエントリを作成
               wikiEntries.push({
                 id: `journals/${dateDir.name}`,
@@ -225,6 +228,7 @@ export function getDocTypes() {
                 },
                 date: indexContent.date || dateDir.name,
                 author: indexContent.author,
+                githubCommits, // GitHubコミット情報を追加
               });
 
               // index.jsonに記載されている各エントリも処理

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@kit/ui/tabs';
 import { DocTypeGrid } from './DocTypeGrid';
+import { JournalList } from './JournalList';
 import { TagFilter } from './TagFilter';
 import type { DocType, DocCategory } from '~/types/mdx';
 
@@ -121,10 +122,18 @@ export function DocTypeTabs({
                   {category.description}
                 </p>
               )}
-              <DocTypeGrid
-                docTypes={getCurrentDocTypes()}
-                emptyMessage={`条件に一致する${category.title}はありません。`}
-              />
+              {/* 日記カテゴリの場合は特別なレイアウトを使用 */}
+              {category.id === 'journals' ? (
+                <JournalList
+                  docTypes={getCurrentDocTypes()}
+                  emptyMessage={`条件に一致する${category.title}はありません。`}
+                />
+              ) : (
+                <DocTypeGrid
+                  docTypes={getCurrentDocTypes()}
+                  emptyMessage={`条件に一致する${category.title}はありません。`}
+                />
+              )}
             </div>
           </TabsContent>
         ))}

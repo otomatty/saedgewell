@@ -9,7 +9,28 @@
       "id": "supabase-production-to-local-sync",
       "title": "Supabase本番環境からローカル環境へのデータ同期手順",
       "description": "本番環境のSupabaseデータベースのデータをローカル開発環境に同期し、同じデータを使用して開発を行うための手順",
-      "tags": ["supabase", "database", "開発環境", "データ同期"]
+      "tags": [
+        "supabase",
+        "database",
+        "開発環境",
+        "データ同期"
+      ]
+    }
+  ],
+  "commits": [
+    {
+      "message": "feat: Docker移行に関するドキュメントを追加\n\n- モノレポアプリケーションのDocker化に向けた詳細なマイルストーンを作成\n- 開発環境の準備、Supabaseの移行、アプリケーションの設定、Nginxの設定、最適化とテスト手順を文書化\n- 環境構築の自動化やCI/CD統合に関する手順も含め、開発フローの効率化を図る\n- adminアプリケーションのpackage.jsonの修正を含む",
+      "sha": "374a0a1dc4c09b485c2f520d6b156589896a351f",
+      "date": "2025-03-20T03:15:57Z",
+      "authorName": "otomatty",
+      "authorLogin": "otomatty",
+      "authorAvatar": "https://avatars.githubusercontent.com/u/119780981?v=4",
+      "commitUrl": "https://github.com/otomatty/saedgewell/commit/374a0a1dc4c09b485c2f520d6b156589896a351f",
+      "repoName": "saedgewell",
+      "repoOwner": "otomatty",
+      "repoUrl": "https://github.com/otomatty/saedgewell",
+      "additions": 916,
+      "deletions": 7
     }
   ]
 }
