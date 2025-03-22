@@ -7,12 +7,17 @@ import { join } from 'node:path';
 export const DOC_ROOT_DIR = '.docs';
 
 /**
+ * プロジェクトルートのパス
+ * 現在の環境での絶対パス
+ */
+export const PROJECT_ROOT = '/Users/sugaiakimasa/apps/saedgewell';
+
+/**
  * ドキュメントのルートディレクトリの絶対パスを取得
  * @returns ドキュメントルートディレクトリの絶対パス
  */
 export function getDocRootPath(): string {
-  // process.cwd()はプロジェクトルートを指すので、そこからの相対パスで.docsディレクトリを指定
-  return join(process.cwd(), DOC_ROOT_DIR);
+  return join(PROJECT_ROOT, DOC_ROOT_DIR);
 }
 
 /**

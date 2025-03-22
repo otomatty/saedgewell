@@ -7,6 +7,7 @@
 import { readdirSync, statSync, readFileSync, existsSync } from 'node:fs';
 import { join, basename, extname } from 'node:path';
 import type { DocType, DocCategory } from '~/types/mdx';
+import { getDocRootPath } from '~/config/paths';
 
 // カテゴリとタグの定義
 const CATEGORIES: DocCategory[] = [
@@ -61,43 +62,54 @@ export type { DocNavigation, DocNavigationItem } from './navigation';
 
 // ドキュメントタイプ関連の関数をエクスポート
 export function getDocTypes() {
-  const contentsDir = join(process.cwd(), 'contents');
+  const contentsDir = getDocRootPath(); // .docsディレクトリへのパスを取得
   const docTypes: DocType[] = [];
   const wikiEntries: DocType[] = [];
 
-  // カテゴリディレクトリを読み取る
-  for (const categoryId of readdirSync(contentsDir)) {
-    const categoryPath = join(contentsDir, categoryId);
+  try {
+    // カテゴリディレクトリを読み取る
+    for (const categoryId of readdirSync(contentsDir)) {
+      const categoryPath = join(contentsDir, categoryId);
 
-    // ディレクトリのみを処理
-    if (!statSync(categoryPath).isDirectory()) continue;
+      // ディレクトリのみを処理
+      if (!statSync(categoryPath).isDirectory()) continue;
 
-    // カテゴリに属するドキュメントタイプを読み取る
-    if (categoryId === 'documents') {
-      // documentsカテゴリの場合、各サブディレクトリがドキュメントタイプ
-      for (const docTypeId of readdirSync(categoryPath)) {
-        const docTypePath = join(categoryPath, docTypeId);
+      // カテゴリに属するドキュメントタイプを読み取る
+      if (categoryId === 'documents') {
+        // documentsカテゴリの場合、各サブディレクトリがドキュメントタイプ
+        for (const docTypeId of readdirSync(categoryPath)) {
+          const docTypePath = join(categoryPath, docTypeId);
 
-        // ディレクトリのみを処理
-        if (!statSync(docTypePath).isDirectory()) continue;
+          // ディレクトリのみを処理
+          if (!statSync(docTypePath).isDirectory()) continue;
 
-        // index.jsonがあれば読み取る
-        const indexPath = join(docTypePath, 'index.json');
-        if (existsSync(indexPath)) {
-          try {
-            const indexContent = JSON.parse(readFileSync(indexPath, 'utf-8'));
-            docTypes.push({
-              id: docTypeId,
-              title: indexContent.title || docTypeId,
-              description: indexContent.description || '',
-              category: 'documents',
-              thumbnail: indexContent.thumbnail || undefined,
-              icon: indexContent.icon || undefined,
-              tags: indexContent.tags || {},
-            });
-          } catch (error) {
-            console.error(`Error parsing ${indexPath}:`, error);
-            // エラーが発生しても処理を続行
+          // index.jsonがあれば読み取る
+          const indexPath = join(docTypePath, 'index.json');
+          if (existsSync(indexPath)) {
+            try {
+              const indexContent = JSON.parse(readFileSync(indexPath, 'utf-8'));
+              docTypes.push({
+                id: docTypeId,
+                title: indexContent.title || docTypeId,
+                description: indexContent.description || '',
+                category: 'documents',
+                thumbnail: indexContent.thumbnail || undefined,
+                icon: indexContent.icon || undefined,
+                tags: indexContent.tags || {},
+              });
+            } catch (error) {
+              console.error(`Error parsing ${indexPath}:`, error);
+              // エラーが発生しても処理を続行
+              docTypes.push({
+                id: docTypeId,
+                title: docTypeId,
+                description: '',
+                category: 'documents',
+                icon: undefined,
+              });
+            }
+          } else {
+            // index.jsonがなければデフォルト値を使用
             docTypes.push({
               id: docTypeId,
               title: docTypeId,
@@ -106,84 +118,77 @@ export function getDocTypes() {
               icon: undefined,
             });
           }
-        } else {
-          // index.jsonがなければデフォルト値を使用
-          docTypes.push({
-            id: docTypeId,
-            title: docTypeId,
-            description: '',
-            category: 'documents',
-            icon: undefined,
-          });
         }
-      }
-    } else if (categoryId === 'wiki') {
-      // wikiカテゴリの場合、各MDXファイルを個別のエントリとして扱う
-      const mdxFiles = readdirSync(categoryPath).filter(
-        (file) => extname(file) === '.mdx'
-      );
+      } else if (categoryId === 'wiki') {
+        // wikiカテゴリの場合、各MDXファイルを個別のエントリとして扱う
+        const mdxFiles = readdirSync(categoryPath).filter(
+          (file) => extname(file) === '.mdx'
+        );
 
-      for (const file of mdxFiles) {
-        const filePath = join(categoryPath, file);
-        const entryId = basename(file, '.mdx');
+        for (const file of mdxFiles) {
+          const filePath = join(categoryPath, file);
+          const entryId = basename(file, '.mdx');
 
-        try {
-          const content = readFileSync(filePath, 'utf-8');
+          try {
+            const content = readFileSync(filePath, 'utf-8');
 
-          // フロントマターから情報を抽出（簡易的な実装）
-          const titleMatch = content.match(/title:\s*(.+)/);
-          const descriptionMatch = content.match(/description:\s*(.+)/);
-          const tagsMatch = content.match(/tags:\s*(.+)/);
-          const thumbnailMatch = content.match(/thumbnail:\s*(.+)/);
-          const iconMatch = content.match(/icon:\s*(.+)/);
+            // フロントマターから情報を抽出（簡易的な実装）
+            const titleMatch = content.match(/title:\s*(.+)/);
+            const descriptionMatch = content.match(/description:\s*(.+)/);
+            const tagsMatch = content.match(/tags:\s*(.+)/);
+            const thumbnailMatch = content.match(/thumbnail:\s*(.+)/);
+            const iconMatch = content.match(/icon:\s*(.+)/);
 
-          const title = titleMatch?.[1]?.trim() || entryId;
-          const description = descriptionMatch?.[1]?.trim() || '';
-          const thumbnail = thumbnailMatch?.[1]?.trim();
-          const icon = iconMatch?.[1]?.trim();
+            const title = titleMatch?.[1]?.trim() || entryId;
+            const description = descriptionMatch?.[1]?.trim() || '';
+            const thumbnail = thumbnailMatch?.[1]?.trim();
+            const icon = iconMatch?.[1]?.trim();
 
-          // タグを抽出
-          let tags: { tech?: string[]; type?: string[] } | undefined =
-            undefined;
+            // タグを抽出
+            let tags: { tech?: string[]; type?: string[] } | undefined =
+              undefined;
 
-          if (tagsMatch) {
-            const tagValue = tagsMatch[1]?.trim();
-            if (tagValue === 'technical') {
-              const techTags: string[] = [];
-              if (content.includes('nextjs')) techTags.push('nextjs');
-              if (content.includes('react')) techTags.push('react');
-              if (content.includes('supabase')) techTags.push('supabase');
+            if (tagsMatch) {
+              const tagValue = tagsMatch[1]?.trim();
+              if (tagValue === 'technical') {
+                const techTags: string[] = [];
+                if (content.includes('nextjs')) techTags.push('nextjs');
+                if (content.includes('react')) techTags.push('react');
+                if (content.includes('supabase')) techTags.push('supabase');
 
-              if (techTags.length > 0) {
-                tags = { tech: techTags };
+                if (techTags.length > 0) {
+                  tags = { tech: techTags };
+                }
+              } else if (tagValue === 'business') {
+                tags = { type: ['business'] };
               }
-            } else if (tagValue === 'business') {
-              tags = { type: ['business'] };
             }
-          }
 
-          wikiEntries.push({
-            id: `wiki/${entryId}`,
-            title,
-            description,
-            category: 'wiki',
-            thumbnail,
-            icon,
-            tags,
-          });
-        } catch (error) {
-          console.error(`Error reading ${filePath}:`, error);
-          // エラーが発生しても処理を続行
-          wikiEntries.push({
-            id: `wiki/${entryId}`,
-            title: entryId,
-            description: '',
-            category: 'wiki',
-            icon: undefined,
-          });
+            wikiEntries.push({
+              id: `wiki/${entryId}`,
+              title,
+              description,
+              category: 'wiki',
+              thumbnail,
+              icon,
+              tags,
+            });
+          } catch (error) {
+            console.error(`Error reading ${filePath}:`, error);
+            // エラーが発生しても処理を続行
+            wikiEntries.push({
+              id: `wiki/${entryId}`,
+              title: entryId,
+              description: '',
+              category: 'wiki',
+              icon: undefined,
+            });
+          }
         }
       }
     }
+  } catch (error) {
+    console.error('Error reading document types:', error);
   }
 
   // すべてのドキュメントタイプを結合

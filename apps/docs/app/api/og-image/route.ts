@@ -23,41 +23,71 @@ export async function GET(request: NextRequest) {
     // URLをデコード
     const decodedUrl = decodeURIComponent(url);
 
-    // HTMLを取得
-    const response = await fetch(decodedUrl, {
-      headers: {
-        // 一般的なブラウザのUser-Agentを設定
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      },
-    });
+    try {
+      // タイムアウトを10秒に設定
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    // レスポンスが成功しなかった場合はエラー
-    if (!response.ok) {
+      const response = await fetch(decodedUrl, {
+        headers: {
+          // 一般的なブラウザのUser-Agentを設定
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      // レスポンスが成功しなかった場合はエラー
+      if (!response.ok) {
+        return NextResponse.json(
+          { error: `Failed to fetch HTML: ${response.status}` },
+          { status: response.status }
+        );
+      }
+
+      // HTMLを取得
+      const html = await response.text();
+
+      // OGP画像のURLを抽出
+      const ogImageUrl = extractOgImage(html, decodedUrl);
+
+      // OGP画像が見つからなかった場合
+      if (!ogImageUrl) {
+        return NextResponse.json(
+          { error: 'OGP image not found', fallback: DEFAULT_THUMBNAIL_PATH },
+          { status: 404 }
+        );
+      }
+
+      // OGP画像のURLを返す
+      return NextResponse.json({ url: ogImageUrl });
+    } catch (fetchError) {
+      const errorMessage =
+        fetchError instanceof Error ? fetchError.message : String(fetchError);
+
+      // アボートエラーの場合はタイムアウトとして処理
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        return NextResponse.json(
+          {
+            error: 'Request timeout while fetching HTML',
+            fallback: DEFAULT_THUMBNAIL_PATH,
+          },
+          { status: 408 }
+        );
+      }
+
+      // その他のネットワークエラー
       return NextResponse.json(
-        { error: `Failed to fetch HTML: ${response.status}` },
-        { status: response.status }
+        {
+          error: `Network error: ${errorMessage}`,
+          fallback: DEFAULT_THUMBNAIL_PATH,
+        },
+        { status: 500 }
       );
     }
-
-    // HTMLを取得
-    const html = await response.text();
-
-    // OGP画像のURLを抽出
-    const ogImageUrl = extractOgImage(html, decodedUrl);
-
-    // OGP画像が見つからなかった場合
-    if (!ogImageUrl) {
-      return NextResponse.json(
-        { error: 'OGP image not found', fallback: DEFAULT_THUMBNAIL_PATH },
-        { status: 404 }
-      );
-    }
-
-    // OGP画像のURLを返す
-    return NextResponse.json({ url: ogImageUrl });
   } catch (error) {
-    console.error('Error fetching OGP image:', error);
     return NextResponse.json(
       { error: 'Failed to fetch OGP image', fallback: DEFAULT_THUMBNAIL_PATH },
       { status: 500 }
@@ -92,7 +122,6 @@ function extractOgImage(html: string, baseUrl: string): string | null {
         const absoluteOgUrl = `${baseUrlObj.origin}${ogImageUrl}`;
         return absoluteOgUrl;
       } catch (e) {
-        console.error('Error parsing base URL:', e);
         return ogImageUrl;
       }
     }
@@ -120,7 +149,6 @@ function extractOgImage(html: string, baseUrl: string): string | null {
         const absoluteTwitterUrl = `${baseUrlObj.origin}${twitterImageUrl}`;
         return absoluteTwitterUrl;
       } catch (e) {
-        console.error('Error parsing base URL:', e);
         return twitterImageUrl;
       }
     }

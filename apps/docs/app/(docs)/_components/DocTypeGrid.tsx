@@ -16,7 +16,7 @@ import {
   getCategoryColor,
 } from '~/lib/utils/category';
 import { getDocTypePath } from '~/lib/utils/path';
-import type { DocType } from '~/lib/mdx/types';
+import type { DocType } from '~/types/mdx';
 
 interface DocTypeGridProps {
   docTypes: DocType[];
@@ -38,31 +38,34 @@ export function DocTypeGrid({
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {}
   );
+  // 画像の表示準備完了状態
+  const [readyStates, setReadyStates] = useState<Record<string, boolean>>({});
   // 全体の読み込み状態
   const [isLoading, setIsLoading] = useState(true);
 
   // 画像URLを最適化する
   useEffect(() => {
+    // すべてのステートをリセット（マウント/再マウント時）
+    const initialLoadingStates: Record<string, boolean> = {};
+    const initialReadyStates: Record<string, boolean> = {};
+
+    // すべてのドキュメントを初期状態では読み込み中に設定
+    for (const docType of docTypes) {
+      initialLoadingStates[docType.id] = true;
+      initialReadyStates[docType.id] = false;
+    }
+
+    setLoadingStates(initialLoadingStates);
+    setReadyStates(initialReadyStates);
+    setIsLoading(true);
+
     const optimizeUrls = async () => {
-      setIsLoading(true);
-      const newOptimizedUrls: Record<string, string> = {};
-      const newLoadingStates: Record<string, boolean> = {};
-
-      // 各ドキュメントの初期読み込み状態を設定
-      for (const docType of docTypes) {
-        newLoadingStates[docType.id] = true;
-      }
-      setLoadingStates(newLoadingStates);
-
       // 各ドキュメントのサムネイルURLを最適化
+      const newOptimizedUrls: Record<string, string> = {};
+
       for (const docType of docTypes) {
         if (docType.thumbnail) {
           try {
-            // 初期値として同期的に最適化したURLを設定
-            newOptimizedUrls[docType.id] = optimizeImageUrlSync(
-              docType.thumbnail
-            );
-
             // 非同期で最適化したURLを取得（OGP画像の取得など）
             const encodedUrl = encodeURIComponent(docType.thumbnail);
             const apiUrl = `/api/optimize-image?url=${encodedUrl}`;
@@ -75,47 +78,117 @@ export function DocTypeGrid({
             if (response.ok) {
               const data = await response.json();
               if (data.url) {
-                newOptimizedUrls[docType.id] = data.url;
+                // URLを状態にまだ設定しない（画像のプリロード完了後に設定）
+                // 画像URLが準備できたらプリロード開始
+                if (typeof window !== 'undefined') {
+                  const img = new window.Image();
+
+                  // 画像のロード完了時にのみ表示状態を更新
+                  img.onload = () => {
+                    // 画像ロード完了時に表示用のステートを更新
+                    setOptimizedUrls((prev) => ({
+                      ...prev,
+                      [docType.id]: data.url,
+                    }));
+                    setLoadingStates((prev) => ({
+                      ...prev,
+                      [docType.id]: false,
+                    }));
+                    setReadyStates((prev) => ({
+                      ...prev,
+                      [docType.id]: true,
+                    }));
+                  };
+
+                  img.onerror = () => {
+                    // エラー時のみデフォルト画像を設定
+                    setOptimizedUrls((prev) => ({
+                      ...prev,
+                      [docType.id]: DEFAULT_THUMBNAIL_PATH,
+                    }));
+                    setLoadingStates((prev) => ({
+                      ...prev,
+                      [docType.id]: false,
+                    }));
+                    setReadyStates((prev) => ({
+                      ...prev,
+                      [docType.id]: true,
+                    }));
+                  };
+
+                  // プリロード開始
+                  img.src = data.url;
+                }
+              } else {
+                // データにURLがない場合はデフォルト画像を使用
+                // 状態をすぐに更新（プリロードする必要がないため）
+                setOptimizedUrls((prev) => ({
+                  ...prev,
+                  [docType.id]: DEFAULT_THUMBNAIL_PATH,
+                }));
+                setLoadingStates((prev) => ({
+                  ...prev,
+                  [docType.id]: false,
+                }));
+                setReadyStates((prev) => ({
+                  ...prev,
+                  [docType.id]: true,
+                }));
               }
+            } else {
+              // APIエラー時はデフォルト画像を使用
+              setOptimizedUrls((prev) => ({
+                ...prev,
+                [docType.id]: DEFAULT_THUMBNAIL_PATH,
+              }));
+              setLoadingStates((prev) => ({
+                ...prev,
+                [docType.id]: false,
+              }));
+              setReadyStates((prev) => ({
+                ...prev,
+                [docType.id]: true,
+              }));
             }
           } catch (error) {
             console.error(`Error optimizing image for ${docType.id}:`, error);
-            // エラーが発生した場合はデフォルト画像を使用
-            newOptimizedUrls[docType.id] = DEFAULT_THUMBNAIL_PATH;
+            // 例外発生時はデフォルト画像を使用
+            setOptimizedUrls((prev) => ({
+              ...prev,
+              [docType.id]: DEFAULT_THUMBNAIL_PATH,
+            }));
+            setLoadingStates((prev) => ({
+              ...prev,
+              [docType.id]: false,
+            }));
+            setReadyStates((prev) => ({
+              ...prev,
+              [docType.id]: true,
+            }));
           }
         } else {
           // サムネイルがない場合はデフォルト画像を使用
-          newOptimizedUrls[docType.id] = DEFAULT_THUMBNAIL_PATH;
+          setOptimizedUrls((prev) => ({
+            ...prev,
+            [docType.id]: DEFAULT_THUMBNAIL_PATH,
+          }));
+          setLoadingStates((prev) => ({
+            ...prev,
+            [docType.id]: false,
+          }));
+          setReadyStates((prev) => ({
+            ...prev,
+            [docType.id]: true,
+          }));
         }
       }
 
-      setOptimizedUrls(newOptimizedUrls);
+      // 全体の読み込み状態を更新
       setIsLoading(false);
     };
 
     optimizeUrls();
   }, [docTypes]);
-
-  // 画像の読み込み完了時の処理
-  const handleImageLoad = (docTypeId: string) => {
-    setLoadingStates((prev) => ({
-      ...prev,
-      [docTypeId]: false,
-    }));
-  };
-
-  // 画像の読み込みエラー時の処理
-  const handleImageError = (docTypeId: string) => {
-    setLoadingStates((prev) => ({
-      ...prev,
-      [docTypeId]: false,
-    }));
-    // エラー時はデフォルト画像を使用
-    setOptimizedUrls((prev) => ({
-      ...prev,
-      [docTypeId]: DEFAULT_THUMBNAIL_PATH,
-    }));
-  };
 
   if (docTypes.length === 0) {
     return (
@@ -131,35 +204,28 @@ export function DocTypeGrid({
         <Link key={docType.id} href={getDocTypePath(docType)}>
           <Card className="h-full transition-colors hover:bg-muted/50">
             <div className="relative aspect-video w-full overflow-hidden rounded-t-lg bg-muted/30">
-              {/* スケルトンローディング */}
-              {(isLoading || loadingStates[docType.id]) && (
+              {/* スケルトンローディング - 画像読み込み中のみ表示 */}
+              {loadingStates[docType.id] && (
                 <div className="absolute inset-0 z-10">
                   <Skeleton className="h-full w-full" />
                 </div>
               )}
 
-              <Image
-                src={
-                  optimizedUrls[docType.id] ||
-                  optimizeImageUrlSync(docType.thumbnail || '') ||
-                  DEFAULT_THUMBNAIL_PATH
-                }
-                alt={docType.title}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-contain p-2"
-                quality={80}
-                priority={false}
-                loading="lazy"
-                blurDataURL={DEFAULT_PLACEHOLDER}
-                placeholder="blur"
-                onLoad={() => handleImageLoad(docType.id)}
-                onError={() => handleImageError(docType.id)}
-                style={{
-                  opacity: loadingStates[docType.id] ? 0 : 1,
-                  transition: 'opacity 0.3s ease-in-out',
-                }}
-              />
+              {/* 画像は準備完了状態のときのみ表示 */}
+              {readyStates[docType.id] && (
+                <Image
+                  src={optimizedUrls[docType.id] || DEFAULT_THUMBNAIL_PATH}
+                  alt={docType.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-contain p-2"
+                  quality={80}
+                  priority={false}
+                  loading="lazy"
+                  blurDataURL={DEFAULT_PLACEHOLDER}
+                  placeholder="blur"
+                />
+              )}
             </div>
             <CardHeader>
               <div className="flex items-center gap-3">

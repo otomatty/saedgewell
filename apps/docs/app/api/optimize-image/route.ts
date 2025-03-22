@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
     // 最適化された画像URLを返す
     return NextResponse.json({ url: optimizedUrl });
   } catch (error) {
-    console.error('Error optimizing image URL:', error);
     return NextResponse.json(
       { error: 'Failed to optimize image URL', url: DEFAULT_THUMBNAIL_PATH },
       { status: 500 }

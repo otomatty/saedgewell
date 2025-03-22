@@ -25,6 +25,25 @@ const config = {
       fullUrl: true,
     },
   },
+  // HTTP プロキシAPIが多くの外部リソースにアクセスできるように設定
+  // 通常、Next.jsはセキュリティ上の理由から外部リソースへのアクセスを制限
+  // 但し、これらのAPIはサーバーサイドで実行されるため、必要に応じて制限を緩和
+  async rewrites() {
+    return [
+      {
+        source: '/api/og-image',
+        destination: '/api/og-image',
+      },
+      {
+        source: '/api/proxy-image',
+        destination: '/api/proxy-image',
+      },
+      {
+        source: '/api/optimize-image',
+        destination: '/api/optimize-image',
+      },
+    ];
+  },
   serverExternalPackages: [],
   // needed for supporting dynamic imports for local content
   outputFileTracingIncludes: {
@@ -67,6 +86,35 @@ function getRemotePatterns() {
     {
       protocol: 'https',
       hostname: 'i.gyazo.com',
+    },
+    // 一般的な外部画像ドメインを追加
+    {
+      protocol: 'https',
+      hostname: 'github.githubassets.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'avatars.githubusercontent.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'user-images.githubusercontent.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'opengraph.githubassets.com',
+    },
+    {
+      protocol: 'https',
+      hostname: '*.gyazo.com',
+    },
+    {
+      protocol: 'https',
+      hostname: '*.cloudfront.net',
+    },
+    {
+      protocol: 'https',
+      hostname: '*.githubusercontent.com',
     },
   ];
 
