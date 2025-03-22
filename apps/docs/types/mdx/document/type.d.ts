@@ -41,8 +41,17 @@ export interface DocType {
   tags?: {
     type?: string[];
     tech?: string[];
+    date?: string[];
     [key: string]: string[] | undefined;
   };
+  /** ドキュメントの要約（主に日記用） */
+  summary?: string;
+  /** ドキュメントの日付（主に日記用） */
+  date?: string;
+  /** ドキュメントの著者（主に日記用） */
+  author?: string;
+  /** 親ドキュメントの識別子（階層構造を表現） */
+  parentId?: string;
 }
 
 /**

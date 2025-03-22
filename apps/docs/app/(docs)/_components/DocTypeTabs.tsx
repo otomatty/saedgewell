@@ -17,7 +17,7 @@ export function DocTypeTabs({
   docTypes,
   docTypesByCategory,
 }: DocTypeTabsProps) {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState(categories[0]?.id || '');
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [activeTagType, setActiveTagType] = useState<'type' | 'tech' | null>(
     null
@@ -56,9 +56,6 @@ export function DocTypeTabs({
 
   // 現在のタブに基づいてドキュメントを取得
   const getCurrentDocTypes = () => {
-    if (activeTab === 'all') {
-      return getFilteredDocTypes(docTypes);
-    }
     return getFilteredDocTypes(docTypesByCategory[activeTab] || []);
   };
 
@@ -87,16 +84,13 @@ export function DocTypeTabs({
   return (
     <div className="space-y-6">
       <Tabs
-        defaultValue="all"
+        defaultValue={categories[0]?.id || ''}
         value={activeTab}
         onValueChange={handleTabChange}
         className="mx-auto max-w-5xl"
       >
         <div className="mb-8 flex justify-center">
           <TabsList>
-            <TabsTrigger value="all" className="min-w-32">
-              全て
-            </TabsTrigger>
             {categories.map((category) => (
               <TabsTrigger
                 key={category.id}
@@ -117,13 +111,6 @@ export function DocTypeTabs({
           onTagClick={handleTagClick}
           onReset={resetTags}
         />
-
-        <TabsContent value="all">
-          <DocTypeGrid
-            docTypes={getCurrentDocTypes()}
-            emptyMessage="条件に一致するドキュメントはありません。"
-          />
-        </TabsContent>
 
         {categories.map((category) => (
           <TabsContent key={category.id} value={category.id}>

@@ -1,0 +1,15 @@
+{
+  "title": "2025年3月20日の作業記録",
+  "description": "Supabase本番環境からローカル環境へのデータ同期手順を整備しました。",
+  "summary": "この日は、本番環境のSupabaseデータベースのデータをローカル開発環境に同期するための手順を確立しました。Supabase CLIを活用したデータのエクスポートとインポートのプロセスを整備することで、ローカル環境で本番と同じデータを使用した開発・テストが可能になり、より正確なテストと効率的な開発を実現しました。",
+  "date": "2025-03-20",
+  "author": "Akimasa Sugai",
+  "entries": [
+    {
+      "id": "supabase-production-to-local-sync",
+      "title": "Supabase本番環境からローカル環境へのデータ同期手順",
+      "description": "本番環境のSupabaseデータベースのデータをローカル開発環境に同期し、同じデータを使用して開発を行うための手順",
+      "tags": ["supabase", "database", "開発環境", "データ同期"]
+    }
+  ]
+}

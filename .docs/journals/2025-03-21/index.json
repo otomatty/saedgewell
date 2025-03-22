@@ -1,0 +1,27 @@
+{
+  "title": "2025年3月21日の作業記録",
+  "description": "ローカル開発環境のDocker上でのSupabase認証実装、JWT問題のデバッグ、HTTPS環境構築など、開発環境の整備に関する作業を行いました。",
+  "summary": "この日は主に開発環境の整備に注力し、3つの主要なタスクを完了しました：(1) Docker環境でのSupabase認証実装と異なるネットワーク間の通信問題の解決、(2) JWT認証問題のデバッグと解決、(3) ローカル開発環境でのHTTPS実装。これらの改善により、ローカル開発環境でも本番環境に近い形での開発とテストが可能になりました。",
+  "date": "2025-03-21",
+  "author": "Akimasa Sugai",
+  "entries": [
+    {
+      "id": "local-https-supabase-auth-implementation",
+      "title": "Docker環境でのSupabase認証実装とネットワーク問題の解決",
+      "description": "Docker環境で実行されているNext.jsアプリケーションがローカルのSupabaseインスタンスと連携し、Google認証を含む機能を正常に動作させるための実装",
+      "tags": ["docker", "supabase", "authentication", "network", "next.js"]
+    },
+    {
+      "id": "docker-jwt-authentication-debugging",
+      "title": "DockerコンテナにおけるJWT認証問題のデバッグと解決",
+      "description": "Docker環境でNext.jsとSupabaseを使用している際に発生したJWT署名エラーの問題を診断し解決する過程",
+      "tags": ["jwt", "supabase", "docker", "authentication", "troubleshooting"]
+    },
+    {
+      "id": "local-https-implementation",
+      "title": "ローカル開発環境でのHTTPS実装",
+      "description": "ローカル開発環境でHTTPSを使用するための実装、自己署名証明書を使用したサブドメインでのHTTPSアクセス",
+      "tags": ["https", "nginx", "docker", "mkcert", "開発環境"]
+    }
+  ]
+}
