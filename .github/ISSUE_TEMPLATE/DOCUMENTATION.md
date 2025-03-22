@@ -1,7 +1,7 @@
 ---
 name: "📝 ドキュメント更新"
 description: ドキュメントの新規作成や既存ドキュメントの更新リクエストを作成します。
-title: "📝 [ドキュメント] - <タイトル>"
+title: "📝 [document] - <タイトル>"
 labels: ["documentation"]
 ---
 

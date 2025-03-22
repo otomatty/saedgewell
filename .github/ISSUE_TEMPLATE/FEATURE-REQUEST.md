@@ -1,7 +1,7 @@
 ---
 name: "✨ 機能リクエスト"
 description: 新機能または改善のリクエストを作成します。
-title: "✨ [機能] - <タイトル>"
+title: "✨ [feature] - <タイトル>"
 labels: ["enhancement"]
 ---
 

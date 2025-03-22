@@ -1,7 +1,7 @@
 ---
 name: "♻️ リファクタリング"
 description: コードのリファクタリングに関するIssueを作成します。
-title: "♻️ [リファクタリング] - <タイトル>"
+title: "♻️ [refactoring] - <タイトル>"
 labels: ["refactoring"]
 ---
 

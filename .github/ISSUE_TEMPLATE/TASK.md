@@ -1,7 +1,7 @@
 ---
 name: "📋 タスク"
 description: 一般的な開発タスクやその他の作業項目を作成します。
-title: "📋 [タスク] - <タイトル>"
+title: "📋 [task] - <タイトル>"
 labels: ["task"]
 ---
 
