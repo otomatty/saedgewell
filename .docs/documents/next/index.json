@@ -1,0 +1,9 @@
+{
+  "title": "Next.js",
+  "description": "Next.jsの公式ドキュメント",
+  "thumbnail": "https://nextjs.org",
+  "tags": {
+    "type": ["official"],
+    "tech": ["nextjs"]
+  }
+}
