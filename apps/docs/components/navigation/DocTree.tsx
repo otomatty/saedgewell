@@ -9,7 +9,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@kit/ui/collapsible';
-import type { DocNode } from '~/lib/mdx/types';
+import type { DocNode } from '~/types/mdx';
 import { getDocPath } from '~/lib/utils/path';
 
 interface DocTreeProps {

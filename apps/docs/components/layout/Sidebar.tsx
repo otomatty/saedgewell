@@ -16,8 +16,8 @@ import {
 } from '@kit/ui/sidebar';
 import { DocTree } from '../navigation/DocTree';
 import { DocTreeSkeleton } from '../navigation/DocTreeSkeleton';
-import type { DocNode } from '~/lib/mdx/types';
-import type { DocType } from '~/lib/mdx/types';
+import type { DocNode } from '~/types/mdx';
+import type { DocType } from '~/types/mdx';
 import { optimizeImageUrlSync } from '~/lib/utils/image';
 
 // サイドバーを表示するパスのリスト

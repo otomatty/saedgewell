@@ -33,7 +33,7 @@ import {
   optimizeImageUrlSync,
   DEFAULT_THUMBNAIL_PATH,
 } from '~/lib/utils/image';
-import type { DocType, DocCategory } from '~/lib/mdx/types';
+import type { DocType, DocCategory } from '~/types/mdx';
 
 // カテゴリごとのアイコンを取得する関数
 function getCategoryIcon(category?: string) {
